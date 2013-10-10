@@ -1,5 +1,6 @@
 package com.katspow.teetrys.client.statemachine;
 
+import com.google.gwt.event.logical.shared.HasInitializeHandlers;
 import com.katspow.teetrys.client.core.GameController;
 
 /**
@@ -57,7 +58,6 @@ public class StateMachine {
         },
         
         MAIN_MENU(MENUS) {
-            
             @Override
             void entry(StateMachine sm) throws Exception {
                 gameController.enterMainMenu();
@@ -68,12 +68,26 @@ public class StateMachine {
                 case CHOOSE_ABOUT:
                     sm.enterState(ABOUT);
                     break;
+                    
+                case CHOOSE_HIGHSCORES:
+                    sm.enterState(HIGHSCORES);
+                    break;
                 }
             }
         },
         
         HIGHSCORES(MENUS) {
-            void process(StateMachine sm, GameEvent e) {
+            @Override
+            void entry(StateMachine sm) throws Exception {
+                gameController.enterHighscores();
+            }
+            
+            void process(StateMachine sm, GameEvent e) throws Exception {
+                switch (e) {
+                case CHOOSE_MAIN_MENU:
+                    sm.enterState(MAIN_MENU);
+                    break;
+                }
             }
         },
         

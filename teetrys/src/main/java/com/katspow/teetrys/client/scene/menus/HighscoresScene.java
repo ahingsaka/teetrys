@@ -10,12 +10,12 @@ import com.katspow.caatja.foundation.ui.TextActor;
 import com.katspow.teetrys.client.core.GameController;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 
-public class AboutMenuScene extends Scene {
+public class HighscoresScene extends Scene {
 
     private Director director;
     private ActorContainer root;
 
-    public AboutMenuScene(Director director) throws Exception {
+    public HighscoresScene(Director director) throws Exception {
         this.director = director;
 
         root = new ActorContainer();
@@ -23,12 +23,12 @@ public class AboutMenuScene extends Scene {
         root.setFillStrokeStyle(CaatjaColor.valueOf("grey"));
 
         addChild(root);
-        
-        addAboutText();
+
+        addHighscores();
     }
-    
-    private void addAboutText() throws Exception {
-        
+
+    private void addHighscores() throws Exception {
+
         TextActor ta = new TextActor() {
 
             @Override
@@ -51,21 +51,16 @@ public class AboutMenuScene extends Scene {
             @Override
             public void mouseDrag(CAATMouseEvent mouseEvent) {
             }
-            
+
         };
-        
-        
-        ta.setFont("40px sans-serif").
-        setText("back").
-        calcTextSize(director).
-        setTextFillStyle("white").
-        disableDrag();
-        
+
+        ta.setFont("40px sans-serif").setText("back").calcTextSize(director).setTextFillStyle("white").disableDrag();
+
         ta.setLocation((GameController.GAME_WIDTH - ta.width) / 2, (GameController.GAME_HEIGHT - ta.height) / 2);
         ta.cacheAsBitmap();
-        
+
         root.addChild(ta);
-        
+
     }
 
 }

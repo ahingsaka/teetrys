@@ -11,6 +11,7 @@ import com.katspow.caatja.foundation.Scene.Ease;
 import com.katspow.caatja.foundation.actor.Actor.Anchor;
 import com.katspow.teetrys.client.scene.LoadingScene;
 import com.katspow.teetrys.client.scene.menus.AboutMenuScene;
+import com.katspow.teetrys.client.scene.menus.HighscoresScene;
 import com.katspow.teetrys.client.scene.menus.MainMenuScene;
 import com.katspow.teetrys.client.statemachine.StateMachine;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
@@ -33,6 +34,7 @@ public class GameController {
     private LoadingScene loadScene;
     private MainMenuScene mainMenuScene;
     private AboutMenuScene aboutMenuScene;
+    private HighscoresScene highscoresScene;
     
     public GameController() throws Exception {
         stateMachine = new StateMachine(this);
@@ -106,6 +108,14 @@ public class GameController {
         }
         return aboutMenuScene;
     }
+    
+    public HighscoresScene getHighscoresScene() throws Exception {
+        if (highscoresScene == null) {
+            highscoresScene = new HighscoresScene(director);
+            director.addScene(highscoresScene);
+        }
+        return highscoresScene;
+    }
 
     public static void sendEvent(GameEvent gameEvent) throws Exception {
         stateMachine.sendEvent(gameEvent);
@@ -113,6 +123,10 @@ public class GameController {
 
     public void enterAboutMenu() throws Exception {
         director.easeIn(director.getSceneIndex(getAboutMenuScene()), Ease.SCALE, 1000, false, Anchor.CENTER, new Interpolator().createElasticOutInterpolator(2.5, 0.4, false));
+    }
+
+    public void enterHighscores() throws Exception {
+        director.easeIn(director.getSceneIndex(getHighscoresScene()), Ease.SCALE, 1000, false, Anchor.CENTER, new Interpolator().createElasticOutInterpolator(2.5, 0.4, false));
     }
 
 }
