@@ -53,7 +53,10 @@ public class StateMachine {
         // MENUS will be the parent of these states : MAIN_MENU, HIGHSCORES, ABOUT
         MENUS(null) {
             void process(StateMachine sm, GameEvent e) throws Exception {
-                    sm.enterState(MAIN_MENU);
+                sm.enterState(MAIN_MENU);
+                
+                // Launch sound ?
+                    
             }
         },
         
@@ -71,6 +74,10 @@ public class StateMachine {
                     
                 case CHOOSE_HIGHSCORES:
                     sm.enterState(HIGHSCORES);
+                    break;
+                
+                case CHOOSE_GAME:
+                    sm.enterState(GAME);
                     break;
                 }
             }
@@ -109,6 +116,12 @@ public class StateMachine {
         
         // GAME will be the parent of these states : GAMING, PAUSE, GAME_OVER, INTERMEZZO(S), END
         GAME(null) {
+            
+            @Override
+            void entry(StateMachine sm) throws Exception {
+                gameController.enterGaming();
+            }
+            
             void process(StateMachine sm, GameEvent e) {
                 
             }

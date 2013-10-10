@@ -76,14 +76,18 @@ public class MainMenuScene extends Scene {
 
             @Override
             public void mouseEnter(CAATMouseEvent mouseEvent) {
-                Actor actor = mouseEvent.source;
-                actor.setScale(1.2, 1.2);
+                if (ml != MenuLink.TEETRYS) {
+                    Actor actor = mouseEvent.source;
+                    actor.setScale(1.2, 1.2);
+                }
             }
 
             @Override
             public void mouseExit(CAATMouseEvent mouseEvent) {
-                Actor actor = mouseEvent.source;
-                actor.setScale(1, 1);
+                if (ml != MenuLink.TEETRYS) {
+                    Actor actor = mouseEvent.source;
+                    actor.setScale(1, 1);
+                }
             }
 
             @Override
