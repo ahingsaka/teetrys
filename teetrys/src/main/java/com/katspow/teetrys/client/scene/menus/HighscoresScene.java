@@ -7,6 +7,7 @@ import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.foundation.ui.TextActor;
+import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.GameController;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 
@@ -20,7 +21,7 @@ public class HighscoresScene extends Scene {
 
         root = new ActorContainer();
         root.setBounds(0, 0, director.canvas.getCoordinateSpaceWidth(), director.canvas.getCoordinateSpaceHeight());
-        root.setFillStrokeStyle(CaatjaColor.valueOf("grey"));
+        root.setFillStrokeStyle(Constants.BACKGROUND_COLOR);
 
         addChild(root);
 

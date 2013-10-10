@@ -144,7 +144,8 @@ public class GameController {
     }
 
     public void enterHighscores() throws Exception {
-        EaseIn.withBoomEffect(director, getHighscoresScene());
+        EaseInOut.scenesFromLeftToRight(director, getHighscoresScene(), director.getCurrentScene());
+//        EaseIn.withBoomEffect(director, getHighscoresScene());
     }
 
 }
