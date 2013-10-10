@@ -19,5 +19,11 @@ public class EaseInOut {
                 Ease.TRANSLATE, Anchor.LEFT, 300, false, new Interpolator().createLinearInterpolator(false, false),
                 new Interpolator().createLinearInterpolator(false, false));
     }
+    
+    public static void scenesFromRightToLeft(Director director, Scene in, Scene out) throws Exception {
+        director.easeInOut(director.getSceneIndex(in), Ease.TRANSLATE, Anchor.LEFT, director.getSceneIndex(out),
+                Ease.TRANSLATE, Anchor.RIGHT, 300, false, new Interpolator().createLinearInterpolator(false, false),
+                new Interpolator().createLinearInterpolator(false, false));
+    }
 
 }

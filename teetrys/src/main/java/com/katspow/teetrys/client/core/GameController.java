@@ -9,7 +9,6 @@ import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.Scene.Ease;
 import com.katspow.caatja.foundation.actor.Actor.Anchor;
-import com.katspow.teetrys.client.effects.EaseIn;
 import com.katspow.teetrys.client.effects.EaseInOut;
 import com.katspow.teetrys.client.scene.LoadingScene;
 import com.katspow.teetrys.client.scene.game.GamingScene;
@@ -140,12 +139,11 @@ public class GameController {
     }
 
     public void enterAboutMenu() throws Exception {
-        EaseIn.withBoomEffect(director, getAboutMenuScene());
+        EaseInOut.scenesFromRightToLeft(director, getAboutMenuScene(), director.getCurrentScene());
     }
 
     public void enterHighscores() throws Exception {
         EaseInOut.scenesFromLeftToRight(director, getHighscoresScene(), director.getCurrentScene());
-//        EaseIn.withBoomEffect(director, getHighscoresScene());
     }
 
 }
