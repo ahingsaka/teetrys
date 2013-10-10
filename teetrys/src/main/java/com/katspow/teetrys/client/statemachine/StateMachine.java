@@ -1,8 +1,6 @@
 package com.katspow.teetrys.client.statemachine;
 
-import com.google.gwt.user.client.Window;
 import com.katspow.teetrys.client.core.GameController;
-import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 
 /**
  * Will control the different states of the game.
@@ -15,7 +13,7 @@ public class StateMachine {
     private static GameController gameController;
     
     public StateMachine(GameController gameController) {
-        this.gameController = gameController;
+        StateMachine.gameController = gameController;
     }
     
     /**
@@ -27,6 +25,7 @@ public class StateMachine {
         CHOOSE_ABOUT,
         CHOOSE_GAME,
         CHOOSE_HIGHSCORES,
+        CHOOSE_MAIN_MENU,
         
         CALL_PAUSE,
         CALL_DOWN,
@@ -64,8 +63,12 @@ public class StateMachine {
                 gameController.enterMainMenu();
             }
 
-            void process(StateMachine sm, GameEvent e) {
-                Window.alert("Receivent evt ");
+            void process(StateMachine sm, GameEvent e) throws Exception {
+                switch (e) {
+                case CHOOSE_ABOUT:
+                    sm.enterState(ABOUT);
+                    break;
+                }
             }
         },
         
@@ -75,8 +78,18 @@ public class StateMachine {
         },
         
         ABOUT(MENUS) {
-            void process(StateMachine sm, GameEvent e) {
+            
+            @Override
+            void entry(StateMachine sm) throws Exception {
                 gameController.enterAboutMenu();
+            }
+            
+            void process(StateMachine sm, GameEvent e) throws Exception {
+                switch (e) {
+                case CHOOSE_MAIN_MENU:
+                    sm.enterState(MAIN_MENU);
+                    break;
+                }
             }
         },
         

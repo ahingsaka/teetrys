@@ -1,13 +1,16 @@
 package com.katspow.teetrys.client.core;
 
-import com.google.gwt.user.client.Window;
+import com.katspow.caatja.behavior.Interpolator;
 import com.katspow.caatja.core.Caatja;
 import com.katspow.caatja.core.canvas.CaatjaCanvas;
 import com.katspow.caatja.core.image.CaatjaImageLoader;
 import com.katspow.caatja.core.image.CaatjaImageLoaderCallback;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
+import com.katspow.caatja.foundation.Scene.Ease;
+import com.katspow.caatja.foundation.actor.Actor.Anchor;
 import com.katspow.teetrys.client.scene.LoadingScene;
+import com.katspow.teetrys.client.scene.menus.AboutMenuScene;
 import com.katspow.teetrys.client.scene.menus.MainMenuScene;
 import com.katspow.teetrys.client.statemachine.StateMachine;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
@@ -28,7 +31,8 @@ public class GameController {
     private CaatjaCanvas canvas;
     
     private LoadingScene loadScene;
-    private MainMenuScene menusScene;
+    private MainMenuScene mainMenuScene;
+    private AboutMenuScene aboutMenuScene;
     
     public GameController() throws Exception {
         stateMachine = new StateMachine(this);
@@ -82,24 +86,33 @@ public class GameController {
      * @throws Exception 
      */
     public void enterMainMenu() throws Exception {
-        director.setScene(getMainMenuScene());
+        director.easeIn(director.getSceneIndex(getMainMenuScene()), Ease.SCALE, 2000, false, Anchor.CENTER, new Interpolator().createElasticOutInterpolator(2.5, .4, false));
+//        director.setScene(getMainMenuScene());
     }
     
     private Scene getMainMenuScene() throws Exception {
-        if (menusScene == null) {
-            menusScene = new MainMenuScene(director);
-            director.addScene(menusScene);
+        if (mainMenuScene == null) {
+            mainMenuScene = new MainMenuScene(director);
+            director.addScene(mainMenuScene);
         }
         
-        return menusScene;
+        return mainMenuScene;
+    }
+    
+    private Scene getAboutMenuScene() throws Exception {
+        if (aboutMenuScene == null) {
+            aboutMenuScene = new AboutMenuScene(director);
+            director.addScene(aboutMenuScene);
+        }
+        return aboutMenuScene;
     }
 
     public static void sendEvent(GameEvent gameEvent) throws Exception {
         stateMachine.sendEvent(gameEvent);
     }
 
-    public void enterAboutMenu() {
-        Window.alert("About Menu entered !");
+    public void enterAboutMenu() throws Exception {
+        director.easeIn(director.getSceneIndex(getAboutMenuScene()), Ease.SCALE, 1000, false, Anchor.CENTER, new Interpolator().createElasticOutInterpolator(2.5, 0.4, false));
     }
-    
+
 }

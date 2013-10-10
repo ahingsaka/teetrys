@@ -14,6 +14,12 @@ import com.katspow.caatjagwt.client.CaatjaGwtService;
 import com.katspow.caatjagwt.client.CaatjaGwtWindow;
 import com.katspow.teetrys.client.core.GameController;
 
+/**
+ * FIXME CAATJA - Régler le pb du mouseDrag par défaut (cf Actor l. 1800)
+ * FIXME CAATJA - setScene + getSceneIndex
+ * @author asamsenesena
+ *
+ */
 public class Teetrys implements EntryPoint {
 
     public void onModuleLoad() {
