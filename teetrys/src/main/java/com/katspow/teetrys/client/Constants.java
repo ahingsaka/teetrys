@@ -6,6 +6,9 @@ public class Constants {
     
     public static final CaatjaColor BACKGROUND_COLOR = CaatjaColor.valueOf("#272822");
     
+    // Value used in gameboard for collision
+    public static final int COLLISION = 1;
+    
     // GAME DIMENSIONS
     //////////////////
     
