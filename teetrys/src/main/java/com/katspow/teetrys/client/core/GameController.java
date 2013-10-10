@@ -94,7 +94,13 @@ public class GameController {
     }
     
     public void enterGaming() throws Exception {
-        director.easeIn(director.getSceneIndex(getGamingScene()), Ease.TRANSLATE, 1000, false, Anchor.BOTTOM, new Interpolator().createLinearInterpolator(false, false));
+        director.easeInOut(director.getSceneIndex(getGamingScene()), Ease.TRANSLATE, Anchor.TOP,
+                director.getSceneIndex(director.getCurrentScene()), Ease.TRANSLATE, Anchor.BOTTOM, 500, false,
+                new Interpolator().createLinearInterpolator(false, false),
+                new Interpolator().createLinearInterpolator(false, false));
+        
+        // Start game loop !
+        
     }
     
     private Scene getMainMenuScene() throws Exception {

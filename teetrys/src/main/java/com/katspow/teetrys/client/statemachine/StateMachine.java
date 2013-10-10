@@ -34,6 +34,7 @@ public class StateMachine {
         CALL_LEFT,
         CALL_RIGHT,
         CALL_START,
+        CALL_ROTATE,
         
         LOSE
     }
@@ -119,7 +120,7 @@ public class StateMachine {
             
             @Override
             void entry(StateMachine sm) throws Exception {
-                gameController.enterGaming();
+                sm.enterState(GAMING);
             }
             
             void process(StateMachine sm, GameEvent e) {
@@ -128,14 +129,39 @@ public class StateMachine {
         },
         
         GAMING(GAME) {
+            
+            @Override
+            void entry(StateMachine sm) throws Exception {
+                gameController.enterGaming();
+            }
+            
             void process(StateMachine sm, GameEvent e) {
-                // TODO Auto-generated method stub
+                
+                switch(e) {
+                case CALL_DOWN:
+                    break;
+                case CALL_UP:
+                    break;
+                case CALL_LEFT:
+                    break;
+                case CALL_RIGHT:
+                    break;
+                case CALL_PAUSE:
+                    break;
+                case CALL_ROTATE:
+                    break;
+                    
+                }
+                
             }
         },
         
         PAUSE(GAME) {
             void process(StateMachine sm, GameEvent e) {
-                // TODO Auto-generated method stub
+                switch (e) {
+                case CALL_PAUSE:
+                    break;
+                }
             }
         },
         
