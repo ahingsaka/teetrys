@@ -23,7 +23,7 @@ public class Teetrys implements EntryPoint {
                 new CaatjaGwtPreloader(), new CAATGwt());
         
         try {
-//            new GameController().start();
+            new GameController().start();
         } catch (Exception e) {
             Window.alert("Could not load teetrys !");
             e.printStackTrace();
