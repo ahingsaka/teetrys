@@ -9,6 +9,8 @@ import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.Scene.Ease;
 import com.katspow.caatja.foundation.actor.Actor.Anchor;
+import com.katspow.teetrys.client.effects.EaseIn;
+import com.katspow.teetrys.client.effects.EaseInOut;
 import com.katspow.teetrys.client.scene.LoadingScene;
 import com.katspow.teetrys.client.scene.game.GamingScene;
 import com.katspow.teetrys.client.scene.menus.AboutMenuScene;
@@ -94,10 +96,7 @@ public class GameController {
     }
     
     public void enterGaming() throws Exception {
-        director.easeInOut(director.getSceneIndex(getGamingScene()), Ease.TRANSLATE, Anchor.TOP,
-                director.getSceneIndex(director.getCurrentScene()), Ease.TRANSLATE, Anchor.BOTTOM, 500, false,
-                new Interpolator().createLinearInterpolator(false, false),
-                new Interpolator().createLinearInterpolator(false, false));
+        EaseInOut.scenesFromUpToDown(director, getGamingScene(), director.getCurrentScene());
         
         // Start game loop !
         
@@ -141,11 +140,11 @@ public class GameController {
     }
 
     public void enterAboutMenu() throws Exception {
-        director.easeIn(director.getSceneIndex(getAboutMenuScene()), Ease.SCALE, 1000, false, Anchor.CENTER, new Interpolator().createElasticOutInterpolator(2.5, 0.4, false));
+        EaseIn.withBoomEffect(director, getAboutMenuScene());
     }
 
     public void enterHighscores() throws Exception {
-        director.easeIn(director.getSceneIndex(getHighscoresScene()), Ease.SCALE, 1000, false, Anchor.CENTER, new Interpolator().createElasticOutInterpolator(2.5, 0.4, false));
+        EaseIn.withBoomEffect(director, getHighscoresScene());
     }
 
 }
