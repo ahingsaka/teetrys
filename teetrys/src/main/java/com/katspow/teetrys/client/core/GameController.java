@@ -9,6 +9,7 @@ import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.Scene.Ease;
 import com.katspow.caatja.foundation.actor.Actor.Anchor;
+import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.effects.EaseInOut;
 import com.katspow.teetrys.client.scene.LoadingScene;
 import com.katspow.teetrys.client.scene.game.GamingScene;
@@ -26,8 +27,6 @@ import com.katspow.teetrys.client.statemachine.StateMachine.GameState;
 public class GameController {
 
     // TODO Move to constants file
-    public static final int GAME_HEIGHT = 840;
-    public static final int GAME_WIDTH = 480;
 
     private static StateMachine stateMachine;
     private Director director;
@@ -43,7 +42,7 @@ public class GameController {
         stateMachine = new StateMachine(this);
         canvas = Caatja.createCanvas();
         director = new Director();
-        director.initialize(GAME_WIDTH, GAME_HEIGHT, canvas);
+        director.initialize(Constants.GAME_WIDTH, Constants.GAME_HEIGHT, canvas);
         
         loadScene = new LoadingScene(director);
         director.addScene(loadScene);

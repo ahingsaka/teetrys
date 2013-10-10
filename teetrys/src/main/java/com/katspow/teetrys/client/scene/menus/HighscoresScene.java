@@ -56,7 +56,7 @@ public class HighscoresScene extends Scene {
 
         ta.setFont("40px sans-serif").setText("back").calcTextSize(director).setTextFillStyle("white").disableDrag();
 
-        ta.setLocation((GameController.GAME_WIDTH - ta.width) / 2, (GameController.GAME_HEIGHT - ta.height) / 2);
+        ta.setLocation((Constants.GAME_WIDTH - ta.width) / 2, (Constants.GAME_HEIGHT - ta.height) / 2);
         ta.cacheAsBitmap();
 
         root.addChild(ta);

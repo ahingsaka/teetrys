@@ -102,7 +102,7 @@ public class MainMenuScene extends Scene {
                 setTextFillStyle("white").
                 disableDrag();
         
-        textActor.setLocation((GameController.GAME_WIDTH - textActor.width) / 2, y);
+        textActor.setLocation((Constants.GAME_WIDTH - textActor.width) / 2, y);
         textActor.cacheAsBitmap();
         
         return textActor;

@@ -61,7 +61,7 @@ public class AboutMenuScene extends Scene {
         setTextFillStyle("white").
         disableDrag();
         
-        ta.setLocation((GameController.GAME_WIDTH - ta.width) / 2, (GameController.GAME_HEIGHT - ta.height) / 2);
+        ta.setLocation((Constants.GAME_WIDTH - ta.width) / 2, (Constants.GAME_HEIGHT - ta.height) / 2);
         ta.cacheAsBitmap();
         
         root.addChild(ta);

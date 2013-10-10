@@ -6,6 +6,18 @@ public class Constants {
     
     public static final CaatjaColor BACKGROUND_COLOR = CaatjaColor.valueOf("#272822");
     
+    // GAME DIMENSIONS
+    //////////////////
     
+    // Window size
+    public static final int GAME_HEIGHT = 800;
+    public static final int GAME_WIDTH = 480;
+    
+    // Falling blocks are builded with cubes, this variable fixes the cube side size
+    public static final int CUBE_SIDE = 40; 
+    
+    // Define the margins on left and right
+    public static final int LEFT_SPACE = 40;
+    public static final int RIGHT_SPACE = 40;
 
 }

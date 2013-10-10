@@ -5,7 +5,7 @@ import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.foundation.ui.TextActor;
-import com.katspow.teetrys.client.core.GameController;
+import com.katspow.teetrys.client.Constants;
 
 /**
  * Scene used during loading of images.
@@ -25,7 +25,7 @@ public class LoadingScene extends Scene {
      */
     public LoadingScene(Director director) throws Exception {
         this.root = new ActorContainer();
-        root.setBounds(0, 0, GameController.GAME_WIDTH, GameController.GAME_HEIGHT);
+        root.setBounds(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         root.setFillStrokeStyle(CaatjaColor.valueOf("#000000"));
 
         addChild(root);
@@ -48,7 +48,7 @@ public class LoadingScene extends Scene {
             .calcTextSize(director)
             .setTextFillStyle("white");
 
-        loading.setLocation((GameController.GAME_WIDTH - loading.width) / 2, (GameController.GAME_HEIGHT) / 2);
+        loading.setLocation((Constants.GAME_WIDTH - loading.width) / 2, (Constants.GAME_HEIGHT) / 2);
 
         addChild(loading);
 
