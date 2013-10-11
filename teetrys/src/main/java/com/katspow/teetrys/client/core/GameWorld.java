@@ -1,10 +1,19 @@
 package com.katspow.teetrys.client.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.teetrys.client.Constants;
 
 public class GameWorld {
 
+    private static final String WALL_COLOR = "#161714";
     private int[][] gameboard;
+    
+    public GameWorld() {
+        init();
+    }
 
     // Initialize the array that will contain cubes.
     // There is a line surrounding the gameboard.
@@ -39,6 +48,39 @@ public class GameWorld {
     
     public int[][] getGameboard() {
         return gameboard;
+    }
+    
+    /**
+     * Returns a list of actors that represent the walls cubes
+     * @return
+     */
+    public List<Actor> createWalls() {
+        
+        int x = 0;
+        int y = Constants.CUBE_SIDE;
+        List<Actor> walls = new ArrayList<Actor>();
+        
+        for (int i = 1; i < getGameboardLinesNb(); i++) {
+            int[] line = gameboard[i];
+            
+            for (int j = 0; j < line.length; j++) {
+                int value = line[j];
+                
+                if (value == Constants.COLLISION) {
+                    Actor cube = Teetrymino.createCube(x, y, WALL_COLOR, WALL_COLOR);
+                    walls.add(cube);
+                }
+                
+                x += Constants.CUBE_SIDE;
+                
+            }
+            
+            y += Constants.CUBE_SIDE;
+            x = 0;
+        }
+        
+        return walls;
+        
     }
     
     public static void main(String[] args) {

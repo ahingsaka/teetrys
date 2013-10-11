@@ -1,5 +1,7 @@
 package com.katspow.teetrys.client.core;
 
+import java.util.List;
+
 import com.katspow.caatja.behavior.Interpolator;
 import com.katspow.caatja.core.Caatja;
 import com.katspow.caatja.core.canvas.CaatjaCanvas;
@@ -8,6 +10,7 @@ import com.katspow.caatja.core.image.CaatjaImageLoaderCallback;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.Scene.Ease;
+import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.Actor.Anchor;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.effects.EaseInOut;
@@ -96,7 +99,15 @@ public class GameController {
     public void enterGaming() throws Exception {
         EaseInOut.scenesFromUpToDown(director, getGamingScene(), director.getCurrentScene());
         
-        // Start game loop !
+        // Init world
+        GameWorld gameWorld = new GameWorld();
+        List<Actor> walls = gameWorld.createWalls();
+        
+        for (Actor cubeWall : walls) {
+            getGamingScene().addChild(cubeWall);
+        }
+        
+        // Start game !
         
     }
     
