@@ -29,8 +29,6 @@ import com.katspow.teetrys.client.statemachine.StateMachine.GameState;
  */
 public class GameController {
 
-    // TODO Move to constants file
-
     private static StateMachine stateMachine;
     private Director director;
     private CaatjaCanvas canvas;
@@ -110,7 +108,19 @@ public class GameController {
         }
         
         // Start game !
+        int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
+        int y = Constants.START_POINT_Y;
         
+        buildCurrentTeetrymino(x, y);
+        
+    }
+    
+    // TODO Move ?
+    private void buildCurrentTeetrymino(double x, double y) throws Exception {
+        List<Actor> teetrymino = Teetrymino.createNewTeetrymino(x, y);
+        for (Actor actor : teetrymino) {
+            getGamingScene().addChild(actor);
+        }
     }
     
     private Scene getMainMenuScene() throws Exception {
