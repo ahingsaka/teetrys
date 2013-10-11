@@ -99,6 +99,8 @@ public class GameController {
     public void enterGaming() throws Exception {
         EaseInOut.scenesFromUpToDown(director, getGamingScene(), director.getCurrentScene());
         
+        // Move to gaming scene ??
+        
         // Init world
         GameWorld gameWorld = new GameWorld();
         List<Actor> walls = gameWorld.createWalls();

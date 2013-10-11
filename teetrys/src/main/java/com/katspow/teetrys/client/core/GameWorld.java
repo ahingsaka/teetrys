@@ -8,7 +8,7 @@ import com.katspow.teetrys.client.Constants;
 
 public class GameWorld {
 
-    private static final String WALL_COLOR = "#161714";
+    private static final String WALL_COLOR = "black";
     private int[][] gameboard;
     
     public GameWorld() {
@@ -60,6 +60,7 @@ public class GameWorld {
         int y = Constants.CUBE_SIDE;
         List<Actor> walls = new ArrayList<Actor>();
         
+        // Begin at 1, we do NOT represent the TOP line of walls (2 cubes are added later in the code)
         for (int i = 1; i < getGameboardLinesNb(); i++) {
             int[] line = gameboard[i];
             
@@ -78,6 +79,13 @@ public class GameWorld {
             y += Constants.CUBE_SIDE;
             x = 0;
         }
+        
+        // add 2 cubes and icons on upper left and right
+        Actor upperLeftCube = Teetrymino.createCube(0, 0, WALL_COLOR, WALL_COLOR);
+        Actor upperRightCube = Teetrymino.createCube(Constants.GAME_WIDTH - Constants.CUBE_SIDE, 0, WALL_COLOR, WALL_COLOR);
+
+        walls.add(upperLeftCube);
+        walls.add(upperRightCube);
         
         return walls;
         

@@ -16,7 +16,7 @@ public class GamingScene extends Scene {
 
         root = new ActorContainer();
         root.setBounds(0, 0, director.canvas.getCoordinateSpaceWidth(), director.canvas.getCoordinateSpaceHeight());
-        root.setFillStrokeStyle(CaatjaColor.valueOf("black"));
+        root.setFillStrokeStyle(CaatjaColor.valueOf("#161714"));
 
         addChild(root);
         
