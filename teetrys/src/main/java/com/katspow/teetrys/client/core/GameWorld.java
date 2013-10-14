@@ -9,7 +9,7 @@ import com.katspow.teetrys.client.Constants;
 public class GameWorld {
 
     private static final String WALL_COLOR = "black";
-    private int[][] gameboard;
+    private Cube[][] gameboard;
     
     public GameWorld() {
         init();
@@ -20,19 +20,24 @@ public class GameWorld {
     // This will be for collisions.
     public void init() {
 
-        gameboard = new int[getGameboardLinesNb()][getGameboardColumnsNb()];
+        gameboard = new Cube[getGameboardLinesNb()][getGameboardColumnsNb()];
 
         for (int i = 0; i < getGameboardLinesNb(); i++) {
+            
+            // Init with default values
+            for (int j = 0; j < getGameboardColumnsNb(); j++) {
+                gameboard[i][j] = Cube.Fixed.EMPTY;
+            }
 
             // Upper and lower lines contain only collision blocks
             if (i == 0 || i == getGameboardLinesNb() - 1) {
                 for (int j = 0; j < getGameboardColumnsNb(); j++) {
-                    gameboard[i][j] = Constants.COLLISION;
+                    gameboard[i][j] = Cube.Fixed.BRICK;
                 }
 
             } else {
-                gameboard[i][0] = Constants.COLLISION;
-                gameboard[i][getGameboardColumnsNb() - 1] = Constants.COLLISION;
+                gameboard[i][0] = Cube.Fixed.BRICK;
+                gameboard[i][getGameboardColumnsNb() - 1] = Cube.Fixed.BRICK;
             }
         }
 
@@ -46,7 +51,7 @@ public class GameWorld {
         return ((Constants.GAME_WIDTH - Constants.LEFT_SPACE - Constants.RIGHT_SPACE) / Constants.CUBE_SIDE) + 2;
     }
     
-    public int[][] getGameboard() {
+    public Cube[][] getGameboard() {
         return gameboard;
     }
     
@@ -62,12 +67,12 @@ public class GameWorld {
         
         // Begin at 1, we do NOT represent the TOP line of walls (2 cubes are added later in the code)
         for (int i = 1; i < getGameboardLinesNb(); i++) {
-            int[] line = gameboard[i];
+            Cube[] line = gameboard[i];
             
             for (int j = 0; j < line.length; j++) {
-                int value = line[j];
+                Cube value = line[j];
                 
-                if (value == Constants.COLLISION) {
+                if (value == Cube.Fixed.BRICK) {
                     Actor cube = Teetrymino.createCube(x, y, WALL_COLOR, WALL_COLOR);
                     walls.add(cube);
                 }
@@ -95,7 +100,7 @@ public class GameWorld {
         GameWorld gw = new GameWorld();
         gw.init();
         
-        int[][] gameboard = gw.getGameboard();
+        Cube[][] gameboard = gw.getGameboard();
         
         for (int i = 0; i < gw.getGameboardLinesNb(); i++) {
             for (int j = 0; j < gw.getGameboardColumnsNb(); j++) {

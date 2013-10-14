@@ -15,6 +15,7 @@ import com.katspow.caatja.foundation.actor.Actor.Anchor;
 import com.katspow.caatja.foundation.timer.Callback;
 import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.teetrys.client.Constants;
+import com.katspow.teetrys.client.core.Cube.Full;
 import com.katspow.teetrys.client.effects.EaseInOut;
 import com.katspow.teetrys.client.scene.LoadingScene;
 import com.katspow.teetrys.client.scene.game.GamingScene;
@@ -41,6 +42,12 @@ public class GameController {
     private HighscoresScene highscoresScene;
     private GamingScene gamingScene;
     private TimerTask timerTask;
+    
+    private GameWorld gameWorld;
+    
+    public enum Direction {
+        UP, DOWN, LEFT, RIGHT
+    }
     
     public GameController() throws Exception {
         stateMachine = new StateMachine(this);
@@ -103,7 +110,7 @@ public class GameController {
         // Move to gaming scene ??
         
         // Init world
-        GameWorld gameWorld = new GameWorld();
+        gameWorld = new GameWorld();
         List<Actor> walls = gameWorld.createWalls();
         
         for (Actor cubeWall : walls) {
@@ -125,7 +132,18 @@ public class GameController {
         timerTask = getGamingScene().createTimer(startTime, duration, new Callback() {
             public void call(double time, double ttime, TimerTask timerTask) {
                 try {
-                    moveCubes(getGamingScene().getCurrentTeetrymino(), 0, Constants.CUBE_SIDE);
+                    List<Actor> currentTeetrymino = getGamingScene().getCurrentTeetrymino();
+                    
+                    boolean collisionFound = Collision.checkCollisionsForAllCubes(currentTeetrymino, Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
+                    
+                    if (collisionFound) {
+                        storeCubes(currentTeetrymino);
+                        
+                        reinit();
+                        
+                    } else {
+                        moveCubes(currentTeetrymino, 0, Constants.CUBE_SIDE);
+                    }
                     
                     timerTask.reset(time);
                     
@@ -145,6 +163,57 @@ public class GameController {
             }
         });
 
+    }
+    
+    private void reinit() throws Exception {
+        int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
+        int y = Constants.START_POINT_Y;
+        List<Actor> currentTeetrymino = buildCurrentTeetrymino(x, y);
+        gamingScene.setCurrentTeetrymino(currentTeetrymino);
+    }
+    
+//    re_init: ->
+//    @x = Globals.LEFT_SPACE + Globals.START_POINT_X * Globals.CUBE_SIDE
+//    @y = Globals.START_POINT_Y
+//    @current_max_y = 0
+//    @current_left_bound = 0
+//    @current_right_bound = 0
+//
+//    @cube_list = @next_cube_list
+//
+//    delta_x = 350 - @x
+//    delta_y = 320 - @y
+//
+//    for cube in @cube_list
+//        cube.setStrokeStyle('#000000')
+//        cube.x -= delta_x
+//        cube.y -= delta_y
+//
+//    @current_shape_number = @next_current_shape_number
+//    @current_transformation = @next_current_transformation
+//
+//    this.build_next_shape(350, 320)
+//
+//    # Kind of a hack, ZOrder does seem to work for 'last' elements only ?
+//    Gui.refreshZOrder()
+//
+//    # TODO Clean code ...
+//    @current_max_y = 0
+    
+    
+    
+    // Store the cubes in gameboard
+    // Disable the mouse event
+    private void storeCubes(List<Actor> cubes) {
+        for (Actor cube : cubes) {
+            
+            // FIXME Disable events
+            
+            int cube_x = (int) (cube.x / Constants.CUBE_SIDE);
+            int cube_y = (int) (cube.y / Constants.CUBE_SIDE + 1);
+            
+            gameWorld.getGameboard()[cube_y][cube_x] = Cube.Full.valueOf(cube);
+        }
     }
     
     // TODO Move ?
@@ -168,13 +237,6 @@ public class GameController {
         
         
     }
-    
-//    move_cubes: (cube_list, add_x, add_y) ->
-//    for cube in cube_list
-//        cube.x += add_x
-//        cube.y += add_y
-//    @y = @y + add_y
-//    @x = @x + add_x
     
     private Scene getMainMenuScene() throws Exception {
         if (mainMenuScene == null) {
