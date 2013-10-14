@@ -1,7 +1,7 @@
 package com.katspow.teetrys.client.statemachine;
 
-import com.google.gwt.event.logical.shared.HasInitializeHandlers;
 import com.katspow.teetrys.client.core.GameController;
+import com.katspow.teetrys.client.core.GameController.Direction;
 
 /**
  * Will control the different states of the game.
@@ -135,11 +135,13 @@ public class StateMachine {
                 gameController.enterGaming();
             }
             
-            void process(StateMachine sm, GameEvent e) {
+            void process(StateMachine sm, GameEvent e) throws Exception {
                 
                 switch(e) {
                 case CALL_DOWN:
+                    gameController.moveCurrentTeetrymino(Direction.DOWN);
                     break;
+                    
                 case CALL_UP:
                     break;
                 case CALL_LEFT:
@@ -216,6 +218,7 @@ public class StateMachine {
         }
         
         currentState = states[states.length - 1];
+        System.out.println("assign " + currentState);
     }
 
     public void setState(GameState mainMenu) {
@@ -228,6 +231,7 @@ public class StateMachine {
 
     public void sendEvent(GameEvent gameEvent) throws Exception {
         currentState.process(this, gameEvent);
+        System.out.println("current state " + currentState);
     }
 
 }

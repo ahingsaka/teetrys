@@ -18,6 +18,7 @@ import com.katspow.teetrys.client.core.GameController;
  * FIXME CAATJA - Régler le pb du mouseDrag par défaut (cf Actor l. 1800), ok on va ajouter des methodes au lieu de faire des surcharges
  * FIXME CAATJA - setScene + getSceneIndex
  * FIXME CAATJA - Passage des interpolators en statique ?
+ * FIXME Throws exception everywhere !!!
  * 
  * @author asamsenesena
  *

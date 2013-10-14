@@ -2,11 +2,14 @@ package com.katspow.teetrys.client.core;
 
 import java.util.List;
 
+import com.katspow.caatja.CAATKeyListener;
 import com.katspow.caatja.behavior.Interpolator;
+import com.katspow.caatja.core.CAAT;
 import com.katspow.caatja.core.Caatja;
 import com.katspow.caatja.core.canvas.CaatjaCanvas;
 import com.katspow.caatja.core.image.CaatjaImageLoader;
 import com.katspow.caatja.core.image.CaatjaImageLoaderCallback;
+import com.katspow.caatja.event.CAATKeyEvent;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.Scene.Ease;
@@ -16,6 +19,7 @@ import com.katspow.caatja.foundation.timer.Callback;
 import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.Cube.Full;
+import com.katspow.teetrys.client.core.GameController.Direction;
 import com.katspow.teetrys.client.effects.EaseInOut;
 import com.katspow.teetrys.client.scene.LoadingScene;
 import com.katspow.teetrys.client.scene.game.GamingScene;
@@ -124,10 +128,29 @@ public class GameController {
         List<Actor> currentTeetrymino = buildCurrentTeetrymino(x, y);
         gamingScene.setCurrentTeetrymino(currentTeetrymino);
         
+        // Register keys
+        registerMovementKeys();
+        
         createGameTimer(0, 1000);
         
     }
     
+    private void registerMovementKeys() {
+        
+        CAAT.registerKeyListener(new CAATKeyListener() {
+            public void call(CAATKeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == CAAT.Keys.DOWN.getValue()) {
+                    try {
+                        stateMachine.sendEvent(GameEvent.CALL_DOWN);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        
+    }
+
     private void createGameTimer(double startTime, double duration) throws Exception {
         timerTask = getGamingScene().createTimer(startTime, duration, new Callback() {
             public void call(double time, double ttime, TimerTask timerTask) {
@@ -234,10 +257,25 @@ public class GameController {
                 cube.y += addy;
             }
         }
-        
-        
     }
     
+    public void moveCurrentTeetrymino(Direction direction) throws Exception {
+        switch (direction) {
+        case DOWN:
+            checkCollisionAndMoveCubes(direction, 0, Constants.CUBE_SIDE);
+            break;
+        }
+    }
+    
+    
+    private void checkCollisionAndMoveCubes(Direction direction, int movex, int movey) throws Exception {
+        List<Actor> currentTeetrymino = getGamingScene().getCurrentTeetrymino();
+        boolean collisionFound  = Collision.checkCollisionsForAllCubes(currentTeetrymino, direction, Constants.CUBE_SIDE, gameWorld.getGameboard());
+        if (!collisionFound) {
+            moveCubes(currentTeetrymino, movex, movey);
+        }
+    }
+
     private Scene getMainMenuScene() throws Exception {
         if (mainMenuScene == null) {
             mainMenuScene = new MainMenuScene(director);
@@ -282,5 +320,6 @@ public class GameController {
     public void enterHighscores() throws Exception {
         EaseInOut.scenesFromLeftToRight(director, getHighscoresScene(), director.getCurrentScene());
     }
+
 
 }
