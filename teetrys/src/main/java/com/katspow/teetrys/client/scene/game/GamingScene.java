@@ -27,6 +27,14 @@ public class GamingScene extends Scene {
         
     }
     
+    public List<Actor> getCurrentTeetrymino() {
+        return currentTeetrymino;
+    }
+    
+    public void setCurrentTeetrymino(List<Actor> currentTeetrymino) {
+        this.currentTeetrymino = currentTeetrymino;
+    }
+    
     
 
 }

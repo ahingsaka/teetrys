@@ -24,7 +24,7 @@ public class Constants {
     public static final int RIGHT_SPACE = 40;
 
     // Represents the column number where falling blocks will appear. There are 10 columns in the game
-    public static final int START_POINT_X = 4;
+    public static final int START_POINT_X = 3;
     public static final int START_POINT_Y = 0;
     
 

@@ -240,7 +240,7 @@ public class Teetrymino {
         Form chosenForm = Form.values()[randomValue];
         
         Transformation baseTransformation = chosenForm.getTransformations().get(0);
-        CaatjaColor randomColor = getRandomColor();
+        String randomColor = getRandomColor();
         
         double i = x;
         double j = y;
@@ -252,9 +252,16 @@ public class Teetrymino {
                 int val = matrix[line][col];
                 
                 if (val != 0) {
-                    Teetrymino.createCube(i, j, color, "#000000");
+                    Actor cube = Teetrymino.createCube(i, j, randomColor, "#000000");
+                    
+                    teetrymino.add(cube);
                 }
+                
+                i += Constants.CUBE_SIDE;
             }
+         
+            i = x;
+            j += Constants.CUBE_SIDE;
         }
         
         
@@ -300,15 +307,15 @@ public class Teetrymino {
         return teetrymino;
     }
     
-    public static CaatjaColor getRandomColor() {
-        String[] letters = "0123456789ABCDEF".split("");
+    public static String getRandomColor() {
+        String[] letters = "0123456789abcdef".split("");
         String color = "#";
         
         for (int i = 0; i < 6; i++) {
-            color += letters[new Random().nextInt(15)];
+            color += letters[new Random().nextInt(16)];
         }
         
-        return CaatjaColor.valueOf(color);
+        return color;
     }
     
 }

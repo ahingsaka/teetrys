@@ -12,6 +12,8 @@ import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.Scene.Ease;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.Actor.Anchor;
+import com.katspow.caatja.foundation.timer.Callback;
+import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.effects.EaseInOut;
 import com.katspow.teetrys.client.scene.LoadingScene;
@@ -38,6 +40,7 @@ public class GameController {
     private AboutMenuScene aboutMenuScene;
     private HighscoresScene highscoresScene;
     private GamingScene gamingScene;
+    private TimerTask timerTask;
     
     public GameController() throws Exception {
         stateMachine = new StateMachine(this);
@@ -111,17 +114,67 @@ public class GameController {
         int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
         int y = Constants.START_POINT_Y;
         
-        buildCurrentTeetrymino(x, y);
+        List<Actor> currentTeetrymino = buildCurrentTeetrymino(x, y);
+        gamingScene.setCurrentTeetrymino(currentTeetrymino);
+        
+        createGameTimer(0, 1000);
         
     }
     
+    private void createGameTimer(double startTime, double duration) throws Exception {
+        timerTask = getGamingScene().createTimer(startTime, duration, new Callback() {
+            public void call(double time, double ttime, TimerTask timerTask) {
+                try {
+                    moveCubes(getGamingScene().getCurrentTeetrymino(), 0, Constants.CUBE_SIDE);
+                    
+                    timerTask.reset(time);
+                    
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            
+        }, new Callback() {
+            public void call(double time, double ttime, TimerTask timerTask) {
+                // TODO Auto-generated method stub
+            }
+            
+        }, new Callback() {
+            public void call(double time, double ttime, TimerTask timerTask) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+    }
+    
     // TODO Move ?
-    private void buildCurrentTeetrymino(double x, double y) throws Exception {
+    private List<Actor> buildCurrentTeetrymino(double x, double y) throws Exception {
         List<Actor> teetrymino = Teetrymino.createNewTeetrymino(x, y);
         for (Actor actor : teetrymino) {
             getGamingScene().addChild(actor);
         }
+        
+        return teetrymino;
     }
+    
+    private void moveCubes(List<Actor> cubes, double addx, double addy) {
+        for (Actor cube : cubes) {
+            // If necessary ?
+            if (cube.y < Constants.GAME_HEIGHT) {
+                cube.x += addx;
+                cube.y += addy;
+            }
+        }
+        
+        
+    }
+    
+//    move_cubes: (cube_list, add_x, add_y) ->
+//    for cube in cube_list
+//        cube.x += add_x
+//        cube.y += add_y
+//    @y = @y + add_y
+//    @x = @x + add_x
     
     private Scene getMainMenuScene() throws Exception {
         if (mainMenuScene == null) {
