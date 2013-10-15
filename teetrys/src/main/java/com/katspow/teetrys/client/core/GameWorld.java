@@ -147,4 +147,13 @@ public class GameWorld {
         
     }
 
+    public void removeCubes(List<Integer> fullLinesIndexes) {
+        for (Integer index : fullLinesIndexes) {
+            Cube[] line = gameboard[index];
+            for (int i = 0; i < line.length - 2; i++) {
+                line[i] = Cube.Fixed.EMPTY; 
+            }
+        }
+    }
+
 }

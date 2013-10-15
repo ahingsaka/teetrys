@@ -224,8 +224,12 @@ public class GameController {
                     Full fullCube = (Full) line[i];
                     returnTime = Effects.blinkAndDisappear(fullCube.getValue(), sceneTime);
                 }
-                
             }
+            
+            // Refresh gameworld
+            gameWorld.removeCubes(fullLinesIndexes);
+            
+            // Make upper cubes fall
             
         }
         
