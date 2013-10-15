@@ -6,10 +6,10 @@ import java.util.Random;
 
 import com.katspow.caatja.core.canvas.CaatjaColor;
 import com.katspow.caatja.foundation.actor.Actor;
-import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.foundation.ui.ShapeActor;
 import com.katspow.caatja.foundation.ui.ShapeActor.Shape;
 import com.katspow.teetrys.client.Constants;
+import com.katspow.teetrys.client.core.GameController.Direction;
 
 /**
  * This represents the pieces of the game.<br>
@@ -17,6 +17,11 @@ import com.katspow.teetrys.client.Constants;
  *
  */
 public class Teetrymino {
+    
+    private List<Actor> cubes;
+    private Form form;
+    private int transfoIndex;
+    private String color;
     
     public enum Form {
         
@@ -213,6 +218,12 @@ public class Teetrymino {
         }
     }
     
+    public Teetrymino(Form form, List<Actor> cubes, String color) {
+        this.form = form;
+        this.cubes = cubes;
+        this.color = color;
+    }
+
     /**
      * Returns the smallest shape possible for a teetrymino : a cube.
      * 
@@ -234,13 +245,23 @@ public class Teetrymino {
         return cube;
     }
     
-    public static List<Actor> createNewTeetrymino(double x, double y) {
-        List<Actor> teetrymino = new ArrayList<Actor>();
+    public static Teetrymino createNewTeetrymino(double x, double y) {
         int randomValue = new Random().nextInt(Form.values().length);
         Form chosenForm = Form.values()[randomValue];
         
-        Transformation baseTransformation = chosenForm.getTransformations().get(0);
-        String randomColor = getRandomColor();
+        return createTeetrymino(x, y, chosenForm, 0, null);
+    }
+    
+    public static Teetrymino createTeetrymino(double x, double y, Form chosenForm, int transfoIndex, String color) {
+        List<Actor> cubes = new ArrayList<Actor>();
+        
+        Transformation baseTransformation = chosenForm.getTransformations().get(transfoIndex);
+        
+        String randomColor = color;
+        
+        if (randomColor == null) {
+            randomColor = getRandomColor();
+        }
         
         double i = x;
         double j = y;
@@ -254,7 +275,7 @@ public class Teetrymino {
                 if (val != 0) {
                     Actor cube = Teetrymino.createCube(i, j, randomColor, "#000000");
                     
-                    teetrymino.add(cube);
+                    cubes.add(cube);
                 }
                 
                 i += Constants.CUBE_SIDE;
@@ -304,7 +325,7 @@ public class Teetrymino {
 //                return [cube_list, current_shape_number, current_transformation]
         
         
-        return teetrymino;
+        return new Teetrymino(chosenForm, cubes, color);
     }
     
     public static String getRandomColor() {
@@ -316,6 +337,108 @@ public class Teetrymino {
         }
         
         return color;
+    }
+    
+//    public Transformation nextTransformation() {
+//        List<Transformation> transformations = form.getTransformations();
+//        transfoIndex += 1;
+//        
+//        if (transfoIndex > transformations.size() - 1) {
+//            transfoIndex = 0;
+//        }
+//        
+//        Transformation transformation = transformations.get(transfoIndex);
+//        return transformation;
+//    }
+    
+    // Move somewhere else ?, coz it needs gameworld
+    public boolean rotate(double x, double y, Cube[][] world) {
+        int nextIndex = nextIndex(form);
+        Teetrymino newTeetrymino = createTeetrymino(x, y, form, nextIndex, color);
+        boolean collision = Collision.checkCollisionsForAllCubes(newTeetrymino.getCubes(), Direction.UP, Constants.CUBE_SIDE, world);
+        
+        if (!collision) {
+            
+            for (int i = 0; i < newTeetrymino.getCubes().size(); i++) {
+                Actor rotatedCube = newTeetrymino.getCubes().get(i);
+                Actor currentCube = this.cubes.get(i);
+                currentCube.x = rotatedCube.x;
+                currentCube.y = rotatedCube.y;
+            }
+            
+            this.transfoIndex = nextIndex;
+            
+            System.out.println("rotate done");
+        }
+        
+        return !collision;
+        
+    }
+    
+    private int nextIndex(Form form) {
+        int nextIndex = transfoIndex + 1;
+        
+        if (nextIndex > form.getTransformations().size() - 1) {
+            nextIndex = 0;
+        }
+        
+        return nextIndex;
+    }
+
+//    rotate_shape: (x, y, cube_list, check_collision, transformation_nb)->
+//    transformations = @cube_shape_list[@current_shape_number]
+//    keep = @current_transformation
+//    shape = transformations[@current_transformation]
+//    i = x
+//    j = y
+//    @current_max_y = y
+//
+//    for line in shape
+//        for value in line
+//            if (value != 0)
+//                cube = cube_list[value - 1]
+//                cube.setLocation(i, j)
+//
+//                if (@current_left_bound == 0) or (i < @current_left_bound)
+//                    @current_left_bound = i
+//
+//                if (@current_right_bound == 0) or (i > @current_right_bound)
+//                    @current_right_bound = i + Globals.CUBE_SIDE
+//
+//                if (j > @current_max_y)
+//                    @current_max_y = j
+//
+//            i += Globals.CUBE_SIDE
+//        i = x
+//        j += Globals.CUBE_SIDE
+//
+//    # Rotation is final only if there is no collision !
+//    collision_found = false
+//    if (check_collision)
+//
+//        # Check if we have reached the bottom of gameboard
+//        for cube in cube_list
+//            if (cube.y >= Globals.GAME_HEIGHT)
+//                collision_found = true
+//                break
+//
+//        if (!collision_found)
+//            collision_found = Collision.check_collisions_with_other_cubes(cube_list, @gameboard)
+//
+//    # If so rotate back 
+//    if (collision_found)
+//        log('collide' + keep)
+//        this.previous_transformation()
+//        this.rotate_shape(x, y, cube_list, false, @current_transformation)
+//
+//    else 
+//        @shape_rotating = false
+//        @current_max_y += Globals.CUBE_SIDE
+    
+    
+    
+    public List<Actor> getCubes() {
+        return cubes;
     }
     
 }

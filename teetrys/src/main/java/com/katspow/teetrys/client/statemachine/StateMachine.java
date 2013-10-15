@@ -145,6 +145,7 @@ public class StateMachine {
                     break;
                     
                 case CALL_UP:
+                    gameController.moveCurrentTeetrymino(Direction.UP);
                     break;
                     
                 case CALL_LEFT:
