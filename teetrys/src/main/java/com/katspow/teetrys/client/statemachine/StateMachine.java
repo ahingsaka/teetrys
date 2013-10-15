@@ -36,7 +36,7 @@ public class StateMachine {
         CALL_START,
         CALL_ROTATE,
         
-        LOSE
+        LOSE, START_GAME
     }
     
     /**
@@ -79,6 +79,7 @@ public class StateMachine {
                 
                 case CHOOSE_GAME:
                     sm.enterState(GAME);
+                    sm.enterState(GAMING);
                     break;
                 }
             }
@@ -120,10 +121,10 @@ public class StateMachine {
             
             @Override
             void entry(StateMachine sm) throws Exception {
-                sm.enterState(GAMING);
+                gameController.enterGaming();
             }
             
-            void process(StateMachine sm, GameEvent e) {
+            void process(StateMachine sm, GameEvent e) throws Exception {
                 
             }
         },
@@ -132,7 +133,7 @@ public class StateMachine {
             
             @Override
             void entry(StateMachine sm) throws Exception {
-                gameController.enterGaming();
+                gameController.startGame();
             }
             
             void process(StateMachine sm, GameEvent e) throws Exception {
@@ -213,6 +214,9 @@ public class StateMachine {
     }
     
     private void enterState(GameState... states) throws Exception {
+        
+        System.out.println(states);
+        
         for (GameState gameState : states) {
             gameState.entry(this);
         }
@@ -231,7 +235,6 @@ public class StateMachine {
 
     public void sendEvent(GameEvent gameEvent) throws Exception {
         currentState.process(this, gameEvent);
-        System.out.println("current state " + currentState);
     }
 
 }

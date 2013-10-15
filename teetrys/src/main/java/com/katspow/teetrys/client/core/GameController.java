@@ -108,8 +108,7 @@ public class GameController {
         director.easeIn(director.getSceneIndex(getMainMenuScene()), Ease.SCALE, 2000, false, Anchor.CENTER, new Interpolator().createElasticOutInterpolator(2.5, .4, false));
     }
     
-    public void enterGaming() throws Exception {
-        EaseInOut.scenesFromUpToDown(director, getGamingScene(), director.getCurrentScene());
+    public void startGame() throws Exception {
         
         // Move to gaming scene ??
         
@@ -319,6 +318,10 @@ public class GameController {
 
     public void enterHighscores() throws Exception {
         EaseInOut.scenesFromLeftToRight(director, getHighscoresScene(), director.getCurrentScene());
+    }
+
+    public void enterGaming() throws Exception {
+        EaseInOut.scenesFromUpToDown(director, getGamingScene(), director.getCurrentScene());
     }
 
 
