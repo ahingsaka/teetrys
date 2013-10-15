@@ -19,7 +19,9 @@ import com.katspow.caatja.foundation.timer.Callback;
 import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.caatja.math.Pt;
 import com.katspow.teetrys.client.Constants;
+import com.katspow.teetrys.client.core.Cube.Full;
 import com.katspow.teetrys.client.effects.EaseInOut;
+import com.katspow.teetrys.client.effects.Effects;
 import com.katspow.teetrys.client.scene.LoadingScene;
 import com.katspow.teetrys.client.scene.game.GamingScene;
 import com.katspow.teetrys.client.scene.menus.AboutMenuScene;
@@ -171,11 +173,21 @@ public class GameController {
                     if (collisionFound) {
                         storeCubes(currentTeetrymino);
                         
-                        reinit();
+                        // Check lines
+                        List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
+
+                        if (fullLinesIndexes.size() > 1) {
+                            // last item is special index
+                            int endIndex = fullLinesIndexes.size() - 1;
+                            checkLines(fullLinesIndexes.subList(0, endIndex), fullLinesIndexes.get(endIndex), time);
+                            
+                        } else {
+                            reinit();
+                        }
+                        
                         
                     } else {
                         moveCubes(currentTeetrymino, 0, Constants.CUBE_SIDE);
-                        // set a constant
                         getGamingScene().getOrigin().y += Constants.CUBE_SIDE;
                     }
                     
@@ -197,6 +209,63 @@ public class GameController {
             }
         });
 
+    }
+    
+    private void checkLines(List<Integer> fullLinesIndexes, Integer startIndex, double sceneTime) {
+        
+        if (!fullLinesIndexes.isEmpty()) {
+            double returnTime = sceneTime;
+            double newReturnTime = sceneTime;
+            
+            for (Integer index : fullLinesIndexes) {
+                Cube[] line = gameWorld.getGameboard()[index];
+                
+                for (int i = 1; i < line.length -2; i++) {
+                    Full fullCube = (Full) line[i];
+                    returnTime = Effects.blinkAndDisappear(fullCube.getValue(), sceneTime);
+                }
+                
+            }
+            
+        }
+        
+//        # If there are lines
+//        if (full_lines_table.length > 0)
+//
+//            return_time = time
+//            new_return_time = time
+//
+//            for index in full_lines_table
+//                line = gameboard[index]
+//                cpt = 0
+//                for cube in line[1..line.length-2]
+//                    return_time = Effects.blink_and_disappear(cube, time)
+//
+//            # Refresh gameboard
+//            this.remove_cubes_in_gameboard(full_lines_table, gameboard)
+//
+//            # Make upper cubes fall
+//            index_found = this.find_empty_line_index_from(index_to_check_upper_lines)
+//
+//            if (index_found != -1)
+//                lines_to_move = []
+//
+//                # Add +1, we don't need the empty line ...
+//                for i in [index_to_check_upper_lines..index_found + 1]
+//                    lines_to_move.push(i)
+//
+//                # TEST NEW FALL EFFECT
+//                #new_return_time = Effects.fall_effect(lines_to_move, gameboard, return_time, full_lines_table.length)
+//
+//                new_return_time = Effects.fall(lines_to_move, gameboard, return_time, full_lines_table.length)
+//
+//                # Store in waiting time
+//                @waiting_time = new_return_time
+//
+//            # Refresh scores
+//            Scores.add_lines(full_lines_table.length)
+//            Gui.refreshScores()
+        
     }
     
     private void reinit() throws Exception {

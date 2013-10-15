@@ -96,6 +96,40 @@ public class GameWorld {
         
     }
     
+    
+    public List<Integer> findNumberOfFullLines() {
+        
+        List<Integer> indexes = new ArrayList<Integer>();
+        int nbLines = gameboard.length - 2;
+        int indexToCheckUpperLines = nbLines;
+        
+        for (int i = nbLines; i > 1; i--) {
+            Cube[] line = gameboard[i];
+            
+            boolean isFullLine = true;
+            
+            for (int j = 1; j < line.length - 2; j++) {
+                Cube cube = line[j];
+                
+                if (cube == Cube.Fixed.EMPTY) {
+                    isFullLine = false;
+                    break;
+                }
+            }
+            
+            if (isFullLine) {
+                indexes.add(Integer.valueOf(i));
+                indexToCheckUpperLines -= 1;
+            }
+            
+        }
+        
+        indexes.add(indexToCheckUpperLines);
+        
+        return indexes;
+        
+    }
+    
     public static void main(String[] args) {
         GameWorld gw = new GameWorld();
         gw.init();
