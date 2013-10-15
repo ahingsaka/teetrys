@@ -140,7 +140,6 @@ public class GameController {
                 try {
                     
                     if (keyEvent.getAction().equals("down")) { 
-                    
                         if (keyEvent.getKeyCode() == CAAT.Keys.DOWN.getValue()) {
                             stateMachine.sendEvent(GameEvent.CALL_DOWN);
                         } else if (keyEvent.getKeyCode() == CAAT.Keys.LEFT.getValue()) {
@@ -151,7 +150,6 @@ public class GameController {
                             stateMachine.sendEvent(GameEvent.CALL_UP);
                             System.out.println("send event");
                         }
-                    
                     }
 
                 } catch (Exception e) {
@@ -178,7 +176,7 @@ public class GameController {
                     } else {
                         moveCubes(currentTeetrymino, 0, Constants.CUBE_SIDE);
                         // set a constant
-                        getGamingScene().getOrigin().y += 1;
+                        getGamingScene().getOrigin().y += Constants.CUBE_SIDE;
                     }
                     
                     timerTask.reset(time);
@@ -291,6 +289,7 @@ public class GameController {
             // TODO Not pretty
             Pt origin = getGamingScene().getOrigin();
             getGamingScene().getCurrentTeetrymino().rotate(origin.x, origin.y, gameWorld.getGameboard());
+            System.out.println("origin.y " + origin.y);
             
             break;
         }
@@ -304,8 +303,8 @@ public class GameController {
         boolean collisionFound  = Collision.checkCollisionsForAllCubes(currentTeetrymino, direction, Constants.CUBE_SIDE, gameWorld.getGameboard());
         if (!collisionFound) {
             moveCubes(currentTeetrymino, movex, movey);
-            getGamingScene().getOrigin().x += movex / Constants.CUBE_SIDE;
-            getGamingScene().getOrigin().y += movey / Constants.CUBE_SIDE;
+            getGamingScene().getOrigin().x += movex;
+            getGamingScene().getOrigin().y += movey;
         }
     }
 
