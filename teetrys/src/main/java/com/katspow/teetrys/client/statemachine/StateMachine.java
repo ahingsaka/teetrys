@@ -139,18 +139,25 @@ public class StateMachine {
             void process(StateMachine sm, GameEvent e) throws Exception {
                 
                 switch(e) {
+                
                 case CALL_DOWN:
                     gameController.moveCurrentTeetrymino(Direction.DOWN);
                     break;
                     
                 case CALL_UP:
                     break;
+                    
                 case CALL_LEFT:
+                    gameController.moveCurrentTeetrymino(Direction.LEFT);
                     break;
+                    
                 case CALL_RIGHT:
+                    gameController.moveCurrentTeetrymino(Direction.RIGHT);
                     break;
+                    
                 case CALL_PAUSE:
                     break;
+                    
                 case CALL_ROTATE:
                     break;
                     

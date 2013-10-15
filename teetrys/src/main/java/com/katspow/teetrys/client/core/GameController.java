@@ -135,19 +135,25 @@ public class GameController {
     }
     
     private void registerMovementKeys() {
-        
+
         CAAT.registerKeyListener(new CAATKeyListener() {
             public void call(CAATKeyEvent keyEvent) {
-                if (keyEvent.getKeyCode() == CAAT.Keys.DOWN.getValue()) {
-                    try {
+                try {
+                    
+                    if (keyEvent.getKeyCode() == CAAT.Keys.DOWN.getValue()) {
                         stateMachine.sendEvent(GameEvent.CALL_DOWN);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else if (keyEvent.getKeyCode() == CAAT.Keys.LEFT.getValue()) {
+                        stateMachine.sendEvent(GameEvent.CALL_LEFT);
+                    } else if (keyEvent.getKeyCode() == CAAT.Keys.RIGHT.getValue()) {
+                        stateMachine.sendEvent(GameEvent.CALL_RIGHT);
                     }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
-        
+
     }
 
     private void createGameTimer(double startTime, double duration) throws Exception {
@@ -263,7 +269,17 @@ public class GameController {
         case DOWN:
             checkCollisionAndMoveCubes(direction, 0, Constants.CUBE_SIDE);
             break;
+            
+        case LEFT:
+            checkCollisionAndMoveCubes(direction, -Constants.CUBE_SIDE, 0);
+            break;
+            
+        case RIGHT:
+            checkCollisionAndMoveCubes(direction, Constants.CUBE_SIDE, 0);
+            break;
         }
+        
+         
     }
     
     
