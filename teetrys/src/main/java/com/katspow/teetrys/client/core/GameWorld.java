@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.teetrys.client.Constants;
+import com.katspow.teetrys.client.core.Cube.Full;
 
 public class GameWorld {
 
@@ -43,11 +44,11 @@ public class GameWorld {
 
     }
 
-    private int getGameboardLinesNb() {
+    public int getGameboardLinesNb() {
         return (Constants.GAME_HEIGHT / Constants.CUBE_SIDE) + 2;
     }
 
-    private int getGameboardColumnsNb() {
+    public int getGameboardColumnsNb() {
         return ((Constants.GAME_WIDTH - Constants.LEFT_SPACE - Constants.RIGHT_SPACE) / Constants.CUBE_SIDE) + 2;
     }
     
@@ -108,7 +109,7 @@ public class GameWorld {
             
             boolean isFullLine = true;
             
-            for (int j = 1; j < line.length - 2; j++) {
+            for (int j = 1; j < line.length - 1; j++) {
                 Cube cube = line[j];
                 
                 if (cube == Cube.Fixed.EMPTY) {
@@ -119,7 +120,7 @@ public class GameWorld {
             
             if (isFullLine) {
                 indexes.add(Integer.valueOf(i));
-                indexToCheckUpperLines -= 1;
+                indexToCheckUpperLines = i - 1;
             }
             
         }
@@ -129,6 +130,52 @@ public class GameWorld {
         return indexes;
         
     }
+    
+    public int findEmptyLineIndexFrom(int indexToCheckUpperLines) {
+        int index_found = -1;
+        
+        for (int i = indexToCheckUpperLines; i > 0; i--) {
+            Cube[] line = gameboard[i];
+            boolean isEmptyLine = true;
+            
+            for (int j = 1; j < line.length - 1; j++) {
+                Cube value = line[j];
+                
+                if (value != Cube.Fixed.EMPTY) {
+                    isEmptyLine = false;
+                    break;
+                }
+            }
+            
+            if (isEmptyLine) {
+                index_found = i;
+                break;
+            }
+        }
+        
+        return index_found;
+    }
+    
+//    find_empty_line_index_from: (index_to_check_upper_lines) ->
+//    log('index to check from ' + index_to_check_upper_lines)
+//    index_found = -1
+//
+//    for i in [index_to_check_upper_lines..1]
+//        line = @gameboard[i]
+//        for j in [1..line.length-2]
+//            value = line[j]
+//            is_empty_line = true
+//            if (value != undefined)
+//                is_empty_line = false
+//                break
+//
+//        if (is_empty_line)
+//            index_found = i
+//            break
+//    log('index of empty line found at ' + index_found)
+//    
+//    return index_found
+    
     
     public static void main(String[] args) {
         GameWorld gw = new GameWorld();
@@ -150,10 +197,34 @@ public class GameWorld {
     public void removeCubes(List<Integer> fullLinesIndexes) {
         for (Integer index : fullLinesIndexes) {
             Cube[] line = gameboard[index];
-            for (int i = 0; i < line.length - 2; i++) {
+            for (int i = 1; i < line.length - 1; i++) {
                 line[i] = Cube.Fixed.EMPTY; 
             }
         }
+    }
+
+    public List<Actor> makeAllCubesFall(int nbLinesToFall) {
+        
+        List<Actor> cubes = new ArrayList<Actor>();
+        
+        for (int i = 0; i < getGameboardLinesNb(); i++) {
+            for (int j = 1; j < getGameboardColumnsNb() - 1; j++) {
+                Cube cube = gameboard[i][j];
+                
+                if (cube != Cube.Fixed.EMPTY) {
+                    Full full = (Full) cube;
+                    full.getValue().y += nbLinesToFall * Constants.CUBE_SIDE;
+                    
+                    gameboard[i][j+nbLinesToFall] = cube;
+                    gameboard[i][j] = Cube.Fixed.EMPTY;
+                    
+                    cubes.add(full.getValue());
+                }
+                
+            }
+        }
+        
+        return cubes;
     }
 
 }

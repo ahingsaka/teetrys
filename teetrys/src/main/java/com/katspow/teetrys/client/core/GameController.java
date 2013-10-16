@@ -1,5 +1,6 @@
 package com.katspow.teetrys.client.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.katspow.caatja.CAATKeyListener;
@@ -211,7 +212,7 @@ public class GameController {
 
     }
     
-    private void checkLines(List<Integer> fullLinesIndexes, Integer startIndex, double sceneTime) {
+    private void checkLines(List<Integer> fullLinesIndexes, Integer indexToCheckUpperLines, double sceneTime) {
         
         if (!fullLinesIndexes.isEmpty()) {
             double returnTime = sceneTime;
@@ -220,7 +221,7 @@ public class GameController {
             for (Integer index : fullLinesIndexes) {
                 Cube[] line = gameWorld.getGameboard()[index];
                 
-                for (int i = 1; i < line.length -2; i++) {
+                for (int i = 1; i < line.length - 1; i++) {
                     Full fullCube = (Full) line[i];
                     returnTime = Effects.blinkAndDisappear(fullCube.getValue(), sceneTime);
                 }
@@ -230,38 +231,48 @@ public class GameController {
             gameWorld.removeCubes(fullLinesIndexes);
             
             // Make upper cubes fall
+            int i = 0;
+            
+            while (i < fullLinesIndexes.size() - 1) {
+                Integer lineIndex = fullLinesIndexes.get(i);
+                Integer nextLineIndex = fullLinesIndexes.get(i + 1);
+                
+                if (nextLineIndex == lineIndex + 1) {
+                    i += 1;
+                    
+                } else {
+                    int nbLinesToFall = i + 1;
+                    
+                    List<Actor> cubes = gameWorld.makeAllCubesFall(nbLinesToFall);
+                    double fallTime = Effects.fall(cubes, nbLinesToFall * Constants.CUBE_SIDE, sceneTime);
+                    
+                }
+                
+            }
+            
+            //Cube[] line = gameWorld.getGameboard()[fullLinesIndexes.get(0)];
+            
+            
+            //int indexToCheckUpperLines = fullLinesIndexes.get(fullLinesIndexes.size() - 1);
+//            int indexFound = gameWorld.findEmptyLineIndexFrom(indexToCheckUpperLines);
+//            System.out.println(indexFound + " " + indexToCheckUpperLines);
+//            
+//            if (indexFound != -1) {
+//                List<Integer> linesToMoveIndexes = new ArrayList<Integer>();
+//                
+//                // Add +1, we don't need the empty line ...
+//                for (int i = indexToCheckUpperLines; i < indexFound + 1; i++) {
+//                    linesToMoveIndexes.add(i);
+//                }
+//                
+//                newReturnTime = Effects.fall(linesToMoveIndexes, gameWorld.getGameboard(), returnTime, fullLinesIndexes.size());
+//            }
+            
+            // Refresh scores
+            
             
         }
         
-//        # If there are lines
-//        if (full_lines_table.length > 0)
-//
-//            return_time = time
-//            new_return_time = time
-//
-//            for index in full_lines_table
-//                line = gameboard[index]
-//                cpt = 0
-//                for cube in line[1..line.length-2]
-//                    return_time = Effects.blink_and_disappear(cube, time)
-//
-//            # Refresh gameboard
-//            this.remove_cubes_in_gameboard(full_lines_table, gameboard)
-//
-//            # Make upper cubes fall
-//            index_found = this.find_empty_line_index_from(index_to_check_upper_lines)
-//
-//            if (index_found != -1)
-//                lines_to_move = []
-//
-//                # Add +1, we don't need the empty line ...
-//                for i in [index_to_check_upper_lines..index_found + 1]
-//                    lines_to_move.push(i)
-//
-//                # TEST NEW FALL EFFECT
-//                #new_return_time = Effects.fall_effect(lines_to_move, gameboard, return_time, full_lines_table.length)
-//
-//                new_return_time = Effects.fall(lines_to_move, gameboard, return_time, full_lines_table.length)
 //
 //                # Store in waiting time
 //                @waiting_time = new_return_time
