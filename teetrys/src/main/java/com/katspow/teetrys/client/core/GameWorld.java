@@ -249,9 +249,9 @@ public class GameWorld {
         
         Cube[] line = gameboard[lineNumber];
         
+        System.out.println("index " + index);
         if (index < line.length - 1) {
         
-            System.out.println("index " + index);
             Cube cube = line[index];
             Teetrymino parent = cube.getParent();
             
@@ -274,6 +274,8 @@ public class GameWorld {
                 
             }
         
+        } else {
+            gravityFall(lineNumber, fullCubes);
         }
         
     }
@@ -421,7 +423,7 @@ public class GameWorld {
                     int cubeAbscisse = (int) (clonedCube.x / Constants.CUBE_SIDE);
                     Cube cube = gameboard[lineNumber][cubeAbscisse];
                     gameboard[lineNumber + nbLines][cubeAbscisse] = cube;  
-                    
+                    gameboard[lineNumber][cubeAbscisse] = Cube.Fixed.EMPTY;
                 }
             }
             

@@ -175,7 +175,8 @@ public class GameController {
                     if (collisionFound) {
                         storeCubes(currentCubes, currentTeetrymino);
                         
-                        // Check lines
+                        // Check lines FIXME, make it recursive 
+                        
                         List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
 
                         if (fullLinesIndexes.size() > 1) {
