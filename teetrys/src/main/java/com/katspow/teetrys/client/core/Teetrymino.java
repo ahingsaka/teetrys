@@ -247,7 +247,9 @@ public class Teetrymino {
     
     public static Teetrymino createNewTeetrymino(double x, double y) {
         int randomValue = new Random().nextInt(Form.values().length);
-        Form chosenForm = Form.values()[randomValue];
+        ///Form chosenForm = Form.values()[randomValue];
+        
+        Form chosenForm = Form.T;
         
         return createTeetrymino(x, y, chosenForm, 0, null);
     }
@@ -328,12 +330,14 @@ public class Teetrymino {
         return new Teetrymino(chosenForm, cubes, color);
     }
     
+    
     public static String getRandomColor() {
-        String[] letters = "0123456789abcdef".split("");
+        String[] letters = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
         String color = "#";
         
         for (int i = 0; i < 6; i++) {
-            color += letters[new Random().nextInt(16)];
+            int nextInt = new Random().nextInt(16);
+            color += letters[nextInt];
         }
         
         return color;

@@ -167,12 +167,13 @@ public class GameController {
         timerTask = getGamingScene().createTimer(startTime, duration, new Callback() {
             public void call(double time, double ttime, TimerTask timerTask) {
                 try {
-                    List<Actor> currentTeetrymino = getGamingScene().getCurrentTeetrymino().getCubes();
+                    Teetrymino currentTeetrymino = getGamingScene().getCurrentTeetrymino();
+                    List<Actor> currentCubes = currentTeetrymino.getCubes();
                     
-                    boolean collisionFound = Collision.checkCollisionsForAllCubes(currentTeetrymino, Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
+                    boolean collisionFound = Collision.checkCollisionsForAllCubes(currentCubes, Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
                     
                     if (collisionFound) {
-                        storeCubes(currentTeetrymino);
+                        storeCubes(currentCubes, currentTeetrymino);
                         
                         // Check lines
                         List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
@@ -188,7 +189,7 @@ public class GameController {
                         
                         
                     } else {
-                        moveCubes(currentTeetrymino, 0, Constants.CUBE_SIDE);
+                        moveCubes(currentCubes, 0, Constants.CUBE_SIDE);
                         getGamingScene().getOrigin().y += Constants.CUBE_SIDE;
                     }
                     
@@ -231,24 +232,9 @@ public class GameController {
             gameWorld.removeCubes(fullLinesIndexes);
             
             // Make upper cubes fall
-            int i = 0;
+            gameWorld.makeAllCubesFall(fullLinesIndexes);
             
-            while (i < fullLinesIndexes.size() - 1) {
-                Integer lineIndex = fullLinesIndexes.get(i);
-                Integer nextLineIndex = fullLinesIndexes.get(i + 1);
-                
-                if (nextLineIndex == lineIndex + 1) {
-                    i += 1;
-                    
-                } else {
-                    int nbLinesToFall = i + 1;
-                    
-                    List<Actor> cubes = gameWorld.makeAllCubesFall(nbLinesToFall);
-                    double fallTime = Effects.fall(cubes, nbLinesToFall * Constants.CUBE_SIDE, sceneTime);
-                    
-                }
-                
-            }
+           
             
             //Cube[] line = gameWorld.getGameboard()[fullLinesIndexes.get(0)];
             
@@ -312,8 +298,8 @@ public class GameController {
 //
 //    this.build_next_shape(350, 320)
 //
-//    # Kind of a hack, ZOrder does seem to work for 'last' elements only ?
 //    Gui.refreshZOrder()
+//    # Kind of a hack, ZOrder does seem to work for 'last' elements only ?
 //
 //    # TODO Clean code ...
 //    @current_max_y = 0
@@ -322,7 +308,7 @@ public class GameController {
     
     // Store the cubes in gameboard
     // Disable the mouse event
-    private void storeCubes(List<Actor> cubes) {
+    private void storeCubes(List<Actor> cubes, Teetrymino teetryminoParent) {
         for (Actor cube : cubes) {
             
             // FIXME Disable touch/mouse events
@@ -330,7 +316,7 @@ public class GameController {
             int cube_x = (int) (cube.x / Constants.CUBE_SIDE);
             int cube_y = (int) (cube.y / Constants.CUBE_SIDE + 1);
             
-            gameWorld.getGameboard()[cube_y][cube_x] = Cube.Full.valueOf(cube);
+            gameWorld.getGameboard()[cube_y][cube_x] = Cube.Full.valueOf(cube, teetryminoParent);
         }
     }
     
