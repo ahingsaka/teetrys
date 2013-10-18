@@ -1,8 +1,13 @@
 package com.katspow.teetrys.client.core;
 
+import java.util.Arrays;
+
+import com.katspow.caatja.core.canvas.CaatjaImage;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.ImageActor;
+import com.katspow.caatja.foundation.actor.SpriteActor;
+import com.katspow.caatja.foundation.image.CompoundImage;
 
 public class Gui {
     
@@ -31,6 +36,17 @@ public class Gui {
         
     }
     
+    private static CompoundImage compoundImage;
+    
+    public static void createCompoundImage(CaatjaImage image, int x, int y) {
+        compoundImage = new CompoundImage().
+                initialize(image, x, y);
+    }
+    
+//    createCompoundImage: (imageName, x, y) ->
+//    @compoundImage = new CAAT.CompoundImage().
+//        initialize(MOCAAT.director.getImage(imageName), x, y)
+    
     public static ImageActor addImage(double x, double y, Labels labels, Scene scene, Director director) throws Exception {
         ImageActor image = new ImageActor().setImage(director.getImage(labels.getLabel())).setLocation(x, y);
         
@@ -47,6 +63,35 @@ public class Gui {
         label.getImg().setExpired(true);
     }
     
-//    Gui.addImage('pause', 170, 300, @scene)
+    public static SpriteActor createNumberSprite(double x, double y, Scene scene, Integer value) throws Exception {
+        
+        SpriteActor sa = new SpriteActor().
+                setAnimationImageIndex(Arrays.asList(0)).
+                setSpriteImage(compoundImage).
+                setLocation(x, y);
+        
+        if (value != null) {
+            sa.setAnimationImageIndex(Arrays.asList(value));
+        }
+        
+        scene.addChild(sa);
+        
+        return sa;
+    }
+    
+    public static void createScoreDigits(Scene scene, Integer value) throws Exception {
+      createNumberSprite(332, 35, scene, null);
+      createNumberSprite(359, 35, scene, null);
+      createNumberSprite(386, 35, scene, null);
+      createNumberSprite(413, 35, scene, null);
+      createNumberSprite(440, 35, scene, null);
+    }
+    
+//    createScoreDigits: (scene) ->
+//    @score_digits.push(this.createNumberSprite(332, 35, scene))
+//    @score_digits.push(this.createNumberSprite(359, 35, scene))
+//    @score_digits.push(this.createNumberSprite(386, 35, scene))
+//    @score_digits.push(this.createNumberSprite(413, 35, scene))
+//    @score_digits.push(this.createNumberSprite(440, 35, scene))
 
 }
