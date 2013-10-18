@@ -91,6 +91,8 @@ public class GameController {
         preloader.addImage(Labels.LINES.getLabel(), "lines.png");
         preloader.addImage(Labels.LEVEL.getLabel(), "lvl.png");
         preloader.addImage(Labels.NEXT.getLabel(), "next.png");
+        preloader.addImage(Labels.PAUSE.getLabel(), "sleep.png");
+        preloader.addImage(Labels.QUIT.getLabel(), "quit.png");
     }
     
     private void finishImageLoading() throws Exception {
@@ -131,6 +133,7 @@ public class GameController {
         
         // TODO We should use zorder
         getGamingScene().addGuiFixedLabels();
+        getGamingScene().addGuiLeftButtons();
         
         // Start game !
         int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;

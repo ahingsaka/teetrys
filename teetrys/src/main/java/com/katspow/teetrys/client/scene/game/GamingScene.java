@@ -5,6 +5,7 @@ import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.math.Pt;
+import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.Gui;
 import com.katspow.teetrys.client.core.Teetrymino;
 import com.katspow.teetrys.client.core.Gui.Labels;
@@ -50,6 +51,11 @@ public class GamingScene extends Scene {
     
     public void setOrigin(Pt origin) {
         this.origin = origin;
+    }
+
+    public void addGuiLeftButtons() throws Exception {
+        Gui.addImage(0, 0, Labels.QUIT, this, director);
+        Gui.addImage(0, Constants.CUBE_SIDE, Labels.PAUSE, this, director);
     }
     
 }

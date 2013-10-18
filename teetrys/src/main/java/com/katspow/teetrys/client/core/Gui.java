@@ -7,7 +7,7 @@ import com.katspow.caatja.foundation.actor.ImageActor;
 public class Gui {
     
     public enum Labels {
-        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next");
+        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit");
         
         private String label;
 
