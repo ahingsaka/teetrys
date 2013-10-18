@@ -10,6 +10,7 @@ import com.katspow.caatja.core.Caatja;
 import com.katspow.caatja.core.canvas.CaatjaCanvas;
 import com.katspow.caatja.core.image.CaatjaImageLoader;
 import com.katspow.caatja.core.image.CaatjaImageLoaderCallback;
+import com.katspow.caatja.core.image.CaatjaPreloader;
 import com.katspow.caatja.event.CAATKeyEvent;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
@@ -21,6 +22,7 @@ import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.caatja.math.Pt;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.Cube.Full;
+import com.katspow.teetrys.client.core.Gui.Labels;
 import com.katspow.teetrys.client.effects.EaseInOut;
 import com.katspow.teetrys.client.effects.Effects;
 import com.katspow.teetrys.client.scene.LoadingScene;
@@ -83,7 +85,12 @@ public class GameController {
     }
 
     private void preloadImages() {
+        final CaatjaPreloader preloader = Caatja.getCaatjaImagePreloader();
         
+        preloader.addImage(Labels.SCORE.getLabel(), "score.png");
+        preloader.addImage(Labels.LINES.getLabel(), "lines.png");
+        preloader.addImage(Labels.LEVEL.getLabel(), "lvl.png");
+        preloader.addImage(Labels.NEXT.getLabel(), "next.png");
     }
     
     private void finishImageLoading() throws Exception {
@@ -121,6 +128,9 @@ public class GameController {
         for (Actor cubeWall : walls) {
             getGamingScene().addChild(cubeWall);
         }
+        
+        // TODO We should use zorder
+        getGamingScene().addGuiFixedLabels();
         
         // Start game !
         int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;

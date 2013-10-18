@@ -5,7 +5,9 @@ import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.math.Pt;
+import com.katspow.teetrys.client.core.Gui;
 import com.katspow.teetrys.client.core.Teetrymino;
+import com.katspow.teetrys.client.core.Gui.Labels;
 
 public class GamingScene extends Scene {
     
@@ -25,6 +27,13 @@ public class GamingScene extends Scene {
 
         addChild(root);
         
+    }
+    
+    public void addGuiFixedLabels() throws Exception {
+        Gui.addImage(332, 10, Labels.SCORE, this, director);
+        Gui.addImage(414, 190, Labels.LEVEL, this, director);
+        Gui.addImage(367, 100, Labels.LINES, this, director);
+        Gui.addImage(367, 280, Labels.NEXT, this, director);
     }
     
     public Teetrymino getCurrentTeetrymino() {

@@ -162,27 +162,6 @@ public class GameWorld {
         return index_found;
     }
     
-//    find_empty_line_index_from: (index_to_check_upper_lines) ->
-//    log('index to check from ' + index_to_check_upper_lines)
-//    index_found = -1
-//
-//    for i in [index_to_check_upper_lines..1]
-//        line = @gameboard[i]
-//        for j in [1..line.length-2]
-//            value = line[j]
-//            is_empty_line = true
-//            if (value != undefined)
-//                is_empty_line = false
-//                break
-//
-//        if (is_empty_line)
-//            index_found = i
-//            break
-//    log('index of empty line found at ' + index_found)
-//    
-//    return index_found
-    
-    
     public static void main(String[] args) {
         GameWorld gw = new GameWorld();
         gw.init();
@@ -282,91 +261,7 @@ public class GameWorld {
 
     
     private void processLine(int lineNumber, Cube[] lineOfCubes) {
-        
        process(lineNumber, 1, null, new ArrayList<Cube.Full>());
-        
-//        System.out.println("process line " + lineNumber);
-//
-//        int i = 1;
-//        
-//        List<Full> fullCubesFound = new ArrayList<Full>();
-//        
-//        while (i < lineOfCubes.length - 1) {
-//            
-//            System.out.println("process index " + i);
-//
-//            if (i == lineOfCubes.length - 1) {
-//                // Move stored blocks
-//                int nbLinesToFall = gravityFall(fullCubesFound);
-//                
-//                if (nbLinesToFall > 0) {
-//                    updateFallingCubes(lineNumber, nbLinesToFall);
-//                }
-//                
-//                fullCubesFound.clear();
-//                
-//                return;
-//            } 
-//
-//            Cube cube = lineOfCubes[i];
-//            Teetrymino parentOfCurrentCube = cube.getParent();
-//
-//            if (parentOfCurrentCube != null) {
-//
-//                fullCubesFound.add((Full) cube);
-//
-//                Cube nextCube = lineOfCubes[i + 1];
-//
-//                if (nextCube.getParent() != null) {
-//                    
-//                    Teetrymino parentOfNextCube = nextCube.getParent();
-//
-//                    if (parentOfCurrentCube == parentOfNextCube) {
-//                        fullCubesFound.add((Full) nextCube);
-//
-//                    } else {
-//                        // Move stored blocks
-//                        int nbLinesToFall = gravityFall(fullCubesFound);
-//                        if (nbLinesToFall > 0) {
-//                            updateFallingCubes(lineNumber, nbLinesToFall);
-//                        }
-//                        fullCubesFound.clear();
-//                    }
-//                    
-//                } else {
-//                    // Move stored blocks
-//                    int nbLinesToFall = gravityFall(fullCubesFound);
-//                    if (nbLinesToFall > 0) {
-//                        updateFallingCubes(lineNumber, nbLinesToFall);
-//                    }
-//                    fullCubesFound.clear();
-//                }
-//                
-//            } else {
-//                
-//                int nbLinesToFall = gravityFall(fullCubesFound);
-//                if (nbLinesToFall > 0) {
-//                    updateFallingCubes(lineNumber, nbLinesToFall);
-//                }
-//                fullCubesFound.clear();
-//                
-//            }
-//            
-//            i += 1;
-//            
-//        }
-    }
-
-    private void updateFallingCubes(int lineNumber, int nbLinesToFall) {
-        Cube[] cubes = gameboard[lineNumber];
-        
-        for (int i = 1; i < cubes.length - 1; i++) {
-            if (cubes[i] != Cube.Fixed.EMPTY) {
-                Full full = (Full) cubes[i];
-                full.getValue().y += nbLinesToFall * Constants.CUBE_SIDE;
-            }
-        }
-        
     }
 
     /**
