@@ -8,6 +8,7 @@ import com.katspow.caatja.behavior.BehaviorListener;
 import com.katspow.caatja.behavior.ContainerBehavior;
 import com.katspow.caatja.behavior.GenericBehavior;
 import com.katspow.caatja.behavior.PathBehavior;
+import com.katspow.caatja.behavior.ScaleBehavior;
 import com.katspow.caatja.behavior.SetForTimeReturnValue;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.pathutil.Path;
@@ -106,5 +107,40 @@ public class Effects {
         
         return time + 300;
     }
+    
+    public static void scale(Actor actor, double time) {
+        ScaleBehavior scaleBehavior = new ScaleBehavior().
+                setFrameTime(time, 400).
+                setValues(0, 1.5, 0, 1.5, 0d, 0d);
+        
+        actor.addBehavior(scaleBehavior);
+    }
 
+    public static void scaleOutAndDisappear(Actor cube, double time) {
+        
+        ScaleBehavior sb = new ScaleBehavior().
+                setFrameTime(time, 400).
+                setValues(1.5, 0, 1.5, 0, 0d, 0d);
+
+        sb.addListener(new BehaviorListener() {
+            public void behaviorStarted(BaseBehavior behavior, double time, Actor actor) {
+                
+            }
+            
+            public void behaviorExpired(BaseBehavior behavior, double time, Actor actor) {
+                //actor.setDiscardable(true);
+                //actor.setExpired(true);
+                actor.setAlpha(1);
+            }
+            
+            public void behaviorApplied(BaseBehavior behavior, double time, double normalizeTime, Actor actor,
+                    SetForTimeReturnValue value) throws Exception {
+                
+            }
+        });
+        
+        cube.addBehavior(sb);
+        
+    }
+    
 }

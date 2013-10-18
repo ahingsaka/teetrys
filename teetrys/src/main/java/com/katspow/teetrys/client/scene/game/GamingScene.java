@@ -1,14 +1,19 @@
 package com.katspow.teetrys.client.scene.game;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.katspow.caatja.core.canvas.CaatjaColor;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
+import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.math.Pt;
 import com.katspow.teetrys.client.Constants;
+import com.katspow.teetrys.client.core.GameWorld;
 import com.katspow.teetrys.client.core.Gui;
-import com.katspow.teetrys.client.core.Teetrymino;
 import com.katspow.teetrys.client.core.Gui.Labels;
+import com.katspow.teetrys.client.core.Teetrymino;
+import com.katspow.teetrys.client.effects.Effects;
 
 public class GamingScene extends Scene {
     
@@ -55,7 +60,51 @@ public class GamingScene extends Scene {
 
     public void addGuiLeftButtons() throws Exception {
         Gui.addImage(0, 0, Labels.QUIT, this, director);
-        Gui.addImage(0, Constants.CUBE_SIDE, Labels.PAUSE, this, director);
+        Gui.addImage(0, Constants.CUBE_SIDE, Labels.SLEEP, this, director);
+    }
+    
+    private List<Actor> hideCubes;
+
+    // Hide all except first column for 'left buttons'
+    public void hideGamingArea(GameWorld gameWorld) throws Exception {
+        
+        if (hideCubes == null) {
+
+            int gameboardLinesNb = gameWorld.getGameboardLinesNb();
+            int gameboardColumnsNb = gameWorld.getGameboardColumnsNb();
+
+            hideCubes = new ArrayList<Actor>();
+
+            int x = Constants.CUBE_SIDE;
+            int y = 0;
+
+            for (int line = 0; line < gameboardLinesNb - 1; line++) {
+                for (int column = 1; column < gameboardColumnsNb; column++) {
+                    Actor cube = Teetrymino.createCube(x, y, "#000000", "#000000");
+                    Effects.scale(cube, time);
+                    hideCubes.add(cube);
+                    addChild(cube);
+
+                    x += Constants.CUBE_SIDE;
+                }
+
+                x = Constants.CUBE_SIDE;
+                y += Constants.CUBE_SIDE;
+
+            }
+            
+        } else {
+            for (Actor actor : hideCubes) {
+                Effects.scale(actor, time);
+            }
+        }
+        
+    }
+
+    public void showGamingArea() {
+        for (Actor cube : hideCubes) {
+            Effects.scaleOutAndDisappear(cube, time);
+        }
     }
     
 }

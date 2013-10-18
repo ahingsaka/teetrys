@@ -1,6 +1,5 @@
 package com.katspow.teetrys.client.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.katspow.caatja.CAATKeyListener;
@@ -91,8 +90,9 @@ public class GameController {
         preloader.addImage(Labels.LINES.getLabel(), "lines.png");
         preloader.addImage(Labels.LEVEL.getLabel(), "lvl.png");
         preloader.addImage(Labels.NEXT.getLabel(), "next.png");
-        preloader.addImage(Labels.PAUSE.getLabel(), "sleep.png");
+        preloader.addImage(Labels.SLEEP.getLabel(), "sleep.png");
         preloader.addImage(Labels.QUIT.getLabel(), "quit.png");
+        preloader.addImage(Labels.PAUSE.getLabel(), "pause.png");
     }
     
     private void finishImageLoading() throws Exception {
@@ -164,7 +164,8 @@ public class GameController {
                             stateMachine.sendEvent(GameEvent.CALL_RIGHT);
                         } else if (keyEvent.getKeyCode() == CAAT.Keys.UP.getValue()) {
                             stateMachine.sendEvent(GameEvent.CALL_UP);
-                            System.out.println("send event");
+                        } else if (keyEvent.getKeyCode() == CAAT.Keys.p.getValue()) {
+                            stateMachine.sendEvent(GameEvent.CALL_PAUSE);
                         }
                     }
 
@@ -448,6 +449,17 @@ public class GameController {
 
     public void enterGaming() throws Exception {
         EaseInOut.scenesFromUpToDown(director, getGamingScene(), director.getCurrentScene());
+        stateMachine.sendEvent(GameEvent.START_GAME);
+    }
+
+    public void enterPause() throws Exception {
+        timerTask.suspended = true;
+        getGamingScene().hideGamingArea(gameWorld);
+    }
+
+    public void exitPause() throws Exception {
+        timerTask.suspended = false;
+        getGamingScene().showGamingArea();
     }
 
 

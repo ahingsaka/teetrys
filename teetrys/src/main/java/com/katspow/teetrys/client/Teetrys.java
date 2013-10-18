@@ -19,7 +19,21 @@ import com.katspow.teetrys.client.core.GameController;
  * FIXME CAATJA - setScene + getSceneIndex
  * FIXME CAATJA - Passage des interpolators en statique ?
  * FIXME CAATJA - ZOrder
+ * FIXME CAATJA - les double Double dans les behaviors
  * FIXME Throws exception everywhere !!!
+ * 
+ * TODO
+ * Gestion pause -en cours-
+ * Gestion touch
+ * Game Over
+ * End
+ * Intermezzo
+ * Gestion vitesse
+ * Gestion score
+ * Gestion lignes/lvl
+ * Gestion highscores
+ * Desactiver action sur clic
+ * Gestion sortie vers site
  * 
  * @author asamsenesena
  *

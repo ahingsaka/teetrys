@@ -79,7 +79,8 @@ public class StateMachine {
                 
                 case CHOOSE_GAME:
                     sm.enterState(GAME);
-                    sm.enterState(GAMING);
+                    sm.sendEvent(GameEvent.START_GAME);
+                    //sm.enterState(GAMING);
                     break;
                 }
             }
@@ -125,16 +126,15 @@ public class StateMachine {
             }
             
             void process(StateMachine sm, GameEvent e) throws Exception {
-                
+                switch (e) {
+                case START_GAME:
+                    sm.enterState(GAMING);
+                    gameController.startGame();
+                }
             }
         },
         
         GAMING(GAME) {
-            
-            @Override
-            void entry(StateMachine sm) throws Exception {
-                gameController.startGame();
-            }
             
             void process(StateMachine sm, GameEvent e) throws Exception {
                 
@@ -157,9 +157,11 @@ public class StateMachine {
                     break;
                     
                 case CALL_PAUSE:
+                    sm.enterState(PAUSE);
                     break;
                     
                 case CALL_ROTATE:
+                    gameController.moveCurrentTeetrymino(Direction.UP);
                     break;
                     
                 }
@@ -168,10 +170,26 @@ public class StateMachine {
         },
         
         PAUSE(GAME) {
-            void process(StateMachine sm, GameEvent e) {
+            void process(StateMachine sm, GameEvent e) throws Exception {
                 switch (e) {
                 case CALL_PAUSE:
+                    exit(sm);
+                    sm.enterState(GAMING);
                     break;
+                }
+            }
+
+            @Override
+            void entry(StateMachine sm) throws Exception {
+                gameController.enterPause();
+            }
+
+            @Override
+            void exit(StateMachine sm) {
+                try {
+                    gameController.exitPause();
+                } catch (Exception e) {
+                    
                 }
             }
         },
