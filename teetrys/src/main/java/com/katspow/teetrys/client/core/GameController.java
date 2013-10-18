@@ -455,11 +455,13 @@ public class GameController {
     public void enterPause() throws Exception {
         timerTask.suspended = true;
         getGamingScene().hideGamingArea(gameWorld);
+        Gui.addImage(170, 300, Labels.PAUSE, getGamingScene(), director);
     }
 
     public void exitPause() throws Exception {
         timerTask.suspended = false;
         getGamingScene().showGamingArea();
+        Gui.hideImage(Labels.PAUSE);
     }
 
 
