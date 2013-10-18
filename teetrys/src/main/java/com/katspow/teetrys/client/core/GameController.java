@@ -175,18 +175,27 @@ public class GameController {
                     if (collisionFound) {
                         storeCubes(currentCubes, currentTeetrymino);
                         
-                        // Check lines FIXME, make it recursive 
-                        
                         List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
-
-                        if (fullLinesIndexes.size() > 1) {
-                            // last item is special index
+                        
+                        while (fullLinesIndexes.size() > 1) {
                             int endIndex = fullLinesIndexes.size() - 1;
                             checkLines(fullLinesIndexes.subList(0, endIndex), fullLinesIndexes.get(endIndex), time);
-                            
-                        } else {
-                            reinit();
+                            fullLinesIndexes = gameWorld.findNumberOfFullLines();
                         }
+                        
+                        // Add waiting time
+                        reinit();
+                        
+//                        List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
+//
+//                        if (fullLinesIndexes.size() > 1) {
+//                            // last item is special index
+//                            int endIndex = fullLinesIndexes.size() - 1;
+//                            checkLines(fullLinesIndexes.subList(0, endIndex), fullLinesIndexes.get(endIndex), time);
+//                            
+//                        } else {
+//                            reinit();
+//                        }
                         
                         
                     } else {
@@ -315,7 +324,7 @@ public class GameController {
             // FIXME Disable touch/mouse events
             
             int cube_x = (int) (cube.x / Constants.CUBE_SIDE);
-            int cube_y = (int) (cube.y / Constants.CUBE_SIDE + 1);
+            int cube_y = ((int) cube.y / Constants.CUBE_SIDE) + 1;
             
             gameWorld.getGameboard()[cube_y][cube_x] = Cube.Full.valueOf(cube, teetryminoParent);
         }

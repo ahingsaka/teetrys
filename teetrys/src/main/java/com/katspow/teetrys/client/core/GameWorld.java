@@ -372,7 +372,6 @@ public class GameWorld {
     /**
      * Return of how many lines we fall.
      * 
-     * FIXME Update gameboard
      * @param lineNumber 
      * 
      * @param fullCubesFound
@@ -409,7 +408,7 @@ public class GameWorld {
                 
                 if (!collisionFound) {
                     nbLines += 1;
-                    y += Constants.CUBE_SIDE;
+                    y = Constants.CUBE_SIDE;
                 }
 
             }
