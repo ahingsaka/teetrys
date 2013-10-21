@@ -39,7 +39,11 @@ import com.katspow.teetrys.client.statemachine.StateMachine.GameState;
  */
 public class GameController {
 
+    private static final int NEXT_Y = 280;
+    private static final int NEXT_X = 310;
+    
     private static StateMachine stateMachine;
+    
     private Director director;
     private CaatjaCanvas canvas;
     
@@ -126,6 +130,8 @@ public class GameController {
         
         // Move to gaming scene ??
         
+        Score.init();
+        
         // Init world
         gameWorld = new GameWorld();
         List<Actor> walls = gameWorld.createWalls();
@@ -145,6 +151,9 @@ public class GameController {
         
         Teetrymino currentTeetrymino = buildCurrentTeetrymino(x, y);
         gamingScene.setCurrentTeetrymino(currentTeetrymino);
+        
+        Teetrymino nextTeetrymino = buildNextTeetrymino();
+        gamingScene.setNextTeetrymino(nextTeetrymino);
         
         // Register keys
         registerMovementKeys();
@@ -299,8 +308,14 @@ public class GameController {
     private void reinit() throws Exception {
         int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
         int y = Constants.START_POINT_Y;
-        Teetrymino currentTeetrymino = buildCurrentTeetrymino(x, y);
-        gamingScene.setCurrentTeetrymino(currentTeetrymino);
+        
+        getGamingScene().setOrigin(new Pt(x, y));
+        Teetrymino nextTeetrymino = getGamingScene().getNextTeetrymino();
+        Teetrymino.setPosition(nextTeetrymino, x, y);
+        gamingScene.setCurrentTeetrymino(nextTeetrymino);
+        
+//        Teetrymino currentTeetrymino = buildCurrentTeetrymino(x, y);
+        gamingScene.setNextTeetrymino(buildNextTeetrymino());
     }
     
 //    re_init: ->
@@ -355,6 +370,16 @@ public class GameController {
         }
         
         getGamingScene().setOrigin(new Pt(x, y));
+        
+        return teetrymino;
+    }
+    
+    private Teetrymino buildNextTeetrymino() throws Exception {
+        Teetrymino teetrymino = Teetrymino.createNewTeetrymino(NEXT_X, NEXT_Y);
+        
+        for (Actor actor : teetrymino.getCubes()) {
+            getGamingScene().addChild(actor);
+        }
         
         return teetrymino;
     }

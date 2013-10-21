@@ -22,6 +22,8 @@ public class GamingScene extends Scene {
     private ActorContainer root;
     
     private Teetrymino currentTeetrymino;
+    private Teetrymino nextTeetrymino;
+    
     private Pt origin;
     
     public GamingScene(Director director) throws Exception {
@@ -58,6 +60,14 @@ public class GamingScene extends Scene {
     
     public void setCurrentTeetrymino(Teetrymino currentTeetrymino) {
         this.currentTeetrymino = currentTeetrymino;
+    }
+    
+    public Teetrymino getNextTeetrymino() {
+        return nextTeetrymino;
+    }
+    
+    public void setNextTeetrymino(Teetrymino nextTeetrymino) {
+        this.nextTeetrymino = nextTeetrymino;
     }
     
     public Pt getOrigin() {

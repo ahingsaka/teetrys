@@ -254,6 +254,39 @@ public class Teetrymino {
         return createTeetrymino(x, y, chosenForm, 0, null);
     }
     
+    public static void setPosition(Teetrymino teetrymino, double x, double y) {
+        Transformation baseTransformation = teetrymino.form.transformations.get(0);
+        
+        double i = x;
+        double j = y;
+        
+        int[][] matrix = baseTransformation.getMatrix();
+        List<Actor> cubes = teetrymino.getCubes();
+        
+        int c = 0;
+        
+        for (int line = 0; line < matrix.length; line ++) {
+            for (int col = 0; col < matrix[line].length; col ++) {
+                int val = matrix[line][col];
+                
+                if (val != 0) {
+                    Actor actor = cubes.get(c);
+                    //actor.setLocation(i, j);
+                    actor.x = i;
+                    actor.y = j;
+                    c += 1;
+                }
+                
+                i += Constants.CUBE_SIDE;
+            }
+         
+            i = x;
+            j += Constants.CUBE_SIDE;
+        }
+        
+        
+    }
+    
     public static Teetrymino createTeetrymino(double x, double y, Form chosenForm, int transfoIndex, String color) {
         List<Actor> cubes = new ArrayList<Actor>();
         
