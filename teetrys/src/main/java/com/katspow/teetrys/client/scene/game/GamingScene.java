@@ -2,6 +2,7 @@ package com.katspow.teetrys.client.scene.game;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.katspow.caatja.core.canvas.CaatjaColor;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
@@ -42,6 +43,15 @@ public class GamingScene extends Scene {
         Gui.addImage(367, 280, Labels.NEXT, this, director);
     }
     
+    public void addGuiDigits() throws Exception {
+        Gui.createNumbers(this);
+    }
+    
+    public void addGuiLeftButtons() throws Exception {
+        Gui.addImage(0, 0, Labels.QUIT, this, director);
+        Gui.addImage(0, Constants.CUBE_SIDE, Labels.SLEEP, this, director);
+    }
+    
     public Teetrymino getCurrentTeetrymino() {
         return currentTeetrymino;
     }
@@ -58,11 +68,6 @@ public class GamingScene extends Scene {
         this.origin = origin;
     }
 
-    public void addGuiLeftButtons() throws Exception {
-        Gui.addImage(0, 0, Labels.QUIT, this, director);
-        Gui.addImage(0, Constants.CUBE_SIDE, Labels.SLEEP, this, director);
-    }
-    
     private List<Actor> hideCubes;
 
     // Hide all except first column for 'left buttons'
@@ -106,5 +111,5 @@ public class GamingScene extends Scene {
             Effects.scaleOutAndDisappear(cube, time);
         }
     }
-    
+
 }

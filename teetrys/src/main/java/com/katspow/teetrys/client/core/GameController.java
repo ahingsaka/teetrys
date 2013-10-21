@@ -93,10 +93,13 @@ public class GameController {
         preloader.addImage(Labels.SLEEP.getLabel(), "sleep.png");
         preloader.addImage(Labels.QUIT.getLabel(), "quit.png");
         preloader.addImage(Labels.PAUSE.getLabel(), "pause.png");
+        preloader.addImage(Labels.NUMBERS.getLabel(), "numbers.png");
     }
     
     private void finishImageLoading() throws Exception {
         director.imagesCache = Caatja.getCaatjaImagePreloader().getCaatjaImages();
+        
+        Gui.createCompoundImage(director.getImage("numbers"), 1, 10);
         
         // TODO Set to introduction when it's done
         stateMachine.setState(GameState.MENUS);
@@ -134,6 +137,7 @@ public class GameController {
         // TODO We should use zorder
         getGamingScene().addGuiFixedLabels();
         getGamingScene().addGuiLeftButtons();
+        getGamingScene().addGuiDigits();
         
         // Start game !
         int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
@@ -258,7 +262,6 @@ public class GameController {
             // Make upper cubes fall
             gameWorld.makeAllCubesFall(fullLinesIndexes);
             
-           
             
             //Cube[] line = gameWorld.getGameboard()[fullLinesIndexes.get(0)];
             

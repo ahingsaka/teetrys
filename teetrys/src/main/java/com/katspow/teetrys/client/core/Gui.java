@@ -1,6 +1,8 @@
 package com.katspow.teetrys.client.core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.katspow.caatja.core.canvas.CaatjaImage;
 import com.katspow.caatja.foundation.Director;
@@ -12,7 +14,7 @@ import com.katspow.caatja.foundation.image.CompoundImage;
 public class Gui {
     
     public enum Labels {
-        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep");
+        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep"), NUMBERS("numbers");
         
         private String label;
         
@@ -36,16 +38,24 @@ public class Gui {
         
     }
     
-    private static CompoundImage compoundImage;
-    
-    public static void createCompoundImage(CaatjaImage image, int x, int y) {
-        compoundImage = new CompoundImage().
-                initialize(image, x, y);
+    /**
+     * Init all digits (score, level, lines) 
+     * 
+     * @param scene
+     * @throws Exception
+     */
+    public static void createNumbers(Scene scene) throws Exception {
+        createScoreDigits(scene);
+        createLinesDigits(scene);
+        createLevelDigits(scene);
     }
     
-//    createCompoundImage: (imageName, x, y) ->
-//    @compoundImage = new CAAT.CompoundImage().
-//        initialize(MOCAAT.director.getImage(imageName), x, y)
+    private static CompoundImage compoundImage;
+    
+    public static void createCompoundImage(CaatjaImage image, int rows, int cols) {
+        compoundImage = new CompoundImage().
+                initialize(image, rows, cols);
+    }
     
     public static ImageActor addImage(double x, double y, Labels labels, Scene scene, Director director) throws Exception {
         ImageActor image = new ImageActor().setImage(director.getImage(labels.getLabel())).setLocation(x, y);
@@ -79,19 +89,27 @@ public class Gui {
         return sa;
     }
     
-    public static void createScoreDigits(Scene scene, Integer value) throws Exception {
-      createNumberSprite(332, 35, scene, null);
-      createNumberSprite(359, 35, scene, null);
-      createNumberSprite(386, 35, scene, null);
-      createNumberSprite(413, 35, scene, null);
-      createNumberSprite(440, 35, scene, null);
+    private static List<SpriteActor> scoreDigits = new ArrayList<SpriteActor>();
+    private static List<SpriteActor> linesDigits = new ArrayList<SpriteActor>();
+    private static List<SpriteActor> levelDigits = new ArrayList<SpriteActor>();
+
+    private static void createScoreDigits(Scene scene) throws Exception {
+        scoreDigits.add(createNumberSprite(332, 35, scene, null));
+        scoreDigits.add(createNumberSprite(359, 35, scene, null));
+        scoreDigits.add(createNumberSprite(386, 35, scene, null));
+        scoreDigits.add(createNumberSprite(413, 35, scene, null));
+        scoreDigits.add(createNumberSprite(440, 35, scene, null));
+    }
+
+    private static void createLinesDigits(Scene scene) throws Exception {
+        linesDigits.add(createNumberSprite(386, 136, scene, null));
+        linesDigits.add(createNumberSprite(413, 136, scene, null));
+        linesDigits.add(createNumberSprite(440, 136, scene, null));
+    }
+
+    private static void createLevelDigits(Scene scene) throws Exception {
+        levelDigits.add(createNumberSprite(413, 225, scene, null));
+        levelDigits.add(createNumberSprite(440, 225, scene, null));
     }
     
-//    createScoreDigits: (scene) ->
-//    @score_digits.push(this.createNumberSprite(332, 35, scene))
-//    @score_digits.push(this.createNumberSprite(359, 35, scene))
-//    @score_digits.push(this.createNumberSprite(386, 35, scene))
-//    @score_digits.push(this.createNumberSprite(413, 35, scene))
-//    @score_digits.push(this.createNumberSprite(440, 35, scene))
-
 }
