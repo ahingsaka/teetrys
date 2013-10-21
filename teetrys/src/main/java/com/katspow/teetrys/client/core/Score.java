@@ -60,6 +60,10 @@ public class Score {
     public static int getLines() {
         return lines;
     }
+
+    public static int getScore() {
+        return score;
+    }
     
     
 //    init: ->

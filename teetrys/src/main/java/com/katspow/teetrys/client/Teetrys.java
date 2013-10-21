@@ -34,7 +34,6 @@ import com.katspow.teetrys.client.core.GameController;
  * Gestion highscores
  * Desactiver action sur clic
  * Gestion sortie vers site
- * Gestion Next
  * 
  * @author asamsenesena
  *

@@ -130,7 +130,6 @@ public class GameController {
         
         // Move to gaming scene ??
         
-        Score.init();
         
         // Init world
         gameWorld = new GameWorld();
@@ -157,6 +156,9 @@ public class GameController {
         
         // Register keys
         registerMovementKeys();
+        
+        Score.init();
+        Gui.refreshScores();
         
         createGameTimer(0, 1000);
         

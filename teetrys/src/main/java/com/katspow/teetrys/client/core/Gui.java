@@ -50,6 +50,42 @@ public class Gui {
         createLevelDigits(scene);
     }
     
+//    refreshDigits: (i, scoreAttribute) ->
+//    if (scoreAttribute > 0)
+//        tmp = scoreAttribute.toString().split("")
+//        i -= tmp.length
+//        i += 1
+//
+//        for value in tmp
+//            score_digit = @score_digits[i]
+//            score_digit.setAnimationImageIndex([value])
+//            i += 1
+    
+    
+    public static void refreshScores() {
+        refreshDigits(4, Score.getScore());
+        refreshDigits(7, Score.getLines());
+        refreshDigits(9, Score.getLevel());
+    }
+    
+    private static void refreshDigits(int digits, int value) {
+        if (value > 0) {
+            // Why is there an empty string at the start of the table
+            String[] tmp = String.valueOf(value).split("");
+            digits -= tmp.length - 1;
+            digits += 1;
+            
+            for (String val : tmp) {
+                if (!val.isEmpty()) {
+                    SpriteActor spriteActor = scoreDigits.get(digits);
+                    spriteActor.setAnimationImageIndex(Arrays.asList(Integer.valueOf(val)));
+                    digits += 1;
+                }
+            }
+            
+        }
+    }
+    
     private static CompoundImage compoundImage;
     
     public static void createCompoundImage(CaatjaImage image, int rows, int cols) {
@@ -90,8 +126,6 @@ public class Gui {
     }
     
     private static List<SpriteActor> scoreDigits = new ArrayList<SpriteActor>();
-    private static List<SpriteActor> linesDigits = new ArrayList<SpriteActor>();
-    private static List<SpriteActor> levelDigits = new ArrayList<SpriteActor>();
 
     private static void createScoreDigits(Scene scene) throws Exception {
         scoreDigits.add(createNumberSprite(332, 35, scene, null));
@@ -102,14 +136,14 @@ public class Gui {
     }
 
     private static void createLinesDigits(Scene scene) throws Exception {
-        linesDigits.add(createNumberSprite(386, 136, scene, null));
-        linesDigits.add(createNumberSprite(413, 136, scene, null));
-        linesDigits.add(createNumberSprite(440, 136, scene, null));
+        scoreDigits.add(createNumberSprite(386, 136, scene, null));
+        scoreDigits.add(createNumberSprite(413, 136, scene, null));
+        scoreDigits.add(createNumberSprite(440, 136, scene, null));
     }
 
     private static void createLevelDigits(Scene scene) throws Exception {
-        levelDigits.add(createNumberSprite(413, 225, scene, null));
-        levelDigits.add(createNumberSprite(440, 225, scene, null));
+        scoreDigits.add(createNumberSprite(413, 225, scene, null));
+        scoreDigits.add(createNumberSprite(440, 225, scene, null));
     }
     
 }
