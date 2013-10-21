@@ -29,8 +29,7 @@ import com.katspow.teetrys.client.core.GameController;
  * End
  * Intermezzo
  * Gestion vitesse
- * Gestion score
- * Gestion lignes/lvl
+ * Gestion lvl
  * Gestion highscores
  * Desactiver action sur clic
  * Gestion sortie vers site

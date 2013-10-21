@@ -50,18 +50,6 @@ public class Gui {
         createLevelDigits(scene);
     }
     
-//    refreshDigits: (i, scoreAttribute) ->
-//    if (scoreAttribute > 0)
-//        tmp = scoreAttribute.toString().split("")
-//        i -= tmp.length
-//        i += 1
-//
-//        for value in tmp
-//            score_digit = @score_digits[i]
-//            score_digit.setAnimationImageIndex([value])
-//            i += 1
-    
-    
     public static void refreshScores() {
         refreshDigits(4, Score.getScore());
         refreshDigits(7, Score.getLines());
@@ -70,7 +58,7 @@ public class Gui {
     
     private static void refreshDigits(int digits, int value) {
         if (value > 0) {
-            // Why is there an empty string at the start of the table
+            // Why is there an empty string at the start of the table ?
             String[] tmp = String.valueOf(value).split("");
             digits -= tmp.length - 1;
             digits += 1;

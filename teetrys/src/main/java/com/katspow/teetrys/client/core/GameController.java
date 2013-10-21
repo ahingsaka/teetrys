@@ -273,6 +273,10 @@ public class GameController {
             // Make upper cubes fall
             gameWorld.makeAllCubesFall(fullLinesIndexes);
             
+            // Refresh scores
+            Score.addLines(fullLinesIndexes.size());
+            Gui.refreshScores();
+            
             
             //Cube[] line = gameWorld.getGameboard()[fullLinesIndexes.get(0)];
             
@@ -292,18 +296,12 @@ public class GameController {
 //                newReturnTime = Effects.fall(linesToMoveIndexes, gameWorld.getGameboard(), returnTime, fullLinesIndexes.size());
 //            }
             
-            // Refresh scores
-            
-            
         }
         
 //
 //                # Store in waiting time
 //                @waiting_time = new_return_time
 //
-//            # Refresh scores
-//            Scores.add_lines(full_lines_table.length)
-//            Gui.refreshScores()
         
     }
     
