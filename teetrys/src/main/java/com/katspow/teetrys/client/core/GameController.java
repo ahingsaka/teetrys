@@ -47,6 +47,8 @@ public class GameController {
     private static final int NEXT_Y = 280;
     private static final int NEXT_X = 310;
     
+    private static int FALL_TIME = 1000;
+    
     private static StateMachine stateMachine;
     
     private Director director;
@@ -166,7 +168,7 @@ public class GameController {
         Score.init();
         Gui.refreshScores();
         
-        createGameTimer(0, 1000);
+        createGameTimer(0, FALL_TIME);
         
     }
     
@@ -230,7 +232,8 @@ public class GameController {
                         
                         if (Score.checkForNextLevel()) {
                             if (Score.getLevel() < 15) {
-                                
+                                FALL_TIME -= Constants.DECREASE_FALL_TIME;
+                                System.out.println("FALLTIME:" + FALL_TIME);
                             }
                         }
                         
@@ -254,7 +257,11 @@ public class GameController {
             
         }, new Callback() {
             public void call(double time, double ttime, TimerTask timerTask) {
-                // TODO Auto-generated method stub
+                try {
+                    createGameTimer(time, FALL_TIME);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

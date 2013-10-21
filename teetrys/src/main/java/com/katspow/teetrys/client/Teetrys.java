@@ -24,10 +24,10 @@ import com.katspow.teetrys.client.core.GameController;
  * 
  * TODO
  * 
- * Gestion vitesse
+ * Gestion vitesse - a tester -
  * 
  * End
- * Intermezzo
+ * Intermezzos
  * Gestion highscores
  * Gestion touch
  * 
