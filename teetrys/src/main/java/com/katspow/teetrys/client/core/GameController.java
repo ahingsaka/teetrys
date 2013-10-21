@@ -215,16 +215,11 @@ public class GameController {
                         // Add waiting time
                         reinit();
                         
-//                        List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
-//
-//                        if (fullLinesIndexes.size() > 1) {
-//                            // last item is special index
-//                            int endIndex = fullLinesIndexes.size() - 1;
-//                            checkLines(fullLinesIndexes.subList(0, endIndex), fullLinesIndexes.get(endIndex), time);
-//                            
-//                        } else {
-//                            reinit();
-//                        }
+                        if (Score.checkForNextLevel()) {
+                            if (Score.getLevel() < 15) {
+                                
+                            }
+                        }
                         
                         
                     } else {
