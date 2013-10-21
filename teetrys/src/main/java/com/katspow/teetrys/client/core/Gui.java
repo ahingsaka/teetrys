@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.katspow.caatja.core.canvas.CaatjaImage;
+import com.katspow.caatja.event.CAATMouseEvent;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.ImageActor;
@@ -14,7 +15,7 @@ import com.katspow.caatja.foundation.image.CompoundImage;
 public class Gui {
     
     public enum Labels {
-        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep"), NUMBERS("numbers");
+        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep"), NUMBERS("numbers"), GAME_OVER("gameover");
         
         private String label;
         
@@ -81,8 +82,19 @@ public class Gui {
                 initialize(image, rows, cols);
     }
     
-    public static ImageActor addImage(double x, double y, Labels labels, Scene scene, Director director) throws Exception {
-        ImageActor image = new ImageActor().setImage(director.getImage(labels.getLabel())).setLocation(x, y);
+    public static ImageActor addImage(double x, double y, final Labels labels, Scene scene, Director director) throws Exception {
+        ImageActor image = new ImageActor() {
+            @Override
+            public void mouseClick(CAATMouseEvent mouseEvent) throws Exception {
+                if (labels == Labels.PAUSE) {
+                    
+                } else if (labels == Labels.GAME_OVER) {
+                    
+                }
+            }
+            
+        }
+        .setImage(director.getImage(labels.getLabel())).setLocation(x, y);
         
         scene.addChild(image);
         scene.setZOrder(image, Integer.MAX_VALUE);

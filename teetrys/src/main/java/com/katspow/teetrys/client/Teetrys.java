@@ -23,16 +23,18 @@ import com.katspow.teetrys.client.core.GameController;
  * FIXME Throws exception everywhere !!!
  * 
  * TODO
- * Gestion pause -en cours-
- * Gestion touch
- * Game Over
+ * 
+ * Gestion vitesse
+ * 
  * End
  * Intermezzo
- * Gestion vitesse
- * Gestion lvl
  * Gestion highscores
+ * Gestion touch
+ * 
  * Desactiver action sur clic
+ * Gestion pause
  * Gestion sortie vers site
+ * Game Over
  * 
  * @author asamsenesena
  *

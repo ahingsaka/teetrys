@@ -3,7 +3,11 @@ package com.katspow.teetrys.client.core;
 import java.util.List;
 
 import com.katspow.caatja.CAATKeyListener;
+import com.katspow.caatja.behavior.AlphaBehavior;
+import com.katspow.caatja.behavior.BaseBehavior;
+import com.katspow.caatja.behavior.BehaviorListener;
 import com.katspow.caatja.behavior.Interpolator;
+import com.katspow.caatja.behavior.SetForTimeReturnValue;
 import com.katspow.caatja.core.CAAT;
 import com.katspow.caatja.core.Caatja;
 import com.katspow.caatja.core.canvas.CaatjaCanvas;
@@ -16,6 +20,7 @@ import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.Scene.Ease;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.Actor.Anchor;
+import com.katspow.caatja.foundation.actor.ImageActor;
 import com.katspow.caatja.foundation.timer.Callback;
 import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.caatja.math.Pt;
@@ -98,6 +103,7 @@ public class GameController {
         preloader.addImage(Labels.QUIT.getLabel(), "quit.png");
         preloader.addImage(Labels.PAUSE.getLabel(), "pause.png");
         preloader.addImage(Labels.NUMBERS.getLabel(), "numbers.png");
+        preloader.addImage(Labels.GAME_OVER.getLabel(), "gameover.png");
     }
     
     private void finishImageLoading() throws Exception {
@@ -202,6 +208,13 @@ public class GameController {
                     boolean collisionFound = Collision.checkCollisionsForAllCubes(currentCubes, Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
                     
                     if (collisionFound) {
+                        
+                        // If we are at the top, it's game over
+                        if (getGamingScene().getOrigin().y == Constants.START_POINT_Y) {
+                            stateMachine.sendEvent(GameEvent.LOSE);
+                            return;
+                        }
+                        
                         storeCubes(currentCubes, currentTeetrymino);
                         
                         List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
@@ -485,6 +498,27 @@ public class GameController {
         timerTask.suspended = false;
         getGamingScene().showGamingArea();
         Gui.hideImage(Labels.PAUSE);
+    }
+
+    public void enterGameOver() throws Exception {
+        timerTask.suspended = true;
+        getGamingScene().hideGamingArea(gameWorld);
+        ImageActor gameOverImage = Gui.addImage(97, 300, Labels.GAME_OVER, getGamingScene(), director);
+        
+        // Move that !
+        gameOverImage.setAlpha(0);
+
+        AlphaBehavior alpha_behavior = new AlphaBehavior().setValues(0, 1).setFrameTime(getGamingScene().time, 2000);
+        
+//        alpha_behavior.addListener({
+//            behaviorExpired: (behavior, time, actor) =>
+//                actor.mouseClick = this.mouseClickHandler
+//        })
+
+        gameOverImage.addBehavior(alpha_behavior);
+        
+        
+        
     }
 
 

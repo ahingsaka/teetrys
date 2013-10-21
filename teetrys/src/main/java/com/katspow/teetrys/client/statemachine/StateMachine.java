@@ -164,6 +164,10 @@ public class StateMachine {
                     gameController.moveCurrentTeetrymino(Direction.UP);
                     break;
                     
+                case LOSE:
+                    sm.enterState(GAME_OVER);
+                    break;
+                    
                 }
                 
             }
@@ -195,6 +199,12 @@ public class StateMachine {
         },
         
         GAME_OVER(GAME) {
+            
+            @Override
+            void entry(StateMachine sm) throws Exception {
+                gameController.enterGameOver();
+            }
+
             void process(StateMachine sm, GameEvent e) {
                 // TODO Auto-generated method stub
             }
