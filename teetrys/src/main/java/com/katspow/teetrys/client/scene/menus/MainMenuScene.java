@@ -1,6 +1,7 @@
 package com.katspow.teetrys.client.scene.menus;
 
 import com.katspow.caatja.event.CAATMouseEvent;
+import com.katspow.caatja.event.MouseListener;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.Actor;
@@ -50,52 +51,101 @@ public class MainMenuScene extends Scene {
     
     private TextActor createMenuLink(final MenuLink ml, double y) {
         TextActor textActor = new TextActor() {
-            @Override
-            public void mouseClick(CAATMouseEvent mouseEvent) throws Exception {
-                switch (ml) {
-                
-                case START:
-                    GameController.sendEvent(GameEvent.CHOOSE_GAME);
-                    break;
-                    
-                case SCORES:
-                    GameController.sendEvent(GameEvent.CHOOSE_HIGHSCORES);
-                    break;
-                    
-                case ABOUT:
-                    GameController.sendEvent(GameEvent.CHOOSE_ABOUT);
-                    break;
-                
-                case TEETRYS:
-                default:
-                    break;
-                
-                }
-                
-            }
+            // TODO Remove
+//            @Override
+//            public void mouseClick(CAATMouseEvent mouseEvent) throws Exception {
+//                switch (ml) {
+//                
+//                case START:
+//                    GameController.sendEvent(GameEvent.CHOOSE_GAME);
+//                    break;
+//                    
+//                case SCORES:
+//                    GameController.sendEvent(GameEvent.CHOOSE_HIGHSCORES);
+//                    break;
+//                    
+//                case ABOUT:
+//                    GameController.sendEvent(GameEvent.CHOOSE_ABOUT);
+//                    break;
+//                
+//                case TEETRYS:
+//                default:
+//                    break;
+//                
+//                }
+//                
+//            }
 
-            @Override
-            public void mouseEnter(CAATMouseEvent mouseEvent) {
+            // TODO Remove
+//            @Override
+//            public void mouseEnter(CAATMouseEvent mouseEvent) {
+//                if (ml != MenuLink.TEETRYS) {
+//                    Actor actor = mouseEvent.source;
+//                    actor.setScale(1.2, 1.2);
+//                }
+//            }
+
+            // TODO Remove
+//            @Override
+//            public void mouseExit(CAATMouseEvent mouseEvent) {
+//                if (ml != MenuLink.TEETRYS) {
+//                    Actor actor = mouseEvent.source;
+//                    actor.setScale(1, 1);
+//                }
+//            }
+
+            // TODO Remove
+//            @Override
+//            public void mouseDrag(CAATMouseEvent mouseEvent) {
+            
+//            }
+            
+        };
+        
+        textActor.setMouseEnterListener(new MouseListener() {
+            public void call(CAATMouseEvent e) throws Exception {
                 if (ml != MenuLink.TEETRYS) {
-                    Actor actor = mouseEvent.source;
+                    Actor actor = e.source;
                     actor.setScale(1.2, 1.2);
                 }
             }
-
-            @Override
-            public void mouseExit(CAATMouseEvent mouseEvent) {
+        });
+        
+        textActor.setMouseExitListener(new MouseListener() {
+            public void call(CAATMouseEvent e) throws Exception {
                 if (ml != MenuLink.TEETRYS) {
-                    Actor actor = mouseEvent.source;
+                    Actor actor = e.source;
                     actor.setScale(1, 1);
                 }
             }
+        });
+        
+        textActor.setMouseDragListener(null);
+        
+        textActor.setMouseClickListener(new MouseListener() {
+            public void call(CAATMouseEvent e) throws Exception {
+                switch (ml) {
 
-            @Override
-            public void mouseDrag(CAATMouseEvent mouseEvent) {
-                // FIXME Caatja
+                case START:
+                    GameController.sendEvent(GameEvent.CHOOSE_GAME);
+                    break;
+
+                case SCORES:
+                    GameController.sendEvent(GameEvent.CHOOSE_HIGHSCORES);
+                    break;
+
+                case ABOUT:
+                    GameController.sendEvent(GameEvent.CHOOSE_ABOUT);
+                    break;
+
+                case TEETRYS:
+                default:
+                    break;
+
+                }
             }
-            
-        };
+        });
+        
                 textActor.setFont("50px sans-serif").
                 setText(ml.getLabel()).
                 calcTextSize(director).

@@ -1,6 +1,7 @@
 package com.katspow.teetrys.client.scene.menus;
 
 import com.katspow.caatja.event.CAATMouseEvent;
+import com.katspow.caatja.event.MouseListener;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.Actor;
@@ -31,29 +32,52 @@ public class AboutMenuScene extends Scene {
         
         TextActor ta = new TextActor() {
 
-            @Override
-            public void mouseClick(CAATMouseEvent mouseEvent) throws Exception {
-                GameController.sendEvent(GameEvent.CHOOSE_MAIN_MENU);
-            }
+            // TODO Remove
+//            @Override
+//            public void mouseClick(CAATMouseEvent mouseEvent) throws Exception {
+//                GameController.sendEvent(GameEvent.CHOOSE_MAIN_MENU);
+//            }
 
-            @Override
-            public void mouseEnter(CAATMouseEvent mouseEvent) {
-                Actor actor = mouseEvent.source;
-                actor.setScale(1.2, 1.2);
-            }
+//            @Override
+//            public void mouseEnter(CAATMouseEvent mouseEvent) {
+//                Actor actor = mouseEvent.source;
+//                actor.setScale(1.2, 1.2);
+//            }
+//
+//            @Override
+//            public void mouseExit(CAATMouseEvent mouseEvent) {
+//                Actor actor = mouseEvent.source;
+//                actor.setScale(1, 1);
+//            }
 
-            @Override
-            public void mouseExit(CAATMouseEvent mouseEvent) {
-                Actor actor = mouseEvent.source;
-                actor.setScale(1, 1);
-            }
-
-            @Override
-            public void mouseDrag(CAATMouseEvent mouseEvent) {
-            }
+            // TODO Remove
+//            @Override
+//            public void mouseDrag(CAATMouseEvent mouseEvent) {
+//            }
             
         };
         
+        ta.setMouseClickListener(new MouseListener() {
+            public void call(CAATMouseEvent e) throws Exception {
+                GameController.sendEvent(GameEvent.CHOOSE_MAIN_MENU);
+            }
+        });
+        
+        ta.setMouseEnterListener(new MouseListener() {
+            public void call(CAATMouseEvent e) throws Exception {
+                Actor actor = e.source;
+                actor.setScale(1.2, 1.2);
+            }
+        });
+        
+        ta.setMouseExitListener(new MouseListener() {
+            public void call(CAATMouseEvent e) throws Exception {
+                Actor actor = e.source;
+                actor.setScale(1, 1);
+            }
+        });
+        
+        ta.setMouseDragListener(null);
         
         ta.setFont("40px sans-serif").
         setText("back").
