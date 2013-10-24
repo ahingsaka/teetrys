@@ -7,9 +7,12 @@ import com.katspow.caatja.behavior.BaseBehavior;
 import com.katspow.caatja.behavior.BehaviorListener;
 import com.katspow.caatja.behavior.ContainerBehavior;
 import com.katspow.caatja.behavior.GenericBehavior;
+import com.katspow.caatja.behavior.Interpolator;
 import com.katspow.caatja.behavior.PathBehavior;
 import com.katspow.caatja.behavior.ScaleBehavior;
 import com.katspow.caatja.behavior.SetForTimeReturnValue;
+import com.katspow.caatja.behavior.listener.BehaviorAppliedListener;
+import com.katspow.caatja.behavior.listener.BehaviorExpiredListener;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.pathutil.Path;
 import com.katspow.teetrys.client.Constants;
@@ -24,22 +27,22 @@ public class Effects {
         ContainerBehavior cb = new ContainerBehavior().setFrameTime(time, 1000);
         
         GenericBehavior changeColorBehavior = new GenericBehavior().setFrameTime(0, 500);
-        changeColorBehavior.addListener(new BehaviorListener() {
-
-            public void behaviorStarted(BaseBehavior behavior, double time, Actor actor) {
+        
+        changeColorBehavior.addListener(BehaviorListener.valueOfExpiredAndApplied(
+                
+           new BehaviorExpiredListener() {
+            public void call(BaseBehavior behavior, double time, Actor actor) {
+                actor.setDiscardable(true);
+                actor.setExpired(true);
                 
             }
             
-            public void behaviorExpired(BaseBehavior behavior, double time, Actor actor) {
-                actor.setDiscardable(true);
-                actor.setExpired(true);
-            }
-            
-            public void behaviorApplied(BaseBehavior behavior, double time, double normalizeTime, Actor actor,
-                    SetForTimeReturnValue value) throws Exception {
+        }, new BehaviorAppliedListener() {
+            public void call(BaseBehavior behavior, double time, double normalizeTime, Actor actor, SetForTimeReturnValue value)
+                    throws Exception {
                 actor.setFillStyle(Teetrymino.getRandomColor());
             }
-        });
+        }));
         
         AlphaBehavior alphaBehavior = new AlphaBehavior().
                 setValues(1, 0).
@@ -53,13 +56,13 @@ public class Effects {
         return time + 1000;
     }
 
-    public static double fall(List<Integer> linesToMoveIndexes, Cube[][] gameboard, double time, int size) {
+    public static double fall(List<Integer> linesToMoveIndexes, final Cube[][] gameboard, double time, int size) {
         
         for (Integer lineIndex : linesToMoveIndexes) {
             
             System.out.println(lineIndex);
             
-            Cube[] line = gameboard[lineIndex];
+            final Cube[] line = gameboard[lineIndex];
             
             for (int i = 1; i < line.length - 1; i++) {
                 
@@ -76,12 +79,19 @@ public class Effects {
                     
                     PathBehavior translationBehavior = new PathBehavior().setFrameTime(time, 300);
                     translationBehavior.setPath(p);
-                    
                     actor.addBehavior(translationBehavior);
+                    
+                    actor.moveTo(actor.x, actor.y + futureY, 300, time, new Interpolator().createLinearInterpolator(false, false), 
+                            BehaviorListener.valueOfExpired(new BehaviorExpiredListener() {
+                        public void call(BaseBehavior behavior, double time, Actor actor) {
+                            
+                        }
+                    }));
                     
                     Cube[] futureLine = gameboard[indexLineToCheck];
                     futureLine[i] = line[i];
                     line[i] = Cube.Fixed.EMPTY;
+                    
                     
                     System.out.println("fall effect added ");
                     
@@ -121,24 +131,13 @@ public class Effects {
         ScaleBehavior sb = new ScaleBehavior().
                 setFrameTime(time, 400).
                 setValues(1.5, 0, 1.5, 0, 0d, 0d);
-
-        sb.addListener(new BehaviorListener() {
-            public void behaviorStarted(BaseBehavior behavior, double time, Actor actor) {
-                
-            }
-            
-            public void behaviorExpired(BaseBehavior behavior, double time, Actor actor) {
-                //actor.setDiscardable(true);
-                //actor.setExpired(true);
+        
+        sb.addListener(BehaviorListener.valueOfExpired(new BehaviorExpiredListener() {
+            public void call(BaseBehavior behavior, double time, Actor actor) {
                 actor.setAlpha(1);
             }
-            
-            public void behaviorApplied(BaseBehavior behavior, double time, double normalizeTime, Actor actor,
-                    SetForTimeReturnValue value) throws Exception {
-                
-            }
-        });
-        
+        }));
+
         cube.addBehavior(sb);
         
     }

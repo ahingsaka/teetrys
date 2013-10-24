@@ -84,19 +84,7 @@ public class Gui {
     }
     
     public static ImageActor addImage(double x, double y, final Labels labels, Scene scene, Director director) throws Exception {
-        ImageActor image = new ImageActor() {
-            // TODO Remove
-//            @Override
-//            public void mouseClick(CAATMouseEvent mouseEvent) throws Exception {
-//                if (labels == Labels.PAUSE) {
-//                    
-//                } else if (labels == Labels.GAME_OVER) {
-//                    
-//                }
-//            }
-            
-        }
-        .setImage(director.getImage(labels.getLabel())).setLocation(x, y);
+        ImageActor image = new ImageActor().setImage(director.getImage(labels.getLabel())).setLocation(x, y);
         
         image.setMouseClickListener(new MouseListener() {
             public void call(CAATMouseEvent e) throws Exception {

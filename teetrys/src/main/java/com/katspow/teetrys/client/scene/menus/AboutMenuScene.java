@@ -30,32 +30,7 @@ public class AboutMenuScene extends Scene {
     
     private void addAboutText() throws Exception {
         
-        TextActor ta = new TextActor() {
-
-            // TODO Remove
-//            @Override
-//            public void mouseClick(CAATMouseEvent mouseEvent) throws Exception {
-//                GameController.sendEvent(GameEvent.CHOOSE_MAIN_MENU);
-//            }
-
-//            @Override
-//            public void mouseEnter(CAATMouseEvent mouseEvent) {
-//                Actor actor = mouseEvent.source;
-//                actor.setScale(1.2, 1.2);
-//            }
-//
-//            @Override
-//            public void mouseExit(CAATMouseEvent mouseEvent) {
-//                Actor actor = mouseEvent.source;
-//                actor.setScale(1, 1);
-//            }
-
-            // TODO Remove
-//            @Override
-//            public void mouseDrag(CAATMouseEvent mouseEvent) {
-//            }
-            
-        };
+        TextActor ta = new TextActor();
         
         ta.setMouseClickListener(new MouseListener() {
             public void call(CAATMouseEvent e) throws Exception {

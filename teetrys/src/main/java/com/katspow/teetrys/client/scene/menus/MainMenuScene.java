@@ -50,57 +50,7 @@ public class MainMenuScene extends Scene {
     }
     
     private TextActor createMenuLink(final MenuLink ml, double y) {
-        TextActor textActor = new TextActor() {
-            // TODO Remove
-//            @Override
-//            public void mouseClick(CAATMouseEvent mouseEvent) throws Exception {
-//                switch (ml) {
-//                
-//                case START:
-//                    GameController.sendEvent(GameEvent.CHOOSE_GAME);
-//                    break;
-//                    
-//                case SCORES:
-//                    GameController.sendEvent(GameEvent.CHOOSE_HIGHSCORES);
-//                    break;
-//                    
-//                case ABOUT:
-//                    GameController.sendEvent(GameEvent.CHOOSE_ABOUT);
-//                    break;
-//                
-//                case TEETRYS:
-//                default:
-//                    break;
-//                
-//                }
-//                
-//            }
-
-            // TODO Remove
-//            @Override
-//            public void mouseEnter(CAATMouseEvent mouseEvent) {
-//                if (ml != MenuLink.TEETRYS) {
-//                    Actor actor = mouseEvent.source;
-//                    actor.setScale(1.2, 1.2);
-//                }
-//            }
-
-            // TODO Remove
-//            @Override
-//            public void mouseExit(CAATMouseEvent mouseEvent) {
-//                if (ml != MenuLink.TEETRYS) {
-//                    Actor actor = mouseEvent.source;
-//                    actor.setScale(1, 1);
-//                }
-//            }
-
-            // TODO Remove
-//            @Override
-//            public void mouseDrag(CAATMouseEvent mouseEvent) {
-            
-//            }
-            
-        };
+        TextActor textActor = new TextActor();
         
         textActor.setMouseEnterListener(new MouseListener() {
             public void call(CAATMouseEvent e) throws Exception {
