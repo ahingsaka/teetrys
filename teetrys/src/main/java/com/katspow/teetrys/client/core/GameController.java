@@ -106,6 +106,9 @@ public class GameController {
         preloader.addImage(Labels.PAUSE.getLabel(), "pause.png");
         preloader.addImage(Labels.NUMBERS.getLabel(), "numbers.png");
         preloader.addImage(Labels.GAME_OVER.getLabel(), "gameover.png");
+        preloader.addImage(Labels.OK.getLabel(), "ok.png");
+        preloader.addImage(Labels.CANCEL.getLabel(), "cancel.png");
+        preloader.addImage(Labels.EXIT.getLabel(), "exit.png");
     }
     
     private void finishImageLoading() throws Exception {
@@ -500,6 +503,12 @@ public class GameController {
         getGamingScene().hideGamingArea(gameWorld);
         Gui.addImage(170, 300, Labels.PAUSE, getGamingScene(), director);
     }
+    
+    public void enterQuit() throws Exception {
+    	timerTask.suspended = true;
+    	getGamingScene().hideGamingArea(gameWorld);
+    	
+	}
 
     public void exitPause() throws Exception {
         timerTask.suspended = false;
@@ -527,6 +536,5 @@ public class GameController {
         
         
     }
-
 
 }

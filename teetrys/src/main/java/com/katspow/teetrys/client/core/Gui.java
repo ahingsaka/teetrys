@@ -17,7 +17,7 @@ import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 public class Gui {
     
     public enum Labels {
-        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep"), NUMBERS("numbers"), GAME_OVER("gameover");
+        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep"), NUMBERS("numbers"), GAME_OVER("gameover"), OK("ok"), CANCEL("cancel"), EXIT("exit");
         
         private String label;
         
@@ -93,7 +93,7 @@ public class Gui {
                 	GameController.sendEvent(GameEvent.CALL_PAUSE);
                     
                 } else if (labels == Labels.GAME_OVER) {
-                    
+                    GameController.sendEvent(GameEvent.CALL_QUIT);
                 }
             }
         });

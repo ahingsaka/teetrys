@@ -35,6 +35,7 @@ public class StateMachine {
         CALL_RIGHT,
         CALL_START,
         CALL_ROTATE,
+        CALL_QUIT,
         
         LOSE, START_GAME
     }
@@ -164,6 +165,9 @@ public class StateMachine {
                     gameController.moveCurrentTeetrymino(Direction.UP);
                     break;
                     
+                case CALL_QUIT:
+                	sm.enterState(QUIT);
+                    
                 case LOSE:
                     sm.enterState(GAME_OVER);
                     break;
@@ -208,6 +212,20 @@ public class StateMachine {
             void process(StateMachine sm, GameEvent e) {
                 // TODO Auto-generated method stub
             }
+        },
+        
+        QUIT(GAME) {
+        	
+        	@Override
+            void entry(StateMachine sm) throws Exception {
+                gameController.enterQuit();
+            }
+
+			void process(StateMachine sm, GameEvent e) throws Exception {
+				// TODO Auto-generated method stub
+				
+			}
+        	
         },
         
         INTERMEZZO_1(GAME) {
