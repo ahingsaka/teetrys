@@ -26,15 +26,15 @@ import com.katspow.teetrys.client.core.GameController;
  * 
  * Gestion vitesse - a tester -
  * 
- * End
- * Intermezzos
- * Gestion highscores
+ * End + score
  * Gestion touch
+ * Quit
  * 
- * Desactiver action sur clic
- * Gestion pause
- * Gestion sortie vers site
+ * about
+ * pause bug
  * Game Over
+ * 
+ * degrade gauche et droite colonnes noires
  * 
  * @author asamsenesena
  *

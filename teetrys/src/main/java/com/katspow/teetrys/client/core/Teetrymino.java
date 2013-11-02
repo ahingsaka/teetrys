@@ -235,14 +235,31 @@ public class Teetrymino {
      */
     public static Actor createCube(double x, double y, String color, String strokeColor) {
         
-        ShapeActor cube = new ShapeActor().
-            setShape(Shape.RECTANGLE).
-            setLocation(x, y).
-            setSize(Constants.CUBE_SIDE, Constants.CUBE_SIDE).
-            setFillStyle(color).
-            setStrokeStyle(CaatjaColor.valueOf(strokeColor));
-        
-        return cube;
+//        ShapeActor cube = new ShapeActor().
+//            setShape(Shape.RECTANGLE).
+//            setLocation(x, y).
+//            setSize(Constants.CUBE_SIDE, Constants.CUBE_SIDE).
+//            setFillStyle(color).
+//            setStrokeStyle(CaatjaColor.valueOf(strokeColor));
+//        
+//        cube.disableDrag();
+//        
+//        return cube;
+    	
+    	return createCube(x, y, Constants.CUBE_SIDE, Constants.CUBE_SIDE, color, strokeColor);
+    }
+    
+    public static Actor createCube(double x, double y, int size_x, int size_y, String color, String strokeColor) {
+    	ShapeActor cube = new ShapeActor().
+                setShape(Shape.RECTANGLE).
+                setLocation(x, y).
+                setSize(size_y, size_x).
+                setFillStyle(color).
+                setStrokeStyle(CaatjaColor.valueOf(strokeColor));
+            
+            cube.disableDrag();
+            
+            return cube;
     }
     
     public static Teetrymino createNewTeetrymino(double x, double y) {
@@ -309,7 +326,6 @@ public class Teetrymino {
                 
                 if (val != 0) {
                     Actor cube = Teetrymino.createCube(i, j, randomColor, "#000000");
-                    
                     cubes.add(cube);
                 }
                 

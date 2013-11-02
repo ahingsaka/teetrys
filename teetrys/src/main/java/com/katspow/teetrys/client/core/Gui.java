@@ -89,12 +89,15 @@ public class Gui {
         image.setMouseClickListener(new MouseListener() {
             public void call(CAATMouseEvent e) throws Exception {
                 if (labels == Labels.PAUSE) {
+                	
                     
                 } else if (labels == Labels.GAME_OVER) {
                     
                 }
             }
         });
+        
+        image.disableDrag();
         
         scene.addChild(image);
         scene.setZOrder(image, Integer.MAX_VALUE);

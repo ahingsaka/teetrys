@@ -27,7 +27,7 @@ public class GamingScene extends Scene {
     private Pt origin;
     
     public GamingScene(Director director) throws Exception {
-        
+    	
         this.director = director;
 
         root = new ActorContainer();
@@ -85,28 +85,28 @@ public class GamingScene extends Scene {
         
         if (hideCubes == null) {
 
-            int gameboardLinesNb = gameWorld.getGameboardLinesNb();
-            int gameboardColumnsNb = gameWorld.getGameboardColumnsNb();
+//            int gameboardLinesNb = gameWorld.getGameboardLinesNb();
+//            int gameboardColumnsNb = gameWorld.getGameboardColumnsNb();
 
             hideCubes = new ArrayList<Actor>();
 
-            int x = Constants.CUBE_SIDE;
+            int x = 0;
             int y = 0;
 
-            for (int line = 0; line < gameboardLinesNb - 1; line++) {
-                for (int column = 1; column < gameboardColumnsNb; column++) {
-                    Actor cube = Teetrymino.createCube(x, y, "#000000", "#000000");
+//            for (int line = 0; line < gameboardLinesNb - 1; line++) {
+//                for (int column = 1; column < gameboardColumnsNb; column++) {
+                    Actor cube = Teetrymino.createCube(x, y, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, "#000000", "#000000");
                     Effects.scale(cube, time);
                     hideCubes.add(cube);
                     addChild(cube);
 
-                    x += Constants.CUBE_SIDE;
-                }
-
-                x = Constants.CUBE_SIDE;
-                y += Constants.CUBE_SIDE;
-
-            }
+//                    x += Constants.CUBE_SIDE;
+//                }
+//
+//                x = Constants.CUBE_SIDE;
+//                y += Constants.CUBE_SIDE;
+//
+//            }
             
         } else {
             for (Actor actor : hideCubes) {

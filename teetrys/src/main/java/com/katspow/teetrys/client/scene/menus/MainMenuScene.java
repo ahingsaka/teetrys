@@ -45,8 +45,8 @@ public class MainMenuScene extends Scene {
     private void createMenuLinks() throws Exception {
         addChild(createMenuLink(MenuLink.TEETRYS, 200));
         addChild(createMenuLink(MenuLink.START, 330));
-        addChild(createMenuLink(MenuLink.SCORES, 400));
-        addChild(createMenuLink(MenuLink.ABOUT, 470));
+//        addChild(createMenuLink(MenuLink.SCORES, 470));
+        addChild(createMenuLink(MenuLink.ABOUT, 400));
     }
     
     private TextActor createMenuLink(final MenuLink ml, double y) {
