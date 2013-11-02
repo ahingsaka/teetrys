@@ -12,6 +12,7 @@ import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.ImageActor;
 import com.katspow.caatja.foundation.actor.SpriteActor;
 import com.katspow.caatja.foundation.image.CompoundImage;
+import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 
 public class Gui {
     
@@ -88,8 +89,8 @@ public class Gui {
         
         image.setMouseClickListener(new MouseListener() {
             public void call(CAATMouseEvent e) throws Exception {
-                if (labels == Labels.PAUSE) {
-                	
+                if (labels == Labels.SLEEP) {
+                	GameController.sendEvent(GameEvent.CALL_PAUSE);
                     
                 } else if (labels == Labels.GAME_OVER) {
                     

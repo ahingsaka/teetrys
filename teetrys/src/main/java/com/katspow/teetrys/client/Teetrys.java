@@ -31,7 +31,7 @@ import com.katspow.teetrys.client.core.GameController;
  * Quit
  * 
  * about
- * pause bug
+ * bug zorder
  * Game Over
  * 
  * degrade gauche et droite colonnes noires

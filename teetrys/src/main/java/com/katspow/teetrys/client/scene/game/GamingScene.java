@@ -90,7 +90,7 @@ public class GamingScene extends Scene {
 
             hideCubes = new ArrayList<Actor>();
 
-            int x = 0;
+            int x = Constants.CUBE_SIDE;
             int y = 0;
 
 //            for (int line = 0; line < gameboardLinesNb - 1; line++) {
