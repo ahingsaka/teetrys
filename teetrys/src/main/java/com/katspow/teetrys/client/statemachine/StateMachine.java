@@ -38,7 +38,7 @@ public class StateMachine {
         CALL_QUIT,
         CALL_CANCEL,
         
-        LOSE, START_GAME, CALL_OK, CALL_MENU, CALL_END
+        LOSE, START_GAME, CALL_OK, CALL_MENU, CALL_END, CALL_MOUSE_DOWN, CALL_MOUSE_UP
     }
     
     /**
@@ -177,7 +177,7 @@ public class StateMachine {
                 case CALL_END:
                 	sm.enterState(END);
                 	break;
-                    
+                	
                 }
                 
             }

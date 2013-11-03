@@ -17,11 +17,8 @@ import com.katspow.teetrys.client.core.GameController;
 /**
  * FIXME CAATJA - ZOrder
  * FIXME Throws exception everywhere !
+ * TODO Gestion touch
  * BUG fall ...
- * 
- * TODO
- * Gestion touch
- * Bug zorder
  */
 public class Teetrys implements EntryPoint {
 

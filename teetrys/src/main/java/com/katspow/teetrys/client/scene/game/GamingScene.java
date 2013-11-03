@@ -12,11 +12,13 @@ import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.math.Pt;
 import com.katspow.teetrys.client.Constants;
+import com.katspow.teetrys.client.core.GameController;
 import com.katspow.teetrys.client.core.GameWorld;
 import com.katspow.teetrys.client.core.Gui;
 import com.katspow.teetrys.client.core.Gui.Labels;
 import com.katspow.teetrys.client.core.Teetrymino;
 import com.katspow.teetrys.client.effects.Effects;
+import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 
 public class GamingScene extends Scene {
     
@@ -36,9 +38,15 @@ public class GamingScene extends Scene {
         root.setBounds(0, 0, director.canvas.getCoordinateSpaceWidth(), director.canvas.getCoordinateSpaceHeight());
         root.setFillStrokeStyle(CaatjaColor.valueOf("#161714"));
         
-        root.setMouseClickListener(new MouseListener() {
+        root.setMouseDownListener(new MouseListener() {
 			public void call(CAATMouseEvent e) throws Exception {
-				
+				GameController.sendEvent(GameEvent.CALL_MOUSE_DOWN, e);
+			}
+		});
+        
+        root.setMouseUpListener(new MouseListener() {
+			public void call(CAATMouseEvent e) throws Exception {
+				GameController.sendEvent(GameEvent.CALL_MOUSE_UP, e);
 			}
 		});
 

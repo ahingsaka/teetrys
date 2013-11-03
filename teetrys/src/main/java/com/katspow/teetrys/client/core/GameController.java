@@ -68,6 +68,10 @@ public class GameController {
     
     private Double blockUntilTime;
     
+    private static boolean mouseDownOnLeftSide;
+    private static boolean mouseDownOnRightSide;
+    private static boolean mouseDownOnDownSide;
+    
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
@@ -236,6 +240,7 @@ public class GameController {
             public void call(double sceneTime, double ttime, TimerTask timerTask) {
                 try {
                 	
+                	// Animation called
                 	if (blockUntilTime != null) {
                 		if (sceneTime <= blockUntilTime) {
                 			timerTask.reset(sceneTime);
@@ -290,7 +295,18 @@ public class GameController {
 
         }, new Callback() {
             public void call(double time, double ttime, TimerTask timerTask) {
-                // TODO Auto-generated method stub
+            	// Mouse down 
+            	try {
+	            	if (mouseDownOnLeftSide) {
+	            		moveCurrentTeetrymino(Direction.LEFT);
+	            	} else if (mouseDownOnRightSide) {
+	            		moveCurrentTeetrymino(Direction.RIGHT);
+	            	} else if (mouseDownOnDownSide) {
+	            		moveCurrentTeetrymino(Direction.DOWN);
+	            	}
+            	} catch (Exception e) {
+            		
+            	}
             }
             
         }, new Callback() {
@@ -533,6 +549,34 @@ public class GameController {
     public static void sendEvent(GameEvent gameEvent) throws Exception {
         stateMachine.sendEvent(gameEvent);
     }
+    
+    /**
+     * 
+     * @param gameEvent
+     * @param mouseEvent
+     * @throws Exception
+     */
+    public static void sendEvent(GameEvent gameEvent, CAATMouseEvent mouseEvent) throws Exception {
+    	
+    	if (gameEvent == GameEvent.CALL_MOUSE_DOWN) {
+    		
+    		double x = mouseEvent.x;
+    		
+    		if (x < (Constants.GAME_WIDTH / 2)) {
+    			mouseDownOnLeftSide = true;
+    		} else if (x > (Constants.GAME_WIDTH / 2)) {
+    			mouseDownOnRightSide = true;
+    		}
+    		
+    		
+    	} else if (gameEvent == GameEvent.CALL_MOUSE_UP) {
+    		mouseDownOnLeftSide = false;
+    		mouseDownOnRightSide = false;
+    		mouseDownOnDownSide = false;
+    	}
+        
+    }
+    
 
     public void enterAboutMenu() throws Exception {
         EaseInOut.scenesFromRightToLeft(director, getAboutMenuScene(), director.getCurrentScene());
