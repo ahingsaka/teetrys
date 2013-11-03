@@ -7,7 +7,7 @@ import com.katspow.caatja.behavior.AlphaBehavior;
 import com.katspow.caatja.behavior.BaseBehavior;
 import com.katspow.caatja.behavior.BehaviorListener;
 import com.katspow.caatja.behavior.Interpolator;
-import com.katspow.caatja.behavior.SetForTimeReturnValue;
+import com.katspow.caatja.behavior.listener.BehaviorExpiredListener;
 import com.katspow.caatja.core.CAAT;
 import com.katspow.caatja.core.Caatja;
 import com.katspow.caatja.core.canvas.CaatjaCanvas;
@@ -15,6 +15,8 @@ import com.katspow.caatja.core.image.CaatjaImageLoader;
 import com.katspow.caatja.core.image.CaatjaImageLoaderCallback;
 import com.katspow.caatja.core.image.CaatjaPreloader;
 import com.katspow.caatja.event.CAATKeyEvent;
+import com.katspow.caatja.event.CAATMouseEvent;
+import com.katspow.caatja.event.MouseListener;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.Scene.Ease;
@@ -47,7 +49,7 @@ public class GameController {
     private static final int NEXT_Y = 280;
     private static final int NEXT_X = 310;
     
-    private static int FALL_TIME = 1000;
+    private static int FALL_TIME;
     
     private static StateMachine stateMachine;
     
@@ -119,6 +121,9 @@ public class GameController {
         // TODO Set to introduction when it's done
         stateMachine.setState(GameState.MENUS);
         
+        // Register keys
+        registerMovementKeys();
+        
         stateMachine.start();
     }
 
@@ -137,11 +142,31 @@ public class GameController {
         director.easeIn(director.getSceneIndex(getMainMenuScene()), Ease.SCALE, 2000, false, Anchor.CENTER, new Interpolator().createElasticOutInterpolator(2.5, .4, false));
     }
     
+    // Move to gaming scene ??
     public void startGame() throws Exception {
+    	
+    	if (timerTask != null) {
+    		timerTask.cancel();
+    		timerTask = null;
+    	}
+    	
+    	if (gamingScene != null)	 {
+//    		getGamingScene().removeAllChildren();
+//    		gamingScene = null;
+    	}
         
-        // Move to gaming scene ??
-        
-        
+    	FALL_TIME = Constants.START_FALL_TIME;
+    	Teetrymino oldCurrentTeetrymino = getGamingScene().getCurrentTeetrymino();
+    	Teetrymino oldNextTeetrymino = getGamingScene().getNextTeetrymino();
+    	
+    	if (oldCurrentTeetrymino != null) {
+    		oldCurrentTeetrymino.expire();;
+    	}
+    	
+    	if (oldNextTeetrymino != null)	 {
+    		oldNextTeetrymino.expire();
+    	}
+    	
         // Init world
         gameWorld = new GameWorld();
         List<Actor> walls = gameWorld.createWalls();
@@ -160,13 +185,10 @@ public class GameController {
         int y = Constants.START_POINT_Y;
         
         Teetrymino currentTeetrymino = buildCurrentTeetrymino(x, y);
-        gamingScene.setCurrentTeetrymino(currentTeetrymino);
+        getGamingScene().setCurrentTeetrymino(currentTeetrymino);
         
         Teetrymino nextTeetrymino = buildNextTeetrymino();
-        gamingScene.setNextTeetrymino(nextTeetrymino);
-        
-        // Register keys
-        registerMovementKeys();
+        getGamingScene().setNextTeetrymino(nextTeetrymino);
         
         Score.init();
         Gui.refreshScores();
@@ -494,6 +516,7 @@ public class GameController {
     }
 
     public void enterGaming() throws Exception {
+    	gamingScene = null;
         EaseInOut.scenesFromUpToDown(director, getGamingScene(), director.getCurrentScene());
         stateMachine.sendEvent(GameEvent.START_GAME);
     }
@@ -508,11 +531,33 @@ public class GameController {
     	timerTask.suspended = true;
     	getGamingScene().hideGamingArea(gameWorld);
     	
+    	Gui.addImage(200, 250, Labels.EXIT, getGamingScene(), director);
+    	Gui.addImage(170, 360, Labels.OK, getGamingScene(), director);
+    	Gui.addImage(250, 360, Labels.CANCEL, getGamingScene(), director);
+    	
+	}
+    
+    public void exitQuit() throws Exception {
+    	timerTask.suspended = false;
+    	getGamingScene().showGamingArea();
+    	Gui.hideImage(Labels.EXIT);
+    	Gui.hideImage(Labels.OK);
+    	Gui.hideImage(Labels.CANCEL);
+    }
+    
+    public void exitGameOver() throws Exception {
+    	timerTask.suspended = false;
+    	
+    	Gui.hideImage(Labels.GAME_OVER);
+    	
+//    	getGamingScene().removeAllChildren();
+    	gamingScene = null;
+    	
 	}
 
     public void exitPause() throws Exception {
         timerTask.suspended = false;
-        getGamingScene().showGamingArea();
+        getGamingScene().clearHideCubes();
         Gui.hideImage(Labels.PAUSE);
     }
 
@@ -526,14 +571,17 @@ public class GameController {
 
         AlphaBehavior alpha_behavior = new AlphaBehavior().setValues(0, 1).setFrameTime(getGamingScene().time, 2000);
         
-//        alpha_behavior.addListener({
-//            behaviorExpired: (behavior, time, actor) =>
-//                actor.mouseClick = this.mouseClickHandler
-//        })
-
+        alpha_behavior.addListener(BehaviorListener.valueOfExpired(new BehaviorExpiredListener() {
+			public void call(BaseBehavior behavior, double time, Actor actor) {
+				actor.setMouseClickListener(new MouseListener() {
+					public void call(CAATMouseEvent e) throws Exception {
+						GameController.sendEvent(GameEvent.CALL_MENU);
+					}
+				});
+			}
+		}));
+        
         gameOverImage.addBehavior(alpha_behavior);
-        
-        
         
     }
 

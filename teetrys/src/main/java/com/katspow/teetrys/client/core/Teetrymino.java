@@ -437,6 +437,14 @@ public class Teetrymino {
         
         return nextIndex;
     }
+    
+    
+    public void expire() {
+    	for (Actor actor : getCubes()) {
+    		actor.setExpired(true);
+    		actor.setDiscardable(true);
+		}
+	}
 
 //    rotate_shape: (x, y, cube_list, check_collision, transformation_nb)->
 //    transformations = @cube_shape_list[@current_shape_number]
@@ -493,5 +501,5 @@ public class Teetrymino {
     public List<Actor> getCubes() {
         return cubes;
     }
-    
+
 }

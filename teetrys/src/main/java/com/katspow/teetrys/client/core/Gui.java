@@ -92,8 +92,14 @@ public class Gui {
                 if (labels == Labels.SLEEP) {
                 	GameController.sendEvent(GameEvent.CALL_PAUSE);
                     
-                } else if (labels == Labels.GAME_OVER) {
-                    GameController.sendEvent(GameEvent.CALL_QUIT);
+                } else if (labels == Labels.CANCEL) {
+                	GameController.sendEvent(GameEvent.CALL_CANCEL);
+                	
+                } else if (labels == Labels.OK) {
+                	GameController.sendEvent(GameEvent.CALL_OK);
+                	
+                } else if  (labels == Labels.QUIT) {
+                	GameController.sendEvent(GameEvent.CALL_QUIT);
                 }
             }
         });

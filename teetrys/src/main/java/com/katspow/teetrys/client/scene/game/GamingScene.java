@@ -79,6 +79,13 @@ public class GamingScene extends Scene {
     }
 
     private List<Actor> hideCubes;
+    
+    public void clearHideCubes() {
+    	for (Actor actor : hideCubes) {
+    		actor.setExpired(true);
+    		actor.setDiscardable(true);
+    	}
+    }
 
     // Hide all except first column for 'left buttons'
     public void hideGamingArea(GameWorld gameWorld) throws Exception {
@@ -121,5 +128,6 @@ public class GamingScene extends Scene {
             Effects.scaleOutAndDisappear(cube, time);
         }
     }
+    
 
 }
