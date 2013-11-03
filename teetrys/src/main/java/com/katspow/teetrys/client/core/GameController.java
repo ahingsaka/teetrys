@@ -99,6 +99,7 @@ public class GameController {
     private void preloadImages() {
         final CaatjaPreloader preloader = Caatja.getCaatjaImagePreloader();
         
+        preloader.addImage(Labels.TEETRYS.getLabel(), "teetrys.png");
         preloader.addImage(Labels.SCORE.getLabel(), "score.png");
         preloader.addImage(Labels.LINES.getLabel(), "lines.png");
         preloader.addImage(Labels.LEVEL.getLabel(), "lvl.png");
@@ -111,6 +112,7 @@ public class GameController {
         preloader.addImage(Labels.OK.getLabel(), "ok.png");
         preloader.addImage(Labels.CANCEL.getLabel(), "cancel.png");
         preloader.addImage(Labels.EXIT.getLabel(), "exit.png");
+        
     }
     
     private void finishImageLoading() throws Exception {

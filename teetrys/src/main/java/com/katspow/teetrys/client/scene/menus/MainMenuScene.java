@@ -9,6 +9,8 @@ import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.foundation.ui.TextActor;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.GameController;
+import com.katspow.teetrys.client.core.Gui;
+import com.katspow.teetrys.client.core.Gui.Labels;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 
 public class MainMenuScene extends Scene {
@@ -43,7 +45,8 @@ public class MainMenuScene extends Scene {
     }
 
     private void createMenuLinks() throws Exception {
-        addChild(createMenuLink(MenuLink.TEETRYS, 200));
+    	Gui.addImage(100, 200, Labels.TEETRYS, this, director);
+        //addChild(createMenuLink(MenuLink.TEETRYS, 200));
         addChild(createMenuLink(MenuLink.START, 330));
 //        addChild(createMenuLink(MenuLink.SCORES, 470));
         addChild(createMenuLink(MenuLink.ABOUT, 400));

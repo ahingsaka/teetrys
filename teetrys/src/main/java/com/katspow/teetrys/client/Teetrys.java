@@ -25,7 +25,6 @@ import com.katspow.teetrys.client.core.GameController;
  * 
  * Gestion vitesse - a tester -
  * 
- * main menu pictures
  * End + score
  * Gestion touch
  * 

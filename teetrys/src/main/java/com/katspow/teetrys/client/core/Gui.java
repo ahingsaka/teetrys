@@ -17,7 +17,7 @@ import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 public class Gui {
     
     public enum Labels {
-        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep"), NUMBERS("numbers"), GAME_OVER("gameover"), OK("ok"), CANCEL("cancel"), EXIT("exit");
+        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep"), NUMBERS("numbers"), GAME_OVER("gameover"), OK("ok"), CANCEL("cancel"), EXIT("exit"), TEETRYS("teetrys");
         
         private String label;
         
