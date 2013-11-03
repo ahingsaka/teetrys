@@ -10,20 +10,20 @@ public class EaseInOut {
 
     public static void scenesFromUpToDown(Director director, Scene in, Scene out) throws Exception {
         director.easeInOut(director.getSceneIndex(in), Ease.TRANSLATE, Anchor.TOP, director.getSceneIndex(out),
-                Ease.TRANSLATE, Anchor.BOTTOM, 300, false, new Interpolator().createLinearInterpolator(false, false),
-                new Interpolator().createLinearInterpolator(false, false));
+                Ease.TRANSLATE, Anchor.BOTTOM, 300, false, Interpolator.createLinearInterpolator(false, false),
+                Interpolator.createLinearInterpolator(false, false));
     }
 
     public static void scenesFromLeftToRight(Director director, Scene in, Scene out) throws Exception {
         director.easeInOut(director.getSceneIndex(in), Ease.TRANSLATE, Anchor.RIGHT, director.getSceneIndex(out),
-                Ease.TRANSLATE, Anchor.LEFT, 300, false, new Interpolator().createLinearInterpolator(false, false),
-                new Interpolator().createLinearInterpolator(false, false));
+                Ease.TRANSLATE, Anchor.LEFT, 300, false, Interpolator.createLinearInterpolator(false, false),
+                Interpolator.createLinearInterpolator(false, false));
     }
     
     public static void scenesFromRightToLeft(Director director, Scene in, Scene out) throws Exception {
         director.easeInOut(director.getSceneIndex(in), Ease.TRANSLATE, Anchor.LEFT, director.getSceneIndex(out),
-                Ease.TRANSLATE, Anchor.RIGHT, 300, false, new Interpolator().createLinearInterpolator(false, false),
-                new Interpolator().createLinearInterpolator(false, false));
+                Ease.TRANSLATE, Anchor.RIGHT, 300, false, Interpolator.createLinearInterpolator(false, false),
+                Interpolator.createLinearInterpolator(false, false));
     }
 
 }

@@ -9,12 +9,12 @@ public class Score {
     private static int linesInCurrentLevel;
 
     public static void init() {
-        level = 19;
+        level = 1;
         lines = 0;
         score = 0;
         oldScore = 0;
         
-        linesInCurrentLevel = 9;
+        linesInCurrentLevel = 0;
     }
     
     public static void addLines(int nbLines) {

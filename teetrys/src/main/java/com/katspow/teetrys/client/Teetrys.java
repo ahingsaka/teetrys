@@ -22,10 +22,8 @@ import com.katspow.teetrys.client.core.GameController;
  * FIXME Throws exception everywhere !!!
  * 
  * TODO
- * Gestion vitesse - a tester -
  * Gestion touch
  * fall effect a refaire
- * 
  * bug zorder
  * 
  * 

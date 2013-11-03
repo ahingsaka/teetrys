@@ -81,7 +81,7 @@ public class Effects {
                     translationBehavior.setPath(p);
                     actor.addBehavior(translationBehavior);
                     
-                    actor.moveTo(actor.x, actor.y + futureY, 300, time, new Interpolator().createLinearInterpolator(false, false), 
+                    actor.moveTo(actor.x, actor.y + futureY, 300, time, Interpolator.createLinearInterpolator(false, false), 
                             BehaviorListener.valueOfExpired(new BehaviorExpiredListener() {
                         public void call(BaseBehavior behavior, double time, Actor actor) {
                             

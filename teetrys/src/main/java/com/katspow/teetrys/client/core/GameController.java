@@ -143,7 +143,7 @@ public class GameController {
      * @throws Exception 
      */
     public void enterMainMenu() throws Exception {
-        director.easeIn(director.getSceneIndex(getMainMenuScene()), Ease.SCALE, 2000, false, Anchor.CENTER, new Interpolator().createElasticOutInterpolator(2.5, .4, false));
+        director.easeIn(director.getSceneIndex(getMainMenuScene()), Ease.SCALE, 2000, false, Anchor.CENTER, Interpolator.createElasticOutInterpolator(2.5, .4, false));
     }
     
     // Move to gaming scene ??
