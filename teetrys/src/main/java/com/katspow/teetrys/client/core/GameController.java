@@ -561,12 +561,15 @@ public class GameController {
     	if (gameEvent == GameEvent.CALL_MOUSE_DOWN) {
     		
     		double x = mouseEvent.x;
+    		double y = mouseEvent.y;
     		
-    		if (x < (Constants.GAME_WIDTH / 2)) {
+    		if (y > Constants.GAME_HEIGHT - Constants.CUBE_SIDE * 2) {
+    			mouseDownOnDownSide = true;
+    		} else if (x < (Constants.GAME_WIDTH / 2)) {
     			mouseDownOnLeftSide = true;
     		} else if (x > (Constants.GAME_WIDTH / 2)) {
     			mouseDownOnRightSide = true;
-    		}
+    		} 
     		
     		
     	} else if (gameEvent == GameEvent.CALL_MOUSE_UP) {
