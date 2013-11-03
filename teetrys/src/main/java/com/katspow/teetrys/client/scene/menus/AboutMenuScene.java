@@ -29,7 +29,25 @@ public class AboutMenuScene extends Scene {
     }
     
     private void addAboutText() throws Exception {
-        
+    	
+    	TextActor text = new TextActor();
+    	
+    	text.
+    	setFont("30px sans-serif").
+    	setText("Powered by Caatja").
+    	calcTextSize(director).
+        setTextFillStyle("white").
+        setLocation((Constants.GAME_WIDTH - text.width) / 2, (Constants.GAME_HEIGHT - text.height) / 2 - 100);
+    	
+    	TextActor text2 = new TextActor();
+    	
+    	text2.
+    	setFont("25px sans-serif").
+    	setText("Author : Ahingsaka Samsenesena").
+    	calcTextSize(director).
+        setTextFillStyle("white").
+        setLocation((Constants.GAME_WIDTH - text2.width) / 2, (Constants.GAME_HEIGHT - text2.height) / 2 + 20);
+    	
         TextActor ta = new TextActor();
         
         ta.setMouseClickListener(new MouseListener() {
@@ -63,6 +81,8 @@ public class AboutMenuScene extends Scene {
         ta.setLocation((Constants.GAME_WIDTH - ta.width) / 2, (Constants.GAME_HEIGHT - ta.height) / 2);
         ta.cacheAsBitmap();
         
+        root.addChild(text);
+        root.addChild(text2);
         root.addChild(ta);
         
     }
