@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.katspow.caatja.core.canvas.CaatjaColor;
+import com.katspow.caatja.event.CAATMouseEvent;
+import com.katspow.caatja.event.MouseListener;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.Actor;
@@ -33,6 +35,12 @@ public class GamingScene extends Scene {
         root = new ActorContainer();
         root.setBounds(0, 0, director.canvas.getCoordinateSpaceWidth(), director.canvas.getCoordinateSpaceHeight());
         root.setFillStrokeStyle(CaatjaColor.valueOf("#161714"));
+        
+        root.setMouseClickListener(new MouseListener() {
+			public void call(CAATMouseEvent e) throws Exception {
+				
+			}
+		});
 
         addChild(root);
         

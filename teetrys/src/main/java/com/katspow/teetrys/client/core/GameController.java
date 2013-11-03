@@ -66,6 +66,8 @@ public class GameController {
     
     private GameWorld gameWorld;
     
+    private Double blockUntilTime;
+    
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
@@ -231,8 +233,21 @@ public class GameController {
 
     private void createGameTimer(double startTime, double duration) throws Exception {
         timerTask = getGamingScene().createTimer(startTime, duration, new Callback() {
-            public void call(double time, double ttime, TimerTask timerTask) {
+            public void call(double sceneTime, double ttime, TimerTask timerTask) {
                 try {
+                	
+                	if (blockUntilTime != null) {
+                		if (sceneTime <= blockUntilTime) {
+                			timerTask.reset(sceneTime);
+                			return;
+                		} else {
+                			blockUntilTime = null;
+                			reinit();
+                			timerTask.reset(sceneTime);
+                		}
+                		
+                	}
+                	
                     Teetrymino currentTeetrymino = getGamingScene().getCurrentTeetrymino();
                     List<Actor> currentCubes = currentTeetrymino.getCubes();
                     
@@ -252,35 +267,27 @@ public class GameController {
                         
                         while (fullLinesIndexes.size() > 1) {
                             int endIndex = fullLinesIndexes.size() - 1;
-                            checkLines(fullLinesIndexes.subList(0, endIndex), fullLinesIndexes.get(endIndex), time);
+                            checkLines(fullLinesIndexes.subList(0, endIndex), fullLinesIndexes.get(endIndex), sceneTime);
                             fullLinesIndexes = gameWorld.findNumberOfFullLines();
                         }
                         
-                        // Add waiting time
-                        reinit();
-                        
-                        if (Score.checkForNextLevel()) {
-                            if (Score.getLevel() < 15) {
-                                FALL_TIME -= Constants.DECREASE_FALL_TIME;
-                                System.out.println("FALLTIME:" + FALL_TIME);
-                            } else if (Score.getLevel() == 20) {
-                            	sendEvent(GameEvent.CALL_END);
-                            }
+                        if (blockUntilTime == null) {
+                        	reinit();
+                        	checkForLevel();
                         }
-                        
                         
                     } else {
                         moveCubes(currentCubes, 0, Constants.CUBE_SIDE);
                         getGamingScene().getOrigin().y += Constants.CUBE_SIDE;
                     }
                     
-                    timerTask.reset(time);
+                    timerTask.reset(sceneTime);
                     
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            
+
         }, new Callback() {
             public void call(double time, double ttime, TimerTask timerTask) {
                 // TODO Auto-generated method stub
@@ -298,9 +305,21 @@ public class GameController {
 
     }
     
+	private void checkForLevel() throws Exception {
+		if (Score.checkForNextLevel()) {
+			if (Score.getLevel() < 15) {
+				FALL_TIME -= Constants.DECREASE_FALL_TIME;
+				System.out.println("FALLTIME:" + FALL_TIME);
+			} else if (Score.getLevel() == 20) {
+				sendEvent(GameEvent.CALL_END);
+			}
+		}
+	}
+    
     private void checkLines(List<Integer> fullLinesIndexes, Integer indexToCheckUpperLines, double sceneTime) {
         
         if (!fullLinesIndexes.isEmpty()) {
+        	
             double returnTime = sceneTime;
             double newReturnTime = sceneTime;
             
@@ -309,7 +328,7 @@ public class GameController {
                 
                 for (int i = 1; i < line.length - 1; i++) {
                     Full fullCube = (Full) line[i];
-                    returnTime = Effects.blinkAndDisappear(fullCube.getValue(), sceneTime);
+                    newReturnTime = Effects.blinkAndDisappear(fullCube.getValue(), sceneTime);
                 }
             }
             
@@ -317,41 +336,21 @@ public class GameController {
             gameWorld.removeCubes(fullLinesIndexes);
             
             // Make upper cubes fall
-            gameWorld.makeAllCubesFall(fullLinesIndexes);
+            gameWorld.makeAllCubesFall(fullLinesIndexes, newReturnTime);
             
             // Refresh scores
             Score.addLines(fullLinesIndexes.size());
             Gui.refreshScores();
             
             
-            //Cube[] line = gameWorld.getGameboard()[fullLinesIndexes.get(0)];
-            
-            
-            //int indexToCheckUpperLines = fullLinesIndexes.get(fullLinesIndexes.size() - 1);
-//            int indexFound = gameWorld.findEmptyLineIndexFrom(indexToCheckUpperLines);
-//            System.out.println(indexFound + " " + indexToCheckUpperLines);
-//            
-//            if (indexFound != -1) {
-//                List<Integer> linesToMoveIndexes = new ArrayList<Integer>();
-//                
-//                // Add +1, we don't need the empty line ...
-//                for (int i = indexToCheckUpperLines; i < indexFound + 1; i++) {
-//                    linesToMoveIndexes.add(i);
-//                }
-//                
-//                newReturnTime = Effects.fall(linesToMoveIndexes, gameWorld.getGameboard(), returnTime, fullLinesIndexes.size());
-//            }
+            blockUntilTime = newReturnTime + 300;
             
         }
-        
-//
-//                # Store in waiting time
-//                @waiting_time = new_return_time
-//
         
     }
     
     private void reinit() throws Exception {
+    	
         int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
         int y = Constants.START_POINT_Y;
         

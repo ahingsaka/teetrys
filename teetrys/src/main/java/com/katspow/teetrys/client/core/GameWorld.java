@@ -2,7 +2,10 @@ package com.katspow.teetrys.client.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.katspow.caatja.behavior.PathBehavior;
 import com.katspow.caatja.foundation.actor.Actor;
+import com.katspow.caatja.pathutil.Path;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.Cube.Full;
 import com.katspow.teetrys.client.core.GameController.Direction;
@@ -188,15 +191,15 @@ public class GameWorld {
         }
     }
 
-    public List<Actor> makeAllCubesFall(List<Integer> fullLinesIndexes) {
+    public List<Actor> makeAllCubesFall(List<Integer> fullLinesIndexes, double newReturnTime) {
         
         List<Actor> cubes = new ArrayList<Actor>();
         
         for (int i = getGameboardLinesNb() - 2; i > 0; i--) {
             if (!fullLinesIndexes.contains(i)) {
-                System.out.println("Line " + i + " process : ");
-                processLine(i, gameboard[i]);
-                System.out.println("Line " + i + " END OF PROCESS ");
+//                System.out.println("Line " + i + " process : ");
+                processLine(i, gameboard[i], newReturnTime);
+//                System.out.println("Line " + i + " END OF PROCESS ");
             }
         }
         
@@ -223,45 +226,46 @@ public class GameWorld {
      * @param index
      * @param previousParent
      * @param fullCubes
+     * @param newReturnTime 
      */
-    private void process(int lineNumber, int index, Teetrymino previousParent, List<Full> fullCubes) {
+    private void process(int lineNumber, int index, Teetrymino previousParent, List<Full> fullCubes, double newReturnTime) {
         
         Cube[] line = gameboard[lineNumber];
         
-        System.out.println("index " + index);
+//        System.out.println("index " + index);
         if (index < line.length - 1) {
         
             Cube cube = line[index];
             Teetrymino parent = cube.getParent();
             
             if (parent == null) {
-                gravityFall(lineNumber, fullCubes);
+                gravityFall(lineNumber, fullCubes, newReturnTime);
                 fullCubes.clear();
-                process(lineNumber, index + 1, null, fullCubes);
+                process(lineNumber, index + 1, null, fullCubes, newReturnTime);
             } else {
                 
                 if (previousParent == parent) {
                     fullCubes.add((Full) cube);
-                    process(lineNumber, index + 1, parent, fullCubes);
+                    process(lineNumber, index + 1, parent, fullCubes, newReturnTime);
                     
                 } else {
-                    gravityFall(lineNumber, fullCubes);
+                    gravityFall(lineNumber, fullCubes, newReturnTime);
                     fullCubes.clear();
                     fullCubes.add((Full) cube);
-                    process(lineNumber, index + 1, parent, fullCubes);
+                    process(lineNumber, index + 1, parent, fullCubes, newReturnTime);
                 }
                 
             }
         
         } else {
-            gravityFall(lineNumber, fullCubes);
+            gravityFall(lineNumber, fullCubes, newReturnTime);
         }
         
     }
 
     
-    private void processLine(int lineNumber, Cube[] lineOfCubes) {
-       process(lineNumber, 1, null, new ArrayList<Cube.Full>());
+    private void processLine(int lineNumber, Cube[] lineOfCubes, double newReturnTime) {
+       process(lineNumber, 1, null, new ArrayList<Cube.Full>(), newReturnTime);
     }
 
     /**
@@ -270,15 +274,16 @@ public class GameWorld {
      * @param lineNumber 
      * 
      * @param fullCubesFound
+     * @param newReturnTime 
      * @return
      */
-    private int gravityFall(int lineNumber, List<Full> fullCubesFound) {
+    private int gravityFall(int lineNumber, List<Full> fullCubesFound, double newReturnTime) {
         
         int nbLines = 0;
         
         if (!fullCubesFound.isEmpty()) {
             
-            System.out.println("nb of cubes to gravity fall " + fullCubesFound.size());
+//            System.out.println("nb of cubes to gravity fall " + fullCubesFound.size());
 
             boolean collisionFound = false;
             int y = 0;
@@ -311,7 +316,14 @@ public class GameWorld {
             if (y > 0) {
                 for (int i = 0; i < clonedCubes.size(); i++) {
                     Actor clonedCube = clonedCubes.get(i);
-                    fullCubesFound.get(i).getValue().y = clonedCube.y;
+                    
+                    // Good line
+//                    fullCubesFound.get(i).getValue().y = clonedCube.y;
+                    
+                    Actor a = fullCubesFound.get(i).getValue();
+                    
+                    a.addBehavior(new PathBehavior().setFrameTime(newReturnTime, 300).setPath(new Path().setLinear(a.x, a.y, a.x, clonedCube.y)));
+//					a.moveTo(clonedCube.x, clonedCube.y, 500, newReturnTime + 100, Interpolator.createLinearInterpolator(false, false));
 
                     // Change gameboard
                     int cubeAbscisse = (int) (clonedCube.x / Constants.CUBE_SIDE);
@@ -323,7 +335,7 @@ public class GameWorld {
             
         }
         
-        System.out.println("nbLines to fall " + nbLines);
+//        System.out.println("nbLines to fall " + nbLines);
         
         return nbLines;
 

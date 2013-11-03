@@ -53,7 +53,7 @@ public class Effects {
         
         actor.addBehavior(cb);
         
-        return time + 1000;
+        return time + 1100;
     }
 
     public static double fall(List<Integer> linesToMoveIndexes, final Cube[][] gameboard, double time, int size) {
@@ -121,7 +121,7 @@ public class Effects {
     public static void scale(Actor actor, double time) {
         ScaleBehavior scaleBehavior = new ScaleBehavior().
                 setFrameTime(time, 400).
-                setValues(0, 1.5, 0, 1.5, 0d, 0d);
+                setValues(0, 1.5, 0, 1.5, 0, 0);
         
         actor.addBehavior(scaleBehavior);
     }
@@ -130,7 +130,7 @@ public class Effects {
         
         ScaleBehavior sb = new ScaleBehavior().
                 setFrameTime(time, 400).
-                setValues(1.5, 0, 1.5, 0, 0d, 0d);
+                setValues(1.5, 0, 1.5, 0, 0, 0);
         
         sb.addListener(BehaviorListener.valueOfExpired(new BehaviorExpiredListener() {
             public void call(BaseBehavior behavior, double time, Actor actor) {

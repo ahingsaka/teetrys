@@ -15,19 +15,13 @@ import com.katspow.caatjagwt.client.CaatjaGwtWindow;
 import com.katspow.teetrys.client.core.GameController;
 
 /**
- * FIXME CAATJA - setScene + getSceneIndex
  * FIXME CAATJA - ZOrder
- * FIXME CAATJA - les double Double dans les behaviors
- * FIXME Throws exception everywhere !!!
+ * FIXME Throws exception everywhere !
+ * BUG fall ...
  * 
  * TODO
  * Gestion touch
- * fall effect a refaire
- * bug zorder
- * 
- * 
- * @author asamsenesena
- *
+ * Bug zorder
  */
 public class Teetrys implements EntryPoint {
 

@@ -265,9 +265,6 @@ public class Teetrymino {
     public static Teetrymino createNewTeetrymino(double x, double y) {
         int randomValue = new Random().nextInt(Form.values().length);
         Form chosenForm = Form.values()[randomValue];
-        
-//        Form chosenForm = Form.T;
-        
         return createTeetrymino(x, y, chosenForm, 0, null);
     }
     
