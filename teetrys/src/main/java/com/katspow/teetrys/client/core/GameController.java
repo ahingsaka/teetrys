@@ -356,12 +356,27 @@ public class GameController {
         int y = Constants.START_POINT_Y;
         
         getGamingScene().setOrigin(new Pt(x, y));
+        
+        // Deactivate mouse click
+        Teetrymino currentTeetrymino = getGamingScene().getCurrentTeetrymino();
+        for (Actor a : currentTeetrymino.getCubes()) {
+        	a.setMouseClickListener(null);
+        }
+        
         Teetrymino nextTeetrymino = getGamingScene().getNextTeetrymino();
+        for (Actor a : nextTeetrymino.getCubes()) {
+        	a.setMouseClickListener(new MouseListener() {
+				public void call(CAATMouseEvent e) throws Exception {
+					sendEvent(GameEvent.CALL_ROTATE);
+				}
+			});
+        }
+        
         Teetrymino.setPosition(nextTeetrymino, x, y);
         gamingScene.setCurrentTeetrymino(nextTeetrymino);
         
-//        Teetrymino currentTeetrymino = buildCurrentTeetrymino(x, y);
-        gamingScene.setNextTeetrymino(buildNextTeetrymino());
+        Teetrymino buildNextTeetrymino = buildNextTeetrymino();
+		gamingScene.setNextTeetrymino(buildNextTeetrymino);
     }
     
 //    re_init: ->
@@ -412,6 +427,13 @@ public class GameController {
     private Teetrymino buildCurrentTeetrymino(double x, double y) throws Exception {
         Teetrymino teetrymino = Teetrymino.createNewTeetrymino(x, y);
         for (Actor actor : teetrymino.getCubes()) {
+        	
+        	actor.setMouseClickListener(new MouseListener() {
+				public void call(CAATMouseEvent e) throws Exception {
+					sendEvent(GameEvent.CALL_ROTATE);
+				}
+			});
+        	
             getGamingScene().addChild(actor);
         }
         

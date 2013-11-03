@@ -16,7 +16,6 @@ import com.katspow.teetrys.client.core.GameController;
 
 /**
  * FIXME CAATJA - setScene + getSceneIndex
- * FIXME CAATJA - Passage des interpolators en statique ?
  * FIXME CAATJA - ZOrder
  * FIXME CAATJA - les double Double dans les behaviors
  * FIXME Throws exception everywhere !!!
