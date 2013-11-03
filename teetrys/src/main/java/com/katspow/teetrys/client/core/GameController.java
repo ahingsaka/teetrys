@@ -25,6 +25,7 @@ import com.katspow.caatja.foundation.actor.Actor.Anchor;
 import com.katspow.caatja.foundation.actor.ImageActor;
 import com.katspow.caatja.foundation.timer.Callback;
 import com.katspow.caatja.foundation.timer.TimerTask;
+import com.katspow.caatja.foundation.ui.TextActor;
 import com.katspow.caatja.math.Pt;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.Cube.Full;
@@ -112,6 +113,7 @@ public class GameController {
         preloader.addImage(Labels.OK.getLabel(), "ok.png");
         preloader.addImage(Labels.CANCEL.getLabel(), "cancel.png");
         preloader.addImage(Labels.EXIT.getLabel(), "exit.png");
+        preloader.addImage(Labels.WELLDONE.getLabel(), "welldone.png");
         
     }
     
@@ -261,6 +263,8 @@ public class GameController {
                             if (Score.getLevel() < 15) {
                                 FALL_TIME -= Constants.DECREASE_FALL_TIME;
                                 System.out.println("FALLTIME:" + FALL_TIME);
+                            } else if (Score.getLevel() == 20) {
+                            	sendEvent(GameEvent.CALL_END);
                             }
                         }
                         
@@ -564,27 +568,49 @@ public class GameController {
     }
 
     public void enterGameOver() throws Exception {
-        timerTask.suspended = true;
-        getGamingScene().hideGamingArea(gameWorld);
-        ImageActor gameOverImage = Gui.addImage(97, 300, Labels.GAME_OVER, getGamingScene(), director);
-        
-        // Move that !
-        gameOverImage.setAlpha(0);
+		timerTask.suspended = true;
+		getGamingScene().hideGamingArea(gameWorld);
+		ImageActor gameOverImage = Gui.addImage(97, 300, Labels.GAME_OVER,
+				getGamingScene(), director);
 
-        AlphaBehavior alpha_behavior = new AlphaBehavior().setValues(0, 1).setFrameTime(getGamingScene().time, 2000);
-        
-        alpha_behavior.addListener(BehaviorListener.valueOfExpired(new BehaviorExpiredListener() {
-			public void call(BaseBehavior behavior, double time, Actor actor) {
-				actor.setMouseClickListener(new MouseListener() {
-					public void call(CAATMouseEvent e) throws Exception {
-						GameController.sendEvent(GameEvent.CALL_MENU);
-					}
-				});
+		// Move that !
+		gameOverImage.setAlpha(0);
+
+		AlphaBehavior alpha_behavior = new AlphaBehavior().setValues(0, 1)
+				.setFrameTime(getGamingScene().time, 2000);
+
+		gameOverImage.addBehavior(alpha_behavior);
+
+		TextActor number = Gui.displayNumber(350, Score.getScore(),
+				getGamingScene(), director);
+
+		number.setMouseClickListener(new MouseListener() {
+			public void call(CAATMouseEvent e) throws Exception {
+				GameController.sendEvent(GameEvent.CALL_MENU);
 			}
-		}));
-        
-        gameOverImage.addBehavior(alpha_behavior);
+		});
         
     }
+
+	public void enterEnd() throws Exception {
+		timerTask.suspended = true;
+    	getGamingScene().hideGamingArea(gameWorld);
+    	
+    	Gui.addImage(125, 250, Labels.WELLDONE, getGamingScene(), director);
+    	
+    	TextActor number = Gui.displayNumber(350, Score.getScore(), getGamingScene(), director);
+    	
+    	number.setMouseClickListener(new MouseListener() {
+			public void call(CAATMouseEvent e) throws Exception {
+				GameController.sendEvent(GameEvent.CALL_MENU);
+			}
+		});
+    	
+	}
+
+	public void exitEnd() {
+		timerTask.suspended = false;
+    	Gui.hideImage(Labels.WELLDONE);
+	}
 
 }

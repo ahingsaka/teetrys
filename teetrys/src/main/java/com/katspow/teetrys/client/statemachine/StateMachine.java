@@ -38,7 +38,7 @@ public class StateMachine {
         CALL_QUIT,
         CALL_CANCEL,
         
-        LOSE, START_GAME, CALL_OK, CALL_MENU
+        LOSE, START_GAME, CALL_OK, CALL_MENU, CALL_END
     }
     
     /**
@@ -174,6 +174,10 @@ public class StateMachine {
                     sm.enterState(GAME_OVER);
                     break;
                     
+                case CALL_END:
+                	sm.enterState(END);
+                	break;
+                    
                 }
                 
             }
@@ -293,9 +297,36 @@ public class StateMachine {
         },
         
         END(GAME) {
-            void process(StateMachine sm, GameEvent e) {
-                // TODO Auto-generated method stub
+        	
+            @Override
+			void entry(StateMachine sm) throws Exception {
+            	gameController.enterEnd();
+			}
+
+			void process(StateMachine sm, GameEvent e) {
+				switch (e) {
+				case CALL_MENU:
+					try {
+						exit(sm);
+						sm.enterState(MAIN_MENU);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+					break;
+				}
             }
+
+			@Override
+			void exit(StateMachine sm) {
+				try {
+					gameController.exitEnd();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			
         }
         
         ;

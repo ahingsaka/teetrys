@@ -12,12 +12,15 @@ import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.ImageActor;
 import com.katspow.caatja.foundation.actor.SpriteActor;
 import com.katspow.caatja.foundation.image.CompoundImage;
+import com.katspow.caatja.foundation.ui.TextActor;
+import com.katspow.teetrys.client.Constants;
+import com.katspow.teetrys.client.scene.game.GamingScene;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 
 public class Gui {
     
     public enum Labels {
-        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep"), NUMBERS("numbers"), GAME_OVER("gameover"), OK("ok"), CANCEL("cancel"), EXIT("exit"), TEETRYS("teetrys");
+        SCORE("score"), LINES("lines"), LEVEL("level"), NEXT("next"), PAUSE("pause"), QUIT("quit"), SLEEP("sleep"), NUMBERS("numbers"), GAME_OVER("gameover"), OK("ok"), CANCEL("cancel"), EXIT("exit"), TEETRYS("teetrys"), WELLDONE("welldone");
         
         private String label;
         
@@ -135,6 +138,23 @@ public class Gui {
         return sa;
     }
     
+    public static TextActor displayNumber(int y, int value, Scene scene, Director director) throws Exception {
+    	
+    	TextActor score = new TextActor();
+    	
+    	score.
+    	setFont("40px sans-serif").
+    	setText("Score : " + value).
+    	calcTextSize(director).
+        setTextFillStyle("white").
+        setLocation((Constants.GAME_WIDTH - score.width) / 2, y);
+    	
+    	scene.addChild(score);
+    	
+    	return score;
+    	
+    }
+    
     private static List<SpriteActor> scoreDigits = new ArrayList<SpriteActor>();
 
     private static void createScoreDigits(Scene scene) throws Exception {
@@ -155,5 +175,6 @@ public class Gui {
         scoreDigits.add(createNumberSprite(413, 225, scene, null));
         scoreDigits.add(createNumberSprite(440, 225, scene, null));
     }
+    
     
 }
