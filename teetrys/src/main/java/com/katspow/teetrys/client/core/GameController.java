@@ -4,10 +4,7 @@ import java.util.List;
 
 import com.katspow.caatja.CAATKeyListener;
 import com.katspow.caatja.behavior.AlphaBehavior;
-import com.katspow.caatja.behavior.BaseBehavior;
-import com.katspow.caatja.behavior.BehaviorListener;
 import com.katspow.caatja.behavior.Interpolator;
-import com.katspow.caatja.behavior.listener.BehaviorExpiredListener;
 import com.katspow.caatja.core.CAAT;
 import com.katspow.caatja.core.Caatja;
 import com.katspow.caatja.core.canvas.CaatjaCanvas;
@@ -26,7 +23,6 @@ import com.katspow.caatja.foundation.actor.ImageActor;
 import com.katspow.caatja.foundation.timer.Callback;
 import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.caatja.foundation.ui.TextActor;
-import com.katspow.caatja.math.Pt;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.Cube.Full;
 import com.katspow.teetrys.client.core.Gui.Labels;
@@ -47,11 +43,6 @@ import com.katspow.teetrys.client.statemachine.StateMachine.GameState;
  */
 public class GameController {
 
-    private static final int NEXT_Y = 280;
-    private static final int NEXT_X = 310;
-    
-    private static int FALL_TIME;
-    
     private static StateMachine stateMachine;
     
     private Director director;
@@ -128,20 +119,16 @@ public class GameController {
         
         Gui.createCompoundImage(director.getImage("numbers"), 1, 10);
         
-        // TODO Set to introduction when it's done
         stateMachine.setState(GameState.MENUS);
         
-        // Register keys
         registerMovementKeys();
         
         stateMachine.start();
     }
 
     private void setupCaatja() throws Exception {
-        
         Caatja.addCanvas(canvas);
         Caatja.loop(60);
-
     }
 
     /**
@@ -160,12 +147,7 @@ public class GameController {
     		timerTask = null;
     	}
     	
-    	if (gamingScene != null)	 {
-//    		getGamingScene().removeAllChildren();
-//    		gamingScene = null;
-    	}
-        
-    	FALL_TIME = Constants.START_FALL_TIME;
+    	gamingScene.FALL_TIME = Constants.START_FALL_TIME;
     	Teetrymino oldCurrentTeetrymino = getGamingScene().getCurrentTeetrymino();
     	Teetrymino oldNextTeetrymino = getGamingScene().getNextTeetrymino();
     	
@@ -194,16 +176,16 @@ public class GameController {
         int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
         int y = Constants.START_POINT_Y;
         
-        Teetrymino currentTeetrymino = buildCurrentTeetrymino(x, y);
+        Teetrymino currentTeetrymino = gamingScene.buildCurrentTeetrymino(x, y);
         getGamingScene().setCurrentTeetrymino(currentTeetrymino);
         
-        Teetrymino nextTeetrymino = buildNextTeetrymino();
+        Teetrymino nextTeetrymino = gamingScene.buildNextTeetrymino();
         getGamingScene().setNextTeetrymino(nextTeetrymino);
         
         Score.init();
         Gui.refreshScores();
         
-        createGameTimer(0, FALL_TIME);
+        createGameTimer(0, gamingScene.FALL_TIME);
         
     }
     
@@ -247,13 +229,13 @@ public class GameController {
                 			return;
                 		} else {
                 			blockUntilTime = null;
-                			reinit();
+                			gamingScene.reinit();
                 			timerTask.reset(sceneTime);
                 		}
                 		
                 	}
                 	
-                    Teetrymino currentTeetrymino = getGamingScene().getCurrentTeetrymino();
+                    Teetrymino currentTeetrymino = gamingScene.getCurrentTeetrymino();
                     List<Actor> currentCubes = currentTeetrymino.getCubes();
                     
                     boolean collisionFound = Collision.checkCollisionsForAllCubes(currentCubes, Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
@@ -261,12 +243,12 @@ public class GameController {
                     if (collisionFound) {
                         
                         // If we are at the top, it's game over
-                        if (getGamingScene().getOrigin().y == Constants.START_POINT_Y) {
+                        if (gamingScene.getOrigin().y == Constants.START_POINT_Y) {
                             stateMachine.sendEvent(GameEvent.LOSE);
                             return;
                         }
                         
-                        storeCubes(currentCubes, currentTeetrymino);
+                        gameWorld.storeCubes(currentCubes, currentTeetrymino);
                         
                         List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
                         
@@ -277,12 +259,12 @@ public class GameController {
                         }
                         
                         if (blockUntilTime == null) {
-                        	reinit();
-                        	checkForLevel();
+                        	gamingScene.reinit();
+                        	gamingScene.checkForLevel();
                         }
                         
                     } else {
-                        moveCubes(currentCubes, 0, Constants.CUBE_SIDE);
+                    	gamingScene.moveCubes(currentCubes, 0, Constants.CUBE_SIDE);
                         getGamingScene().getOrigin().y += Constants.CUBE_SIDE;
                     }
                     
@@ -298,11 +280,11 @@ public class GameController {
             	// Mouse down 
             	try {
 	            	if (mouseDownOnLeftSide) {
-	            		moveCurrentTeetrymino(Direction.LEFT);
+	            		gamingScene.moveCurrentTeetrymino(Direction.LEFT, gameWorld);
 	            	} else if (mouseDownOnRightSide) {
-	            		moveCurrentTeetrymino(Direction.RIGHT);
+	            		gamingScene.moveCurrentTeetrymino(Direction.RIGHT, gameWorld);
 	            	} else if (mouseDownOnDownSide) {
-	            		moveCurrentTeetrymino(Direction.DOWN);
+	            		gamingScene.moveCurrentTeetrymino(Direction.DOWN, gameWorld);
 	            	}
             	} catch (Exception e) {
             		
@@ -312,7 +294,7 @@ public class GameController {
         }, new Callback() {
             public void call(double time, double ttime, TimerTask timerTask) {
                 try {
-                    createGameTimer(time, FALL_TIME);
+                    createGameTimer(time, gamingScene.FALL_TIME);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -320,17 +302,6 @@ public class GameController {
         });
 
     }
-    
-	private void checkForLevel() throws Exception {
-		if (Score.checkForNextLevel()) {
-			if (Score.getLevel() < 15) {
-				FALL_TIME -= Constants.DECREASE_FALL_TIME;
-				System.out.println("FALLTIME:" + FALL_TIME);
-			} else if (Score.getLevel() == 20) {
-				sendEvent(GameEvent.CALL_END);
-			}
-		}
-	}
     
     private void checkLines(List<Integer> fullLinesIndexes, Integer indexToCheckUpperLines, double sceneTime) {
         
@@ -365,154 +336,10 @@ public class GameController {
         
     }
     
-    private void reinit() throws Exception {
-    	
-        int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
-        int y = Constants.START_POINT_Y;
-        
-        getGamingScene().setOrigin(new Pt(x, y));
-        
-        // Deactivate mouse click
-        Teetrymino currentTeetrymino = getGamingScene().getCurrentTeetrymino();
-        for (Actor a : currentTeetrymino.getCubes()) {
-        	a.setMouseClickListener(null);
-        }
-        
-        Teetrymino nextTeetrymino = getGamingScene().getNextTeetrymino();
-        for (Actor a : nextTeetrymino.getCubes()) {
-        	a.setMouseClickListener(new MouseListener() {
-				public void call(CAATMouseEvent e) throws Exception {
-					sendEvent(GameEvent.CALL_ROTATE);
-				}
-			});
-        }
-        
-        Teetrymino.setPosition(nextTeetrymino, x, y);
-        gamingScene.setCurrentTeetrymino(nextTeetrymino);
-        
-        Teetrymino buildNextTeetrymino = buildNextTeetrymino();
-		gamingScene.setNextTeetrymino(buildNextTeetrymino);
-    }
+    public void moveCurrentTeetrymino(Direction dir) throws Exception {
+		gamingScene.moveCurrentTeetrymino(dir, gameWorld);
+	}
     
-//    re_init: ->
-//    @x = Globals.LEFT_SPACE + Globals.START_POINT_X * Globals.CUBE_SIDE
-//    @y = Globals.START_POINT_Y
-//    @current_max_y = 0
-//    @current_left_bound = 0
-//    @current_right_bound = 0
-//
-//    @cube_list = @next_cube_list
-//
-//    delta_x = 350 - @x
-//    delta_y = 320 - @y
-//
-//    for cube in @cube_list
-//        cube.setStrokeStyle('#000000')
-//        cube.x -= delta_x
-//        cube.y -= delta_y
-//
-//    @current_shape_number = @next_current_shape_number
-//    @current_transformation = @next_current_transformation
-//
-//    this.build_next_shape(350, 320)
-//
-//    Gui.refreshZOrder()
-//    # Kind of a hack, ZOrder does seem to work for 'last' elements only ?
-//
-//    # TODO Clean code ...
-//    @current_max_y = 0
-    
-    
-    
-    // Store the cubes in gameboard
-    // Disable the mouse event
-    private void storeCubes(List<Actor> cubes, Teetrymino teetryminoParent) {
-        for (Actor cube : cubes) {
-            
-            // FIXME Disable touch/mouse events
-            
-            int cube_x = (int) (cube.x / Constants.CUBE_SIDE);
-            int cube_y = ((int) cube.y / Constants.CUBE_SIDE) + 1;
-            
-            gameWorld.getGameboard()[cube_y][cube_x] = Cube.Full.valueOf(cube, teetryminoParent);
-        }
-    }
-    
-    // TODO Move ?
-    private Teetrymino buildCurrentTeetrymino(double x, double y) throws Exception {
-        Teetrymino teetrymino = Teetrymino.createNewTeetrymino(x, y);
-        for (Actor actor : teetrymino.getCubes()) {
-        	
-        	actor.setMouseClickListener(new MouseListener() {
-				public void call(CAATMouseEvent e) throws Exception {
-					sendEvent(GameEvent.CALL_ROTATE);
-				}
-			});
-        	
-            getGamingScene().addChild(actor);
-        }
-        
-        getGamingScene().setOrigin(new Pt(x, y));
-        
-        return teetrymino;
-    }
-    
-    private Teetrymino buildNextTeetrymino() throws Exception {
-        Teetrymino teetrymino = Teetrymino.createNewTeetrymino(NEXT_X, NEXT_Y);
-        
-        for (Actor actor : teetrymino.getCubes()) {
-            getGamingScene().addChild(actor);
-        }
-        
-        return teetrymino;
-    }
-    
-    private void moveCubes(List<Actor> cubes, double addx, double addy) {
-        for (Actor cube : cubes) {
-            // If necessary ?
-            if (cube.y < Constants.GAME_HEIGHT) {
-                cube.x += addx;
-                cube.y += addy;
-            }
-        }
-    }
-    
-    public void moveCurrentTeetrymino(Direction direction) throws Exception {
-        switch (direction) {
-        case DOWN:
-            checkCollisionAndMoveCubes(direction, 0, Constants.CUBE_SIDE);
-            break;
-            
-        case LEFT:
-            checkCollisionAndMoveCubes(direction, -Constants.CUBE_SIDE, 0);
-            break;
-            
-        case RIGHT:
-            checkCollisionAndMoveCubes(direction, Constants.CUBE_SIDE, 0);
-            break;
-        case UP:
-            // TODO Not pretty
-            Pt origin = getGamingScene().getOrigin();
-            getGamingScene().getCurrentTeetrymino().rotate(origin.x, origin.y, gameWorld.getGameboard());
-            System.out.println("origin.y " + origin.y);
-            
-            break;
-        }
-        
-         
-    }
-    
-    
-    private void checkCollisionAndMoveCubes(Direction direction, int movex, int movey) throws Exception {
-        List<Actor> currentTeetrymino = getGamingScene().getCurrentTeetrymino().getCubes();
-        boolean collisionFound  = Collision.checkCollisionsForAllCubes(currentTeetrymino, direction, Constants.CUBE_SIDE, gameWorld.getGameboard());
-        if (!collisionFound) {
-            moveCubes(currentTeetrymino, movex, movey);
-            getGamingScene().getOrigin().x += movex;
-            getGamingScene().getOrigin().y += movey;
-        }
-    }
-
     private Scene getMainMenuScene() throws Exception {
         if (mainMenuScene == null) {
             mainMenuScene = new MainMenuScene(director);
@@ -538,11 +365,7 @@ public class GameController {
         return highscoresScene;
     }
    
-    public GamingScene getGamingScene() throws Exception {
-        if (gamingScene == null) {
-            gamingScene = new GamingScene(director);
-            director.addScene(gamingScene);
-        }
+    public GamingScene getGamingScene() {
         return gamingScene;
     }
 
@@ -591,6 +414,10 @@ public class GameController {
 
     public void enterGaming() throws Exception {
     	gamingScene = null;
+    	
+    	gamingScene = new GamingScene(director);
+        director.addScene(gamingScene);
+    	
         EaseInOut.scenesFromUpToDown(director, getGamingScene(), director.getCurrentScene());
         stateMachine.sendEvent(GameEvent.START_GAME);
     }
@@ -611,7 +438,7 @@ public class GameController {
     	
 	}
     
-    public void exitQuit() throws Exception {
+    public void exitQuit() {
     	timerTask.suspended = false;
     	getGamingScene().showGamingArea();
     	Gui.hideImage(Labels.EXIT);
@@ -619,17 +446,14 @@ public class GameController {
     	Gui.hideImage(Labels.CANCEL);
     }
     
-    public void exitGameOver() throws Exception {
+    public void exitGameOver() {
     	timerTask.suspended = false;
-    	
     	Gui.hideImage(Labels.GAME_OVER);
-    	
-//    	getGamingScene().removeAllChildren();
     	gamingScene = null;
     	
 	}
 
-    public void exitPause() throws Exception {
+    public void exitPause() {
         timerTask.suspended = false;
         getGamingScene().clearHideCubes();
         Gui.hideImage(Labels.PAUSE);

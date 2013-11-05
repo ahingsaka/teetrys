@@ -100,6 +100,19 @@ public class GameWorld {
         
     }
     
+    // Store the cubes in gameboard
+    // Disable the mouse event
+    public void storeCubes(List<Actor> cubes, Teetrymino teetryminoParent) {
+        for (Actor cube : cubes) {
+            
+            // FIXME Disable touch/mouse events
+            
+            int cube_x = (int) (cube.x / Constants.CUBE_SIDE);
+            int cube_y = ((int) cube.y / Constants.CUBE_SIDE) + 1;
+            
+            getGameboard()[cube_y][cube_x] = Cube.Full.valueOf(cube, teetryminoParent);
+        }
+    }
     
     /**
      * Returns a list of full line indexes and the last index is the line above
