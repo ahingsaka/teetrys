@@ -1,7 +1,5 @@
 package com.katspow.teetrys.client.core;
 
-import java.util.List;
-
 import com.katspow.caatja.CAATKeyListener;
 import com.katspow.caatja.behavior.AlphaBehavior;
 import com.katspow.caatja.behavior.Interpolator;
@@ -17,17 +15,12 @@ import com.katspow.caatja.event.MouseListener;
 import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.Scene.Ease;
-import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.Actor.Anchor;
 import com.katspow.caatja.foundation.actor.ImageActor;
-import com.katspow.caatja.foundation.timer.Callback;
-import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.caatja.foundation.ui.TextActor;
 import com.katspow.teetrys.client.Constants;
-import com.katspow.teetrys.client.core.Cube.Full;
 import com.katspow.teetrys.client.core.Gui.Labels;
 import com.katspow.teetrys.client.effects.EaseInOut;
-import com.katspow.teetrys.client.effects.Effects;
 import com.katspow.teetrys.client.scene.LoadingScene;
 import com.katspow.teetrys.client.scene.game.GamingScene;
 import com.katspow.teetrys.client.scene.menus.AboutMenuScene;
@@ -53,15 +46,6 @@ public class GameController {
     private AboutMenuScene aboutMenuScene;
     private HighscoresScene highscoresScene;
     private GamingScene gamingScene;
-    private TimerTask timerTask;
-    
-    private GameWorld gameWorld;
-    
-    private Double blockUntilTime;
-    
-    private static boolean mouseDownOnLeftSide;
-    private static boolean mouseDownOnRightSide;
-    private static boolean mouseDownOnDownSide;
     
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -139,54 +123,8 @@ public class GameController {
         director.easeIn(director.getSceneIndex(getMainMenuScene()), Ease.SCALE, 2000, false, Anchor.CENTER, Interpolator.createElasticOutInterpolator(2.5, .4, false));
     }
     
-    // Move to gaming scene ??
     public void startGame() throws Exception {
-    	
-    	if (timerTask != null) {
-    		timerTask.cancel();
-    		timerTask = null;
-    	}
-    	
-    	gamingScene.FALL_TIME = Constants.START_FALL_TIME;
-    	Teetrymino oldCurrentTeetrymino = getGamingScene().getCurrentTeetrymino();
-    	Teetrymino oldNextTeetrymino = getGamingScene().getNextTeetrymino();
-    	
-    	if (oldCurrentTeetrymino != null) {
-    		oldCurrentTeetrymino.expire();;
-    	}
-    	
-    	if (oldNextTeetrymino != null)	 {
-    		oldNextTeetrymino.expire();
-    	}
-    	
-        // Init world
-        gameWorld = new GameWorld();
-        List<Actor> walls = gameWorld.createWalls();
-        
-        for (Actor cubeWall : walls) {
-            getGamingScene().addChild(cubeWall);
-        }
-        
-        // TODO We should use zorder
-        getGamingScene().addGuiFixedLabels();
-        getGamingScene().addGuiLeftButtons();
-        getGamingScene().addGuiDigits();
-        
-        // Start game !
-        int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
-        int y = Constants.START_POINT_Y;
-        
-        Teetrymino currentTeetrymino = gamingScene.buildCurrentTeetrymino(x, y);
-        getGamingScene().setCurrentTeetrymino(currentTeetrymino);
-        
-        Teetrymino nextTeetrymino = gamingScene.buildNextTeetrymino();
-        getGamingScene().setNextTeetrymino(nextTeetrymino);
-        
-        Score.init();
-        Gui.refreshScores();
-        
-        createGameTimer(0, gamingScene.FALL_TIME);
-        
+    	gamingScene.startGame();
     }
     
     private void registerMovementKeys() {
@@ -217,127 +155,8 @@ public class GameController {
 
     }
 
-    private void createGameTimer(double startTime, double duration) throws Exception {
-        timerTask = getGamingScene().createTimer(startTime, duration, new Callback() {
-            public void call(double sceneTime, double ttime, TimerTask timerTask) {
-                try {
-                	
-                	// Animation called
-                	if (blockUntilTime != null) {
-                		if (sceneTime <= blockUntilTime) {
-                			timerTask.reset(sceneTime);
-                			return;
-                		} else {
-                			blockUntilTime = null;
-                			gamingScene.reinit();
-                			timerTask.reset(sceneTime);
-                		}
-                		
-                	}
-                	
-                    Teetrymino currentTeetrymino = gamingScene.getCurrentTeetrymino();
-                    List<Actor> currentCubes = currentTeetrymino.getCubes();
-                    
-                    boolean collisionFound = Collision.checkCollisionsForAllCubes(currentCubes, Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
-                    
-                    if (collisionFound) {
-                        
-                        // If we are at the top, it's game over
-                        if (gamingScene.getOrigin().y == Constants.START_POINT_Y) {
-                            stateMachine.sendEvent(GameEvent.LOSE);
-                            return;
-                        }
-                        
-                        gameWorld.storeCubes(currentCubes, currentTeetrymino);
-                        
-                        List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
-                        
-                        while (fullLinesIndexes.size() > 1) {
-                            int endIndex = fullLinesIndexes.size() - 1;
-                            checkLines(fullLinesIndexes.subList(0, endIndex), fullLinesIndexes.get(endIndex), sceneTime);
-                            fullLinesIndexes = gameWorld.findNumberOfFullLines();
-                        }
-                        
-                        if (blockUntilTime == null) {
-                        	gamingScene.reinit();
-                        	gamingScene.checkForLevel();
-                        }
-                        
-                    } else {
-                    	gamingScene.moveCubes(currentCubes, 0, Constants.CUBE_SIDE);
-                        getGamingScene().getOrigin().y += Constants.CUBE_SIDE;
-                    }
-                    
-                    timerTask.reset(sceneTime);
-                    
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }, new Callback() {
-            public void call(double time, double ttime, TimerTask timerTask) {
-            	// Mouse down 
-            	try {
-	            	if (mouseDownOnLeftSide) {
-	            		gamingScene.moveCurrentTeetrymino(Direction.LEFT, gameWorld);
-	            	} else if (mouseDownOnRightSide) {
-	            		gamingScene.moveCurrentTeetrymino(Direction.RIGHT, gameWorld);
-	            	} else if (mouseDownOnDownSide) {
-	            		gamingScene.moveCurrentTeetrymino(Direction.DOWN, gameWorld);
-	            	}
-            	} catch (Exception e) {
-            		
-            	}
-            }
-            
-        }, new Callback() {
-            public void call(double time, double ttime, TimerTask timerTask) {
-                try {
-                    createGameTimer(time, gamingScene.FALL_TIME);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-    }
-    
-    private void checkLines(List<Integer> fullLinesIndexes, Integer indexToCheckUpperLines, double sceneTime) {
-        
-        if (!fullLinesIndexes.isEmpty()) {
-        	
-            double returnTime = sceneTime;
-            double newReturnTime = sceneTime;
-            
-            for (Integer index : fullLinesIndexes) {
-                Cube[] line = gameWorld.getGameboard()[index];
-                
-                for (int i = 1; i < line.length - 1; i++) {
-                    Full fullCube = (Full) line[i];
-                    newReturnTime = Effects.blinkAndDisappear(fullCube.getValue(), sceneTime);
-                }
-            }
-            
-            // Refresh gameworld
-            gameWorld.removeCubes(fullLinesIndexes);
-            
-            // Make upper cubes fall
-            gameWorld.makeAllCubesFall(fullLinesIndexes, newReturnTime);
-            
-            // Refresh scores
-            Score.addLines(fullLinesIndexes.size());
-            Gui.refreshScores();
-            
-            
-            blockUntilTime = newReturnTime + 300;
-            
-        }
-        
-    }
-    
     public void moveCurrentTeetrymino(Direction dir) throws Exception {
-		gamingScene.moveCurrentTeetrymino(dir, gameWorld);
+		gamingScene.moveCurrentTeetrymino(dir);
 	}
     
     private Scene getMainMenuScene() throws Exception {
@@ -387,18 +206,18 @@ public class GameController {
     		double y = mouseEvent.y;
     		
     		if (y > Constants.GAME_HEIGHT - Constants.CUBE_SIDE * 2) {
-    			mouseDownOnDownSide = true;
+    			GamingScene.mouseDownOnDownSide = true;
     		} else if (x < (Constants.GAME_WIDTH / 2)) {
-    			mouseDownOnLeftSide = true;
+    			GamingScene.mouseDownOnLeftSide = true;
     		} else if (x > (Constants.GAME_WIDTH / 2)) {
-    			mouseDownOnRightSide = true;
+    			GamingScene.mouseDownOnRightSide = true;
     		} 
     		
     		
     	} else if (gameEvent == GameEvent.CALL_MOUSE_UP) {
-    		mouseDownOnLeftSide = false;
-    		mouseDownOnRightSide = false;
-    		mouseDownOnDownSide = false;
+    		GamingScene.mouseDownOnLeftSide = false;
+    		GamingScene.mouseDownOnRightSide = false;
+    		GamingScene.mouseDownOnDownSide = false;
     	}
         
     }
@@ -423,14 +242,14 @@ public class GameController {
     }
 
     public void enterPause() throws Exception {
-        timerTask.suspended = true;
-        getGamingScene().hideGamingArea(gameWorld);
+        gamingScene.suspend(true);
+        gamingScene.hideGamingArea();
         Gui.addImage(170, 300, Labels.PAUSE, getGamingScene(), director);
     }
     
     public void enterQuit() throws Exception {
-    	timerTask.suspended = true;
-    	getGamingScene().hideGamingArea(gameWorld);
+    	gamingScene.suspend(true);
+    	gamingScene.hideGamingArea();
     	
     	Gui.addImage(200, 250, Labels.EXIT, getGamingScene(), director);
     	Gui.addImage(170, 360, Labels.OK, getGamingScene(), director);
@@ -439,7 +258,7 @@ public class GameController {
 	}
     
     public void exitQuit() {
-    	timerTask.suspended = false;
+    	gamingScene.suspend(false);
     	getGamingScene().showGamingArea();
     	Gui.hideImage(Labels.EXIT);
     	Gui.hideImage(Labels.OK);
@@ -447,21 +266,21 @@ public class GameController {
     }
     
     public void exitGameOver() {
-    	timerTask.suspended = false;
+    	gamingScene.suspend(false);
     	Gui.hideImage(Labels.GAME_OVER);
     	gamingScene = null;
     	
 	}
 
     public void exitPause() {
-        timerTask.suspended = false;
+    	gamingScene.suspend(false);
         getGamingScene().clearHideCubes();
         Gui.hideImage(Labels.PAUSE);
     }
 
     public void enterGameOver() throws Exception {
-		timerTask.suspended = true;
-		getGamingScene().hideGamingArea(gameWorld);
+    	gamingScene.suspend(true);
+    	gamingScene.hideGamingArea();
 		ImageActor gameOverImage = Gui.addImage(97, 300, Labels.GAME_OVER,
 				getGamingScene(), director);
 
@@ -485,8 +304,8 @@ public class GameController {
     }
 
 	public void enterEnd() throws Exception {
-		timerTask.suspended = true;
-    	getGamingScene().hideGamingArea(gameWorld);
+		gamingScene.suspend(true);
+		gamingScene.hideGamingArea();
     	
     	Gui.addImage(125, 250, Labels.WELLDONE, getGamingScene(), director);
     	
@@ -501,7 +320,7 @@ public class GameController {
 	}
 
 	public void exitEnd() {
-		timerTask.suspended = false;
+		gamingScene.suspend(false);
     	Gui.hideImage(Labels.WELLDONE);
 	}
 

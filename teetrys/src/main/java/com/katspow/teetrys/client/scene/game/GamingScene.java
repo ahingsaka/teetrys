@@ -10,13 +10,17 @@ import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.ActorContainer;
+import com.katspow.caatja.foundation.timer.Callback;
+import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.caatja.math.Pt;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.Collision;
+import com.katspow.teetrys.client.core.Cube;
 import com.katspow.teetrys.client.core.GameController;
 import com.katspow.teetrys.client.core.GameWorld;
 import com.katspow.teetrys.client.core.Gui;
 import com.katspow.teetrys.client.core.Score;
+import com.katspow.teetrys.client.core.Cube.Full;
 import com.katspow.teetrys.client.core.GameController.Direction;
 import com.katspow.teetrys.client.core.Gui.Labels;
 import com.katspow.teetrys.client.core.Teetrymino;
@@ -32,9 +36,17 @@ public class GamingScene extends Scene {
     
     private Director director;
     private ActorContainer root;
+    private GameWorld gameWorld;
+    
+    private TimerTask timerTask;
+    private Double blockUntilTime;
     
     private Teetrymino currentTeetrymino;
     private Teetrymino nextTeetrymino;
+    
+    public static boolean mouseDownOnLeftSide;
+    public static boolean mouseDownOnRightSide;
+    public static boolean mouseDownOnDownSide;
     
     private Pt origin;
     
@@ -60,6 +72,142 @@ public class GamingScene extends Scene {
 
         addChild(root);
         
+    }
+    
+    public void startGame() throws Exception {
+    	
+    	if (timerTask != null) {
+    		timerTask.cancel();
+    		timerTask = null;
+    	}
+    	
+    	FALL_TIME = Constants.START_FALL_TIME;
+    	Teetrymino oldCurrentTeetrymino = getCurrentTeetrymino();
+    	Teetrymino oldNextTeetrymino = getNextTeetrymino();
+    	
+    	if (oldCurrentTeetrymino != null) {
+    		oldCurrentTeetrymino.expire();;
+    	}
+    	
+    	if (oldNextTeetrymino != null)	 {
+    		oldNextTeetrymino.expire();
+    	}
+    	
+        // Init world
+    	GameWorld gameWorld = new GameWorld();
+        List<Actor> walls = gameWorld.createWalls();
+        
+        for (Actor cubeWall : walls) {
+            addChild(cubeWall);
+        }
+        
+        setGameWorld(gameWorld);
+        
+        addGuiFixedLabels();
+        addGuiLeftButtons();
+        addGuiDigits();
+        
+        // Start game !
+        int x = Constants.LEFT_SPACE + Constants.START_POINT_X * Constants.CUBE_SIDE;
+        int y = Constants.START_POINT_Y;
+        
+        Teetrymino currentTeetrymino = buildCurrentTeetrymino(x, y);
+        setCurrentTeetrymino(currentTeetrymino);
+        
+        Teetrymino nextTeetrymino = buildNextTeetrymino();
+        setNextTeetrymino(nextTeetrymino);
+        
+        Score.init();
+        Gui.refreshScores();
+        
+        createGameTimer(0, FALL_TIME);
+		
+	}
+    
+    public void createGameTimer(double startTime, double duration) throws Exception {
+        timerTask = createTimer(startTime, duration, new Callback() {
+            public void call(double sceneTime, double ttime, TimerTask timerTask) {
+                try {
+                	
+                	// Animation called
+                	if (blockUntilTime != null) {
+                		if (sceneTime <= blockUntilTime) {
+                			timerTask.reset(sceneTime);
+                			return;
+                		} else {
+                			blockUntilTime = null;
+                			reinit();
+                			timerTask.reset(sceneTime);
+                		}
+                		
+                	}
+                	
+                    Teetrymino currentTeetrymino = getCurrentTeetrymino();
+                    List<Actor> currentCubes = currentTeetrymino.getCubes();
+                    
+                    boolean collisionFound = Collision.checkCollisionsForAllCubes(currentCubes, Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
+                    
+                    if (collisionFound) {
+                        
+                        // If we are at the top, it's game over
+                        if (getOrigin().y == Constants.START_POINT_Y) {
+                            GameController.sendEvent(GameEvent.LOSE);
+                            return;
+                        }
+                        
+                        gameWorld.storeCubes(currentCubes, currentTeetrymino);
+                        
+                        List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
+                        
+                        while (fullLinesIndexes.size() > 1) {
+                            int endIndex = fullLinesIndexes.size() - 1;
+                            checkLines(fullLinesIndexes.subList(0, endIndex), fullLinesIndexes.get(endIndex), sceneTime);
+                            fullLinesIndexes = gameWorld.findNumberOfFullLines();
+                        }
+                        
+                        if (blockUntilTime == null) {
+                        	reinit();
+                        	checkForLevel();
+                        }
+                        
+                    } else {
+                    	moveCubes(currentCubes, 0, Constants.CUBE_SIDE);
+                        getOrigin().y += Constants.CUBE_SIDE;
+                    }
+                    
+                    timerTask.reset(sceneTime);
+                    
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new Callback() {
+            public void call(double time, double ttime, TimerTask timerTask) {
+            	// Mouse down 
+            	try {
+	            	if (mouseDownOnLeftSide) {
+	            		moveCurrentTeetrymino(Direction.LEFT);
+	            	} else if (mouseDownOnRightSide) {
+	            		moveCurrentTeetrymino(Direction.RIGHT);
+	            	} else if (mouseDownOnDownSide) {
+	            		moveCurrentTeetrymino(Direction.DOWN);
+	            	}
+            	} catch (Exception e) {
+            		
+            	}
+            }
+            
+        }, new Callback() {
+            public void call(double time, double ttime, TimerTask timerTask) {
+                try {
+                    createGameTimer(time, FALL_TIME);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
     
     public void reinit() throws Exception {
@@ -91,6 +239,8 @@ public class GamingScene extends Scene {
 		setNextTeetrymino(buildNextTeetrymino);
     }
     
+    
+    
     public void checkCollisionAndMoveCubes(Direction direction, int movex, int movey, GameWorld gameWorld) throws Exception {
         List<Actor> currentTeetrymino = getCurrentTeetrymino().getCubes();
         boolean collisionFound  = Collision.checkCollisionsForAllCubes(currentTeetrymino, direction, Constants.CUBE_SIDE, gameWorld.getGameboard());
@@ -100,6 +250,40 @@ public class GamingScene extends Scene {
             getOrigin().y += movey;
         }
     }
+    
+	private void checkLines(List<Integer> fullLinesIndexes,
+			Integer indexToCheckUpperLines, double sceneTime) {
+
+		if (!fullLinesIndexes.isEmpty()) {
+
+			double returnTime = sceneTime;
+			double newReturnTime = sceneTime;
+
+			for (Integer index : fullLinesIndexes) {
+				Cube[] line = gameWorld.getGameboard()[index];
+
+				for (int i = 1; i < line.length - 1; i++) {
+					Full fullCube = (Full) line[i];
+					newReturnTime = Effects.blinkAndDisappear(
+							fullCube.getValue(), sceneTime);
+				}
+			}
+
+			// Refresh gameworld
+			gameWorld.removeCubes(fullLinesIndexes);
+
+			// Make upper cubes fall
+			gameWorld.makeAllCubesFall(fullLinesIndexes, newReturnTime);
+
+			// Refresh scores
+			Score.addLines(fullLinesIndexes.size());
+			Gui.refreshScores();
+
+			blockUntilTime = newReturnTime + 300;
+
+		}
+
+	}
     
     public void moveCubes(List<Actor> cubes, double addx, double addy) {
         for (Actor cube : cubes) {
@@ -111,7 +295,7 @@ public class GamingScene extends Scene {
         }
     }
     
-    public void moveCurrentTeetrymino(Direction direction, GameWorld gameWorld) throws Exception {
+    public void moveCurrentTeetrymino(Direction direction) throws Exception {
         switch (direction) {
         case DOWN:
             checkCollisionAndMoveCubes(direction, 0, Constants.CUBE_SIDE, gameWorld);
@@ -224,7 +408,7 @@ public class GamingScene extends Scene {
     }
 
     // Hide all except first column for 'left buttons'
-    public void hideGamingArea(GameWorld gameWorld) throws Exception {
+    public void hideGamingArea() throws Exception {
         
         if (hideCubes == null) {
 
@@ -265,5 +449,16 @@ public class GamingScene extends Scene {
         }
     }
     
+    public void suspend(boolean suspend) {
+    	timerTask.suspended = suspend;
+    }
+
+	public void setGameWorld(GameWorld gameWorld) {
+		this.gameWorld = gameWorld;
+	}
+	
+	public TimerTask getTimerTask() {
+		return timerTask;
+	}
 
 }
