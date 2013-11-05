@@ -1,4 +1,4 @@
-package com.katspow.teetrys.client.core;
+package com.katspow.teetrys.client.core.world.teetrymino;
 
 import com.katspow.caatja.foundation.actor.Actor;
 

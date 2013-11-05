@@ -1,10 +1,12 @@
-package com.katspow.teetrys.client.core;
+package com.katspow.teetrys.client.core.world;
 
 import java.util.List;
 
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.teetrys.client.Constants;
+import com.katspow.teetrys.client.core.GameController;
 import com.katspow.teetrys.client.core.GameController.Direction;
+import com.katspow.teetrys.client.core.world.teetrymino.Cube;
 
 public class Collision {
     

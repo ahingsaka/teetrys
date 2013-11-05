@@ -15,7 +15,6 @@ import com.katspow.caatjagwt.client.CaatjaGwtWindow;
 import com.katspow.teetrys.client.core.GameController;
 
 /**
- * FIXME Throws exception everywhere !
  * BUG fall ...
  */
 public class Teetrys implements EntryPoint {

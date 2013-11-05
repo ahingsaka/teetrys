@@ -16,9 +16,9 @@ import com.katspow.caatja.behavior.listener.BehaviorExpiredListener;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.pathutil.Path;
 import com.katspow.teetrys.client.Constants;
-import com.katspow.teetrys.client.core.Cube;
-import com.katspow.teetrys.client.core.Cube.Full;
-import com.katspow.teetrys.client.core.Teetrymino;
+import com.katspow.teetrys.client.core.world.teetrymino.Cube;
+import com.katspow.teetrys.client.core.world.teetrymino.Teetrymino;
+import com.katspow.teetrys.client.core.world.teetrymino.Cube.Full;
 
 public class Effects {
     

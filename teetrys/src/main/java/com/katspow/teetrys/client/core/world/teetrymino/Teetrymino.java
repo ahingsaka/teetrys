@@ -1,4 +1,4 @@
-package com.katspow.teetrys.client.core;
+package com.katspow.teetrys.client.core.world.teetrymino;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import com.katspow.caatja.foundation.ui.ShapeActor;
 import com.katspow.caatja.foundation.ui.ShapeActor.Shape;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.GameController.Direction;
+import com.katspow.teetrys.client.core.world.Collision;
 
 /**
  * This represents the pieces of the game.<br>

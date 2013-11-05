@@ -1,4 +1,4 @@
-package com.katspow.teetrys.client.core;
+package com.katspow.teetrys.client.core.world;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,11 @@ import com.katspow.caatja.behavior.PathBehavior;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.pathutil.Path;
 import com.katspow.teetrys.client.Constants;
-import com.katspow.teetrys.client.core.Cube.Full;
 import com.katspow.teetrys.client.core.GameController.Direction;
+import com.katspow.teetrys.client.core.world.teetrymino.Cube;
+import com.katspow.teetrys.client.core.world.teetrymino.Teetrymino;
+import com.katspow.teetrys.client.core.world.teetrymino.Cube.Fixed;
+import com.katspow.teetrys.client.core.world.teetrymino.Cube.Full;
 
 public class GameWorld {
 

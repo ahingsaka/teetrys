@@ -1,4 +1,4 @@
-package com.katspow.teetrys.client.core;
+package com.katspow.teetrys.client.core.world.teetrymino;
 
 /**
  * One transformation is stored in a 5x5 matrix.
