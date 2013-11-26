@@ -374,7 +374,7 @@ public class Teetrymino {
 //                return [cube_list, current_shape_number, current_transformation]
         
         
-        return new Teetrymino(chosenForm, cubes, color);
+        return new Teetrymino(chosenForm, cubes, randomColor);
     }
     
     
@@ -406,7 +406,7 @@ public class Teetrymino {
     public boolean rotate(double x, double y, Cube[][] world) {
         int nextIndex = nextIndex(form);
         Teetrymino newTeetrymino = createTeetrymino(x, y, form, nextIndex, color);
-        boolean collision = Collision.checkCollisionsForAllCubes(newTeetrymino.getCubes(), Direction.UP, Constants.CUBE_SIDE, world);
+        boolean collision = Collision.checkCollisionsForAllCubes(newTeetrymino.getCubes(), color, Direction.UP, Constants.CUBE_SIDE, world);
         
         if (!collision) {
             
@@ -499,5 +499,9 @@ public class Teetrymino {
     public List<Actor> getCubes() {
         return cubes;
     }
+    
+    public String getColor() {
+		return color;
+	}
 
 }

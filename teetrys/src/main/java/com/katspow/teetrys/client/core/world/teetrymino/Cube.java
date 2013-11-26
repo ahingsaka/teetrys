@@ -11,12 +11,22 @@ public interface Cube {
             public Teetrymino getParent() {
                 return null;
             }
+
+			@Override
+			public String toString() {
+				return "0";
+			}
         }, 
         
         BRICK {
             public Teetrymino getParent() {
                 return null;
             }
+
+			@Override
+			public String toString() {
+				return "B";
+			}
         }
     }
     
@@ -50,6 +60,13 @@ public interface Cube {
         public Teetrymino getParent() {
             return parent;
         }
+
+		@Override
+		public String toString() {
+			return parent.getColor();
+		}
+        
+        
         
     }
 

@@ -3,6 +3,7 @@ package com.katspow.teetrys.client.scene.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dev.jjs.CorrelationFactory.DummyCorrelationFactory;
 import com.katspow.caatja.core.canvas.CaatjaColor;
 import com.katspow.caatja.event.CAATMouseEvent;
 import com.katspow.caatja.event.MouseListener;
@@ -135,8 +136,17 @@ public class GamingScene extends Scene {
                 			timerTask.reset(sceneTime);
                 			return;
                 		} else {
+                			
                 			blockUntilTime = null;
-                			reinit();
+                			
+                			// check again for full lines
+                            List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
+                            if (fullLinesIndexes.size() > 0) {
+	                            checkLines(fullLinesIndexes, sceneTime);
+                            } else {
+                            	reinit();
+                            }
+                			
                 			timerTask.reset(sceneTime);
                 		}
                 		
@@ -145,7 +155,7 @@ public class GamingScene extends Scene {
                     Teetrymino currentTeetrymino = getCurrentTeetrymino();
                     List<Actor> currentCubes = currentTeetrymino.getCubes();
                     
-                    boolean collisionFound = Collision.checkCollisionsForAllCubes(currentCubes, Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
+                    boolean collisionFound = Collision.checkCollisionsForAllCubes(currentCubes, currentTeetrymino.getColor(), Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
                     
                     if (collisionFound) {
                         
@@ -159,11 +169,12 @@ public class GamingScene extends Scene {
                         
                         List<Integer> fullLinesIndexes = gameWorld.findNumberOfFullLines();
                         
-                        while (fullLinesIndexes.size() > 1) {
-                            int endIndex = fullLinesIndexes.size() - 1;
-                            checkLines(fullLinesIndexes.subList(0, endIndex), fullLinesIndexes.get(endIndex), sceneTime);
-                            fullLinesIndexes = gameWorld.findNumberOfFullLines();
+//                        while (fullLinesIndexes.size() > 1) {
+                        if (fullLinesIndexes.size() > 0) {
+                            checkLines(fullLinesIndexes, sceneTime);
                         }
+//                            fullLinesIndexes = gameWorld.findNumberOfFullLines();
+//                        }
                         
                         if (blockUntilTime == null) {
                         	reinit();
@@ -243,7 +254,7 @@ public class GamingScene extends Scene {
     
     public void checkCollisionAndMoveCubes(Direction direction, int movex, int movey, GameWorld gameWorld) throws Exception {
         List<Actor> currentTeetrymino = getCurrentTeetrymino().getCubes();
-        boolean collisionFound  = Collision.checkCollisionsForAllCubes(currentTeetrymino, direction, Constants.CUBE_SIDE, gameWorld.getGameboard());
+        boolean collisionFound  = Collision.checkCollisionsForAllCubes(currentTeetrymino, getCurrentTeetrymino().getColor(), direction, Constants.CUBE_SIDE, gameWorld.getGameboard());
         if (!collisionFound) {
             moveCubes(currentTeetrymino, movex, movey);
             getOrigin().x += movex;
@@ -251,8 +262,7 @@ public class GamingScene extends Scene {
         }
     }
     
-	private void checkLines(List<Integer> fullLinesIndexes,
-			Integer indexToCheckUpperLines, double sceneTime) {
+	private void checkLines(List<Integer> fullLinesIndexes, double sceneTime) {
 
 		if (!fullLinesIndexes.isEmpty()) {
 
@@ -274,6 +284,9 @@ public class GamingScene extends Scene {
 
 			// Make upper cubes fall
 			gameWorld.makeAllCubesFall(fullLinesIndexes, newReturnTime);
+			
+			// log
+			GameWorld.dumpGameWorld(gameWorld);
 
 			// Refresh scores
 			Score.addLines(fullLinesIndexes.size());
