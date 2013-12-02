@@ -301,7 +301,6 @@ public class GameWorld {
 			boolean collisionFound = false;
 			int y = 0;
 			String color = fullCubesFound.get(0).getParent().getColor();
-			;
 
 			List<Actor> clonedCubes = new ArrayList<Actor>();
 
