@@ -3,7 +3,6 @@ package com.katspow.teetrys.client.scene.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dev.jjs.CorrelationFactory.DummyCorrelationFactory;
 import com.katspow.caatja.core.canvas.CaatjaColor;
 import com.katspow.caatja.event.CAATMouseEvent;
 import com.katspow.caatja.event.MouseListener;
@@ -16,15 +15,15 @@ import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.caatja.math.Pt;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.GameController;
-import com.katspow.teetrys.client.core.Gui;
-import com.katspow.teetrys.client.core.Score;
 import com.katspow.teetrys.client.core.GameController.Direction;
+import com.katspow.teetrys.client.core.Gui;
 import com.katspow.teetrys.client.core.Gui.Labels;
+import com.katspow.teetrys.client.core.Score;
 import com.katspow.teetrys.client.core.world.Collision;
 import com.katspow.teetrys.client.core.world.GameWorld;
 import com.katspow.teetrys.client.core.world.teetrymino.Cube;
-import com.katspow.teetrys.client.core.world.teetrymino.Teetrymino;
 import com.katspow.teetrys.client.core.world.teetrymino.Cube.Full;
+import com.katspow.teetrys.client.core.world.teetrymino.Teetrymino;
 import com.katspow.teetrys.client.effects.Effects;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
 
