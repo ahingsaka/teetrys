@@ -5,6 +5,8 @@ import com.katspow.caatja.foundation.actor.Actor;
 public interface Cube {
 
     public Teetrymino getParent();
+    
+    public Actor getValue();
 
     public enum Fixed implements Cube {
         EMPTY {
@@ -16,6 +18,13 @@ public interface Cube {
             public String toString() {
                 return "0";
             }
+
+            @Override
+            public Actor getValue() {
+                return null;
+            }
+            
+            
         },
 
         BRICK {
@@ -27,6 +36,12 @@ public interface Cube {
             public String toString() {
                 return "B";
             }
+
+            @Override
+            public Actor getValue() {
+                return null;
+            }
+            
         }
     }
 
@@ -35,6 +50,10 @@ public interface Cube {
         private Actor value;
 
         private Teetrymino parent;
+        
+        private Full(Actor value) {
+            this.value = value;
+        }
 
         private Full(Actor value, Teetrymino parent) {
             this.value = value;
@@ -51,6 +70,10 @@ public interface Cube {
 
         public static Full valueOf(Actor value, Teetrymino parent) {
             return new Full(value, parent);
+        }
+        
+        public static Full valueOf(Actor value) {
+            return new Full(value);
         }
 
         public void setParent(Teetrymino parent) {
@@ -76,10 +99,27 @@ public interface Cube {
                 return false;
             Full other = (Full) obj;
             if (parent == null) {
-                if (other.parent != null)
+                if (other.parent != null) {
                     return false;
-            } else if (!parent.getColor().equals(other.parent.getColor()))
-                return false;
+                }
+                
+            } else {
+                if (other.parent == null) {
+                    return false;
+                } else {
+                    String color = parent.getColor();
+                    String color2 = other.parent.getColor();
+                    System.out.println("--");
+                    System.out.println(color);
+                    System.out.println(color2);
+                    System.out.println("--");
+                    boolean equals = color.equals(color2);
+                    System.out.println(equals);
+                    return equals;
+                }
+                
+            }
+            
             return true;
         }
 

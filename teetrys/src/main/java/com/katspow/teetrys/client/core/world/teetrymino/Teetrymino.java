@@ -11,6 +11,7 @@ import com.katspow.caatja.foundation.ui.ShapeActor.Shape;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.GameController.Direction;
 import com.katspow.teetrys.client.core.world.Collision;
+import com.katspow.teetrys.client.core.world.teetrymino.Cube.Full;
 
 /**
  * This represents the pieces of the game.<br>
@@ -19,7 +20,7 @@ import com.katspow.teetrys.client.core.world.Collision;
  */
 public class Teetrymino {
     
-    private List<Actor> cubes;
+    private List<Cube> cubes;
     private Form form;
     private int transfoIndex;
     private String color;
@@ -219,7 +220,7 @@ public class Teetrymino {
         }
     }
     
-    public Teetrymino(Form form, List<Actor> cubes, String color) {
+    public Teetrymino(Form form, List<Cube> cubes, String color) {
         this.form = form;
         this.cubes = cubes;
         this.color = color;
@@ -234,33 +235,23 @@ public class Teetrymino {
      * @param strokeColor
      * @return
      */
-    public static Actor createCube(double x, double y, String color, String strokeColor) {
-        
-//        ShapeActor cube = new ShapeActor().
-//            setShape(Shape.RECTANGLE).
-//            setLocation(x, y).
-//            setSize(Constants.CUBE_SIDE, Constants.CUBE_SIDE).
-//            setFillStyle(color).
-//            setStrokeStyle(CaatjaColor.valueOf(strokeColor));
-//        
-//        cube.disableDrag();
-//        
-//        return cube;
-    	
+    public static Cube createCube(double x, double y, String color, String strokeColor) {
     	return createCube(x, y, Constants.CUBE_SIDE, Constants.CUBE_SIDE, color, strokeColor);
     }
     
-    public static Actor createCube(double x, double y, int size_x, int size_y, String color, String strokeColor) {
-    	ShapeActor cube = new ShapeActor().
+    public static Cube createCube(double x, double y, int size_x, int size_y, String color, String strokeColor) {
+        
+    	ShapeActor actor = new ShapeActor().
                 setShape(Shape.RECTANGLE).
                 setLocation(x, y).
                 setSize(size_y, size_x).
                 setFillStyle(color).
                 setStrokeStyle(CaatjaColor.valueOf(strokeColor));
             
-            cube.disableDrag();
+    	actor.disableDrag();
             
-            return cube;
+        Full cube = Full.valueOf(actor);
+        return cube;
     }
     
     public static Teetrymino createNewTeetrymino(double x, double y) {
@@ -276,7 +267,7 @@ public class Teetrymino {
         double j = y;
         
         int[][] matrix = baseTransformation.getMatrix();
-        List<Actor> cubes = teetrymino.getCubes();
+        List<Cube> cubes = teetrymino.getCubes();
         
         int c = 0;
         
@@ -285,7 +276,7 @@ public class Teetrymino {
                 int val = matrix[line][col];
                 
                 if (val != 0) {
-                    Actor actor = cubes.get(c);
+                    Actor actor = cubes.get(c).getValue();
                     //actor.setLocation(i, j);
                     actor.x = i;
                     actor.y = j;
@@ -303,7 +294,7 @@ public class Teetrymino {
     }
     
     public static Teetrymino createTeetrymino(double x, double y, Form chosenForm, int transfoIndex, String color) {
-        List<Actor> cubes = new ArrayList<Actor>();
+        List<Cube> cubes = new ArrayList<Cube>();
         
         Transformation baseTransformation = chosenForm.getTransformations().get(transfoIndex);
         
@@ -323,7 +314,7 @@ public class Teetrymino {
                 int val = matrix[line][col];
                 
                 if (val != 0) {
-                    Actor cube = Teetrymino.createCube(i, j, randomColor, "#000000");
+                    Cube cube = Teetrymino.createCube(i, j, randomColor, "#000000");
                     cubes.add(cube);
                 }
                 
@@ -333,46 +324,6 @@ public class Teetrymino {
             i = x;
             j += Constants.CUBE_SIDE;
         }
-        
-        
-        // TODO
-//                current_shape_number = shape_number
-//
-//                transformations = @cube_shape_list[shape_number]
-//                shape = transformations[0]
-//                current_transformation = 0
-//
-//                color = COLOR.get_random_color()
-//
-//                i = x
-//                j = y
-//
-//                mouseEnterHandler = (mouseEvent) ->
-//                    Globals.ON_ENTER_SHAPE = true
-//
-//                mouseClick = (mouseEvent) =>
-//                    @shape_rotating = true
-//                    this.next_transformation()
-//                    this.rotate_shape(@x, @y, @cube_list, true, @current_transformation)
-//
-//                for line in shape
-//                    for value in line
-//                        if (value != 0)
-//                            rectangle = Teetryminos.create_cube(i, j, color, '#000000')
-//                            rectangle.mouseEnter = mouseEnterHandler
-//                            rectangle.mouseClick = mouseClick
-//
-//                            if (j > @current_max_y)
-//                                @current_max_y = j + Globals.CUBE_SIDE
-//
-//                            cube_list[value - 1] = rectangle
-//
-//                        i += Globals.CUBE_SIDE
-//                    i = x
-//                    j += Globals.CUBE_SIDE
-//
-//                return [cube_list, current_shape_number, current_transformation]
-        
         
         return new Teetrymino(chosenForm, cubes, randomColor);
     }
@@ -411,8 +362,9 @@ public class Teetrymino {
         if (!collision) {
             
             for (int i = 0; i < newTeetrymino.getCubes().size(); i++) {
-                Actor rotatedCube = newTeetrymino.getCubes().get(i);
-                Actor currentCube = this.cubes.get(i);
+                Cube c = newTeetrymino.getCubes().get(i);
+                Actor rotatedCube = c.getValue();
+                Actor currentCube = this.cubes.get(i).getValue();
                 currentCube.x = rotatedCube.x;
                 currentCube.y = rotatedCube.y;
             }
@@ -438,7 +390,8 @@ public class Teetrymino {
     
     
     public void expire() {
-    	for (Actor actor : getCubes()) {
+    	for (Cube cube : getCubes()) {
+    	    Actor actor = cube.getValue();
     		actor.setExpired(true);
     		actor.setDiscardable(true);
 		}
@@ -496,7 +449,7 @@ public class Teetrymino {
     
     
     
-    public List<Actor> getCubes() {
+    public List<Cube> getCubes() {
         return cubes;
     }
     

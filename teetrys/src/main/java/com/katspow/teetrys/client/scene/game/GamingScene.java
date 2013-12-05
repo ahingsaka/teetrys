@@ -152,7 +152,7 @@ public class GamingScene extends Scene {
                 	}
                 	
                     Teetrymino currentTeetrymino = getCurrentTeetrymino();
-                    List<Actor> currentCubes = currentTeetrymino.getCubes();
+                    List<Cube> currentCubes = currentTeetrymino.getCubes();
                     
                     boolean collisionFound = Collision.checkCollisionsForAllCubes(currentCubes, currentTeetrymino.getColor(), Direction.DOWN, Constants.CUBE_SIDE, gameWorld.getGameboard());
                     
@@ -229,13 +229,13 @@ public class GamingScene extends Scene {
         
         // Deactivate mouse click
         Teetrymino currentTeetrymino = getCurrentTeetrymino();
-        for (Actor a : currentTeetrymino.getCubes()) {
-        	a.setMouseClickListener(null);
+        for (Cube a : currentTeetrymino.getCubes()) {
+        	a.getValue().setMouseClickListener(null);
         }
         
         Teetrymino nextTeetrymino = getNextTeetrymino();
-        for (Actor a : nextTeetrymino.getCubes()) {
-        	a.setMouseClickListener(new MouseListener() {
+        for (Cube a : nextTeetrymino.getCubes()) {
+        	a.getValue().setMouseClickListener(new MouseListener() {
 				public void call(CAATMouseEvent e) throws Exception {
 					GameController.sendEvent(GameEvent.CALL_ROTATE);
 				}
@@ -252,7 +252,7 @@ public class GamingScene extends Scene {
     
     
     public void checkCollisionAndMoveCubes(Direction direction, int movex, int movey, GameWorld gameWorld) throws Exception {
-        List<Actor> currentTeetrymino = getCurrentTeetrymino().getCubes();
+        List<Cube> currentTeetrymino = getCurrentTeetrymino().getCubes();
         boolean collisionFound  = Collision.checkCollisionsForAllCubes(currentTeetrymino, getCurrentTeetrymino().getColor(), direction, Constants.CUBE_SIDE, gameWorld.getGameboard());
         if (!collisionFound) {
             moveCubes(currentTeetrymino, movex, movey);
@@ -297,12 +297,12 @@ public class GamingScene extends Scene {
 
 	}
     
-    public void moveCubes(List<Actor> cubes, double addx, double addy) {
-        for (Actor cube : cubes) {
+    public void moveCubes(List<Cube> cubes, double addx, double addy) {
+        for (Cube cube : cubes) {
             // If necessary ?
-            if (cube.y < Constants.GAME_HEIGHT) {
-                cube.x += addx;
-                cube.y += addy;
+            if (cube.getValue().y < Constants.GAME_HEIGHT) {
+                cube.getValue().x += addx;
+                cube.getValue().y += addy;
             }
         }
     }
@@ -333,15 +333,15 @@ public class GamingScene extends Scene {
     
     public Teetrymino buildCurrentTeetrymino(double x, double y) throws Exception {
         Teetrymino teetrymino = Teetrymino.createNewTeetrymino(x, y);
-        for (Actor actor : teetrymino.getCubes()) {
+        for (Cube actor : teetrymino.getCubes()) {
         	
-        	actor.setMouseClickListener(new MouseListener() {
+        	actor.getValue().setMouseClickListener(new MouseListener() {
 				public void call(CAATMouseEvent e) throws Exception {
 					GameController.sendEvent(GameEvent.CALL_ROTATE);
 				}
 			});
         	
-            addChild(actor);
+            addChild(actor.getValue());
         }
         
         setOrigin(new Pt(x, y));
@@ -352,8 +352,8 @@ public class GamingScene extends Scene {
     public Teetrymino buildNextTeetrymino() throws Exception {
         Teetrymino teetrymino = Teetrymino.createNewTeetrymino(NEXT_X, NEXT_Y);
         
-        for (Actor actor : teetrymino.getCubes()) {
-            addChild(actor);
+        for (Cube actor : teetrymino.getCubes()) {
+            addChild(actor.getValue());
         }
         
         return teetrymino;
@@ -434,10 +434,10 @@ public class GamingScene extends Scene {
 
 //            for (int line = 0; line < gameboardLinesNb - 1; line++) {
 //                for (int column = 1; column < gameboardColumnsNb; column++) {
-                    Actor cube = Teetrymino.createCube(x, y, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, "#000000", "#000000");
-                    Effects.scale(cube, time);
-                    hideCubes.add(cube);
-                    addChild(cube);
+                    Cube cube = Teetrymino.createCube(x, y, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, "#000000", "#000000");
+                    Effects.scale(cube.getValue(), time);
+                    hideCubes.add(cube.getValue());
+                    addChild(cube.getValue());
 
 //                    x += Constants.CUBE_SIDE;
 //                }

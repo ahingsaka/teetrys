@@ -81,7 +81,7 @@ public class GameWorld {
                 Cube value = line[j];
                 
                 if (value == Cube.Fixed.BRICK) {
-                    Actor cube = Teetrymino.createCube(x, y, WALL_COLOR, WALL_COLOR);
+                    Actor cube = Teetrymino.createCube(x, y, WALL_COLOR, WALL_COLOR).getValue();
                     walls.add(cube);
                 }
                 
@@ -94,8 +94,8 @@ public class GameWorld {
         }
         
         // add 2 cubes and icons on upper left and right
-        Actor upperLeftCube = Teetrymino.createCube(0, 0, WALL_COLOR, WALL_COLOR);
-        Actor upperRightCube = Teetrymino.createCube(Constants.GAME_WIDTH - Constants.CUBE_SIDE, 0, WALL_COLOR, WALL_COLOR);
+        Actor upperLeftCube = Teetrymino.createCube(0, 0, WALL_COLOR, WALL_COLOR).getValue();
+        Actor upperRightCube = Teetrymino.createCube(Constants.GAME_WIDTH - Constants.CUBE_SIDE, 0, WALL_COLOR, WALL_COLOR).getValue();
 
         walls.add(upperLeftCube);
         walls.add(upperRightCube);
@@ -106,15 +106,15 @@ public class GameWorld {
     
     // Store the cubes in gameboard
     // Disable the mouse event
-    public void storeCubes(List<Actor> cubes, Teetrymino teetryminoParent) {
-        for (Actor cube : cubes) {
+    public void storeCubes(List<Cube> cubes, Teetrymino teetryminoParent) {
+        for (Cube cube : cubes) {
             
             // FIXME Disable touch/mouse events
             
-            int cube_x = (int) (cube.x / Constants.CUBE_SIDE);
-            int cube_y = ((int) cube.y / Constants.CUBE_SIDE) + 1;
+            int cube_x = (int) (cube.getValue().x / Constants.CUBE_SIDE);
+            int cube_y = ((int) cube.getValue().y / Constants.CUBE_SIDE) + 1;
             
-            getGameboard()[cube_y][cube_x] = Cube.Full.valueOf(cube, teetryminoParent);
+            getGameboard()[cube_y][cube_x] = Cube.Full.valueOf(cube.getValue(), teetryminoParent);
         }
     }
     
@@ -302,18 +302,22 @@ public class GameWorld {
 			int y = 0;
 			String color = fullCubesFound.get(0).getParent().getColor();
 
-			List<Actor> clonedCubes = new ArrayList<Actor>();
+			List<Cube> clonedCubes = new ArrayList<Cube>();
 
 			for (Full cube : fullCubesFound) {
 				Actor clonedCube = new Actor();
 				clonedCube.x = cube.getValue().x;
 				clonedCube.y = cube.getValue().y;
-				clonedCubes.add(clonedCube);
+				
+				Full cloned = Full.valueOf(clonedCube);
+				
+				clonedCubes.add(cloned);
 			}
 
 			while (!collisionFound) {
 
-				for (Actor actor : clonedCubes) {
+				for (Cube cube : clonedCubes) {
+				    Actor actor = cube.getValue();
 					actor.y += y;
 				}
 
@@ -330,7 +334,7 @@ public class GameWorld {
 
 			if (y > 0) {
 				for (int i = 0; i < clonedCubes.size(); i++) {
-					Actor clonedCube = clonedCubes.get(i);
+					Actor clonedCube = clonedCubes.get(i).getValue();
 					Actor a = fullCubesFound.get(i).getValue();
 
 					a.addBehavior(new PathBehavior().setFrameTime(
@@ -484,19 +488,22 @@ public class GameWorld {
             int y = 0;
             String color = fullCubesFound.get(0).getParent().getColor();;
 
-            List<Actor> clonedCubes = new ArrayList<Actor>();
+            List<Cube> clonedCubes = new ArrayList<Cube>();
             
             for (Full cube : fullCubesFound) {
                 Actor clonedCube = new Actor();
                 clonedCube.x = cube.getValue().x;
                 clonedCube.y = cube.getValue().y;
-                clonedCubes.add(clonedCube);
+                
+                Full cloned = Full.valueOf(clonedCube);
+                
+                clonedCubes.add(cloned);
             }
 
             while (!collisionFound) {
                 
-                for (Actor actor : clonedCubes) {
-                    actor.y += y;
+                for (Cube actor : clonedCubes) {
+                    actor.getValue().y += y;
                 }
                 
                 collisionFound = Collision.checkCollisionsForAllCubes(clonedCubes, color, Direction.DOWN, Constants.CUBE_SIDE,
@@ -511,7 +518,7 @@ public class GameWorld {
             
             if (y > 0) {
                 for (int i = 0; i < clonedCubes.size(); i++) {
-                    Actor clonedCube = clonedCubes.get(i);
+                    Actor clonedCube = clonedCubes.get(i).getValue();
                     Actor a = fullCubesFound.get(i).getValue();
                     
                     a.addBehavior(new PathBehavior().setFrameTime(newReturnTime, 300).setPath(new Path().setLinear(a.x, a.y, a.x, clonedCube.y)));
