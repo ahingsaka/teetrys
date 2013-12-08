@@ -241,6 +241,11 @@ public class GameWorld {
 	private void makeOneLineFall(int lineIndex, int toAdd, double returnTime, List<Integer> fullLinesIndexes) {
 		
 		for (int i = lineIndex; i > 0; i--) {
+			
+			if (fullLinesIndexes.contains(i)) {
+				return;
+			}
+			
 			Cube[] cubesFromLine = getGameboard()[i];
 			
 			for (int j = 1; j < cubesFromLine.length - 1; j++) {
@@ -250,10 +255,10 @@ public class GameWorld {
 //					value.addBehavior(new PathBehavior().setFrameTime(
 //							returnTime, 300).setPath(
 //							new Path().setLinear(value.x, value.y, value.x, value.y
-//									+ toAdd)));
+//									+ Constants.CUBE_SIDE)));
 					
-					value.y += Constants.CUBE_SIDE; 
-					gameboard[i + 1][j] = cube; 
+					value.y += toAdd; 
+					gameboard[i + toAdd / Constants.CUBE_SIDE][j] = cube; 
 					gameboard[i][j] = Cube.Fixed.EMPTY;
 				}
 			}
@@ -288,10 +293,9 @@ public class GameWorld {
     	
     	for (int i = firstLineIndex - 1; i > 0; i--) {
     		if (!fullLinesIndexes.contains(i)) {
-    			
     			makeOneLineFall(i, toAdd, newReturnTime, fullLinesIndexes);
     		} else {
-    			//newReturnTime += 300;
+    			newReturnTime += 300;
     		}
     		
     		toAdd += Constants.CUBE_SIDE;
