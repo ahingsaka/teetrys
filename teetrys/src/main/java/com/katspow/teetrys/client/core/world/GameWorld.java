@@ -1,7 +1,6 @@
 package com.katspow.teetrys.client.core.world;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -252,12 +251,12 @@ public class GameWorld {
 				Cube cube = cubesFromLine[j];
 				Actor value = cube.getValue();
 				if (value != null) {
-//					value.addBehavior(new PathBehavior().setFrameTime(
-//							returnTime, 300).setPath(
-//							new Path().setLinear(value.x, value.y, value.x, value.y
-//									+ Constants.CUBE_SIDE)));
+//						value.addBehavior(new PathBehavior().setFrameTime(
+//								returnTime, 300).setPath(
+//								new Path().setLinear(value.x, value.y, value.x, value.y
+//										+ toAdd)));
 					
-					value.y += toAdd; 
+					value.y += toAdd;
 					gameboard[i + toAdd / Constants.CUBE_SIDE][j] = cube; 
 					gameboard[i][j] = Cube.Fixed.EMPTY;
 				}
