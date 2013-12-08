@@ -109,12 +109,7 @@ public interface Cube {
                 } else {
                     String color = parent.getColor();
                     String color2 = other.parent.getColor();
-                    System.out.println("--");
-                    System.out.println(color);
-                    System.out.println(color2);
-                    System.out.println("--");
                     boolean equals = color.equals(color2);
-                    System.out.println(equals);
                     return equals;
                 }
                 

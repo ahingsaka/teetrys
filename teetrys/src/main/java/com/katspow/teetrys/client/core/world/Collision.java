@@ -7,7 +7,6 @@ import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.GameController.Direction;
 import com.katspow.teetrys.client.core.world.teetrymino.Cube;
 import com.katspow.teetrys.client.core.world.teetrymino.Cube.Full;
-import com.katspow.teetrys.client.core.world.teetrymino.Teetrymino;
 
 public class Collision {
     
@@ -35,41 +34,16 @@ public class Collision {
 				
 				if (cubeDownside.getParent() != null) {
 					Full f = (Full) cubeDownside;
-//					Actor value = f.getValue();
+					Actor value = f.getValue();
 					
-					for (Cube cube2 : currentTeetrymino) {
-                        if (cube2.getParent() != null) {
-                            String color2 = cube2.getParent().getColor();
-                            
-                            Teetrymino parent = f.getParent();
-                            if (parent != null) {
-                                String color3 = parent.getColor();
-                                if (color2 != null && color3 != null) {
-                                    if (color2.equals(color3)) {
-                                        return false;
-                                    }
-                                }
-                            }
-                            
-                            
-                        }
-                    }
-					
-					if (currentTeetrymino.contains(cubeDownside)) {
-					    System.out.println("found !");
-					    return false;
-					} else {
-					    System.out.println("not found !");
+					double x = value.x;
+					double y = value.y;
+
+					for (Cube actor : currentTeetrymino) {
+						if (actor.getValue().x == x && actor.getValue().y == y) {
+							return false;
+						}
 					}
-					
-//					double x = value.x;
-//					double y = value.y;
-//
-//					for (Actor actor : currentTeetrymino) {
-//						if (actor.x == x && actor.y == y) {
-//							return false;
-//						}
-//					}
 
 				}
 				

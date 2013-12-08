@@ -237,8 +237,65 @@ public class GameWorld {
 		}
 		return o1y;
 	}
+	
+	private void makeOneLineFall(int lineIndex, int toAdd, double returnTime, List<Integer> fullLinesIndexes) {
+		
+		for (int i = lineIndex; i > 0; i--) {
+			Cube[] cubesFromLine = getGameboard()[i];
+			
+			for (int j = 1; j < cubesFromLine.length - 1; j++) {
+				Cube cube = cubesFromLine[j];
+				Actor value = cube.getValue();
+				if (value != null) {
+//					value.addBehavior(new PathBehavior().setFrameTime(
+//							returnTime, 300).setPath(
+//							new Path().setLinear(value.x, value.y, value.x, value.y
+//									+ toAdd)));
+					
+					value.y += Constants.CUBE_SIDE; 
+					gameboard[i + 1][j] = cube; 
+					gameboard[i][j] = Cube.Fixed.EMPTY;
+				}
+			}
+		}
+		
+			
+//			Cube[] cubesFromLine = getGameboard()[lineIndex];
+//			for (int j = 1; j < cubesFromLine.length - 1; j++) {
+//				Cube cube = cubesFromLine[j];
+//				Actor value = cube.getValue();
+//				if (value != null) {
+//					value.addBehavior(new PathBehavior().setFrameTime(
+//							returnTime, 300).setPath(
+//							new Path().setLinear(value.x, value.y, value.x, value.y
+//									+ toAdd)));
+//					
+//					gameboard[lineIndex + toAdd / Constants.CUBE_SIDE][j] = cube; 
+//					gameboard[lineIndex][j] = Cube.Fixed.EMPTY;
+//				}
+//			}
+	}
 
     public void makeAllCubesFall(List<Integer> fullLinesIndexes, double newReturnTime) {
+    	
+    	Integer firstLineIndex = fullLinesIndexes.get(0);
+    	
+    	if (firstLineIndex == 0) {
+    		return;
+    	}
+    	
+    	int toAdd = Constants.CUBE_SIDE;
+    	
+    	for (int i = firstLineIndex - 1; i > 0; i--) {
+    		if (!fullLinesIndexes.contains(i)) {
+    			
+    			makeOneLineFall(i, toAdd, newReturnTime, fullLinesIndexes);
+    		} else {
+    			//newReturnTime += 300;
+    		}
+    		
+    		toAdd += Constants.CUBE_SIDE;
+		}
     	
     	// Deplacement de chaque ligne qui disparait
 //    	int substractValue = 0;
@@ -250,21 +307,21 @@ public class GameWorld {
     	
     	
     	// Gravity
-    	List<Full> alreadyVisited = new ArrayList<Cube.Full>();
-    	List<List<Full>> teetryminosSaves = new ArrayList<List<Full>>();
-    	
-        for (int i = getGameboardLinesNb() - 2; i > 0; i--) {
-//            if (!fullLinesIndexes.contains(i)) {
-              processLine(i, gameboard[i], alreadyVisited, teetryminosSaves, newReturnTime);
-//            }
-        }
-        
-        // Trier les teetryminos en fonction de leur hauteur (plus bas d abord)
-		Collections.sort(teetryminosSaves, comparator);
-        
-        for (List<Full> teetryminoSave : teetryminosSaves) {
-        	newGravityFall(teetryminoSave, newReturnTime);
-		}
+//    	List<Full> alreadyVisited = new ArrayList<Cube.Full>();
+//    	List<List<Full>> teetryminosSaves = new ArrayList<List<Full>>();
+//    	
+//        for (int i = getGameboardLinesNb() - 2; i > 0; i--) {
+////            if (!fullLinesIndexes.contains(i)) {
+//              processLine(i, gameboard[i], alreadyVisited, teetryminosSaves, newReturnTime);
+////            }
+//        }
+//        
+//        // Trier les teetryminos en fonction de leur hauteur (plus bas d abord)
+//		Collections.sort(teetryminosSaves, comparator);
+//        
+//        for (List<Full> teetryminoSave : teetryminosSaves) {
+//        	newGravityFall(teetryminoSave, newReturnTime);
+//		}
         
     }
     
