@@ -2,8 +2,8 @@ package com.katspow.teetrys.client.core.world.teetrymino;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
+import com.google.gwt.user.client.Random;
 import com.katspow.caatja.core.canvas.CaatjaColor;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.ui.ShapeActor;
@@ -255,7 +255,7 @@ public class Teetrymino {
     }
     
     public static Teetrymino createNewTeetrymino(double x, double y) {
-        int randomValue = new Random().nextInt(Form.values().length);
+        int randomValue = Random.nextInt(Form.values().length);
         Form chosenForm = Form.values()[randomValue];
         return createTeetrymino(x, y, chosenForm, 0, null);
     }
@@ -334,7 +334,7 @@ public class Teetrymino {
         String color = "#";
         
         for (int i = 0; i < 6; i++) {
-            int nextInt = new Random().nextInt(16);
+            int nextInt = Random.nextInt(16);
             color += letters[nextInt];
         }
         
