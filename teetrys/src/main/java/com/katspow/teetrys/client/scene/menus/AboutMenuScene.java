@@ -7,6 +7,7 @@ import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.foundation.ui.TextActor;
+import com.katspow.caatja.foundation.ui.TextFont;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.GameController;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
@@ -33,7 +34,7 @@ public class AboutMenuScene extends Scene {
     	TextActor text = new TextActor();
     	
     	text.
-    	setFont("30px sans-serif").
+    	setFont(new TextFont(30, "px", "sans-serif")).
     	setText("Powered by Caatja").
     	calcTextSize(director).
         setTextFillStyle("white").
@@ -42,7 +43,7 @@ public class AboutMenuScene extends Scene {
     	TextActor text2 = new TextActor();
     	
     	text2.
-    	setFont("25px sans-serif").
+    	setFont(new TextFont(25, "px", "sans-serif")).
     	setText("Author : Ahingsaka Samsenesena").
     	calcTextSize(director).
         setTextFillStyle("white").
@@ -72,7 +73,7 @@ public class AboutMenuScene extends Scene {
         
         ta.setMouseDragListener(null);
         
-        ta.setFont("40px sans-serif").
+        ta.setFont(new TextFont(40, "px", "sans-serif")).
         setText("back").
         calcTextSize(director).
         setTextFillStyle("white").

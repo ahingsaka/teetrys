@@ -7,6 +7,7 @@ import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.foundation.ui.TextActor;
+import com.katspow.caatja.foundation.ui.TextFont;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.GameController;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
@@ -54,7 +55,7 @@ public class HighscoresScene extends Scene {
         
         ta.setMouseDragListener(null);
 
-        ta.setFont("40px sans-serif").setText("back").calcTextSize(director).setTextFillStyle("white").disableDrag();
+        ta.setFont(new TextFont(40, "px", "sans-serif")).setText("back").calcTextSize(director).setTextFillStyle("white").disableDrag();
 
         ta.setLocation((Constants.GAME_WIDTH - ta.width) / 2, (Constants.GAME_HEIGHT - ta.height) / 2);
         ta.cacheAsBitmap();

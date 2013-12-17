@@ -7,6 +7,7 @@ import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.foundation.ui.TextActor;
+import com.katspow.caatja.foundation.ui.TextFont;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.core.GameController;
 import com.katspow.teetrys.client.core.Gui;
@@ -99,7 +100,7 @@ public class MainMenuScene extends Scene {
             }
         });
         
-                textActor.setFont("50px sans-serif").
+                textActor.setFont(new TextFont(50, "px", "sans-serif")).
                 setText(ml.getLabel()).
                 calcTextSize(director).
                 setTextFillStyle("white").

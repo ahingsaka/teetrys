@@ -13,6 +13,7 @@ import com.katspow.caatja.foundation.actor.ImageActor;
 import com.katspow.caatja.foundation.actor.SpriteActor;
 import com.katspow.caatja.foundation.image.CompoundImage;
 import com.katspow.caatja.foundation.ui.TextActor;
+import com.katspow.caatja.foundation.ui.TextFont;
 import com.katspow.teetrys.client.Constants;
 import com.katspow.teetrys.client.scene.game.GamingScene;
 import com.katspow.teetrys.client.statemachine.StateMachine.GameEvent;
@@ -143,7 +144,7 @@ public class Gui {
     	TextActor score = new TextActor();
     	
     	score.
-    	setFont("40px sans-serif").
+    	setFont(new TextFont(40, "px", "sans-serif")).
     	setText("Score : " + value).
     	calcTextSize(director).
         setTextFillStyle("white").

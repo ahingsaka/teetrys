@@ -5,6 +5,7 @@ import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.ActorContainer;
 import com.katspow.caatja.foundation.ui.TextActor;
+import com.katspow.caatja.foundation.ui.TextFont;
 import com.katspow.teetrys.client.Constants;
 
 /**
@@ -42,7 +43,7 @@ public class LoadingScene extends Scene {
     private void createLoadingText(Director director) throws Exception {
 
         TextActor loading = new TextActor();
-        loading.setFont("30px sans-serif")
+        loading.setFont(new TextFont(30, "px", "sans-serif"))
             .setTextBaseline("top")
             .setText("Loading ...")
             .calcTextSize(director)
