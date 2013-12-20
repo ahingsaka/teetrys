@@ -2,7 +2,7 @@ package com.katspow.teetrys.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
-import com.katspow.caatjagwt.client.CAATGwt;
+import com.katspow.caatjagwt.client.CaatjaGwt;
 import com.katspow.teetrys.client.core.GameController;
 
 public class Teetrys implements EntryPoint {
@@ -14,7 +14,7 @@ public class Teetrys implements EntryPoint {
 //                new CaatjaGwtPreloader(), new CAATGwt());
         
         try {
-            CAATGwt.init();
+            CaatjaGwt.init();
             new GameController().start();
         } catch (Exception e) {
             Window.alert("Could not load teetrys !");
