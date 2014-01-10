@@ -10,7 +10,9 @@ import com.katspow.caatja.foundation.Director;
 import com.katspow.caatja.foundation.Scene;
 import com.katspow.caatja.foundation.actor.Actor;
 import com.katspow.caatja.foundation.actor.ActorContainer;
-import com.katspow.caatja.foundation.timer.Callback;
+import com.katspow.caatja.foundation.timer.CallbackCancel;
+import com.katspow.caatja.foundation.timer.CallbackTick;
+import com.katspow.caatja.foundation.timer.CallbackTimeout;
 import com.katspow.caatja.foundation.timer.TimerTask;
 import com.katspow.caatja.math.Pt;
 import com.katspow.teetrys.client.Constants;
@@ -125,7 +127,7 @@ public class GamingScene extends Scene {
 	}
     
     public void createGameTimer(double startTime, double duration) throws Exception {
-        timerTask = createTimer(startTime, duration, new Callback() {
+        timerTask = createTimer(startTime, duration, new CallbackTimeout() {
             public void call(double sceneTime, double ttime, TimerTask timerTask) {
                 try {
                 	
@@ -192,7 +194,7 @@ public class GamingScene extends Scene {
                 }
             }
 
-        }, new Callback() {
+        }, new CallbackTick() {
             public void call(double time, double ttime, TimerTask timerTask) {
             	// Mouse down 
             	try {
@@ -208,7 +210,7 @@ public class GamingScene extends Scene {
             	}
             }
             
-        }, new Callback() {
+        }, new CallbackCancel() {
             public void call(double time, double ttime, TimerTask timerTask) {
                 try {
                     createGameTimer(time, FALL_TIME);
