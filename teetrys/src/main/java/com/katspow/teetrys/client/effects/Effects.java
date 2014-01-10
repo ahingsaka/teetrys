@@ -31,14 +31,14 @@ public class Effects {
         changeColorBehavior.addListener(BehaviorListener.valueOfExpiredAndApplied(
                 
            new BehaviorExpiredListener() {
-            public void call(BaseBehavior behavior, double time, Actor actor) {
+            public void onExpired(BaseBehavior behavior, double time, Actor actor) {
                 actor.setDiscardable(true);
                 actor.setExpired(true);
                 
             }
             
         }, new BehaviorAppliedListener() {
-            public void call(BaseBehavior behavior, double time, double normalizeTime, Actor actor, SetForTimeReturnValue value)
+            public void onApplied(BaseBehavior behavior, double time, double normalizeTime, Actor actor, SetForTimeReturnValue value)
                     throws Exception {
                 actor.setFillStyle(Teetrymino.getRandomColor());
             }
@@ -83,7 +83,7 @@ public class Effects {
                     
                     actor.moveTo(actor.x, actor.y + futureY, 300, time, Interpolator.createLinearInterpolator(false, false), 
                             BehaviorListener.valueOfExpired(new BehaviorExpiredListener() {
-                        public void call(BaseBehavior behavior, double time, Actor actor) {
+                        public void onExpired(BaseBehavior behavior, double time, Actor actor) {
                             
                         }
                     }));
@@ -133,7 +133,7 @@ public class Effects {
                 setValues(1.5, 0, 1.5, 0, 0, 0);
         
         sb.addListener(BehaviorListener.valueOfExpired(new BehaviorExpiredListener() {
-            public void call(BaseBehavior behavior, double time, Actor actor) {
+            public void onExpired(BaseBehavior behavior, double time, Actor actor) {
                 actor.setAlpha(1);
             }
         }));
