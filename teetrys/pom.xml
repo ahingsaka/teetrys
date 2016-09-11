@@ -10,7 +10,7 @@
 		<dependency>
 			<groupId>com.katspow.caatja</groupId>
 			<artifactId>caatja-gwt</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.7.6-SNAPSHOT</version>
 		</dependency>
 
 	</dependencies>
